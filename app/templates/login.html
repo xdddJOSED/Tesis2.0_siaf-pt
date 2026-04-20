@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 16px;">
+    <div class="glass-card" style="width: 100%; max-width: 460px; padding: 48px 40px;">
+
+        <!-- Encabezado -->
+        <div style="text-align: center; margin-bottom: 32px;">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                <i class="fa-solid fa-right-to-bracket" style="font-size: 28px; color: #2e7d32;"></i>
+            </div>
+            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;">Iniciar Sesión en SIAF-PT</h2>
+            <p style="margin: 8px 0 0; color: #666; font-size: 14px;">Accede al Sistema de Análisis de Propuestas de Tesis</p>
+        </div>
+
+        <!-- Mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div style="padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px;
+                    {% if category == 'error' %}
+                        background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb;
+                    {% else %}
+                        background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;
+                    {% endif %}">
+                    <i class="fa-solid {{ 'fa-circle-exclamation' if category == 'error' else 'fa-circle-check' }}" style="margin-right: 8px;"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Formulario -->
+        <form method="POST" action="{{ url_for('main.login') }}" autocomplete="off">
+
+            <!-- Correo Institucional -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                    <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> Correo Institucional
+                </label>
+                <input type="email" name="correo" required
+                    placeholder="ejemplo@utm.edu.ec"
+                    style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none;"
+                    onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+            </div>
+
+            <!-- Contraseña -->
+            <div style="margin-bottom: 28px; position: relative;">
+                <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                    <i class="fa-solid fa-lock" style="color: #2e7d32; margin-right: 4px;"></i> Contraseña
+                </label>
+                <input type="password" name="password" id="passwordField" required
+                    placeholder="Ingresa tu contraseña"
+                    style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none; padding-right: 44px;"
+                    onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+                <button type="button" onclick="togglePassword()"
+                    style="position: absolute; right: 12px; top: 32px; background: none; border: none; cursor: pointer; color: #999; font-size: 16px; padding: 4px;">
+                    <i class="fa-solid fa-eye" id="toggleIcon"></i>
+                </button>
+            </div>
+
+            <!-- Botón de login -->
+            <button type="submit" class="btn-main utm-green"
+                style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.3px;">
+                <i class="fa-solid fa-right-to-bracket" style="margin-right: 8px;"></i>Ingresar
+            </button>
+        </form>
+
+        <!-- Link a registro -->
+        <div style="text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="color: #666; font-size: 14px; margin: 0;">
+                ¿No tienes cuenta?
+                <a href="{{ url_for('main.registro') }}" style="color: #2e7d32; font-weight: 600; text-decoration: none;">Regístrate aquí</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const field = document.getElementById('passwordField');
+    const icon = document.getElementById('toggleIcon');
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+{% endblock %}

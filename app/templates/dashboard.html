@@ -1,0 +1,427 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Mensajes flash -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div style="padding: 12px 16px; border-radius: 8px; margin: 16px 0; font-size: 14px;
+            {% if category == 'error' %}
+                background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb;
+            {% else %}
+                background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;
+            {% endif %}">
+            <i class="fa-solid {{ 'fa-circle-exclamation' if category == 'error' else 'fa-circle-check' }}" style="margin-right: 8px;"></i>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endwith %}
+
+<!-- Cabecera de bienvenida -->
+<div style="padding: 40px 0 24px;">
+    <h1 style="margin: 0; font-weight: 700; font-size: 28px; color: #1a1a1a;">
+        <i class="fa-solid fa-hand-wave" style="color: #2e7d32;"></i>
+        Hola, {{ g.user.nombre_completo.split()[0] }}
+    </h1>
+    <p style="margin: 8px 0 0; color: #666; font-size: 15px;">
+        Bienvenido/a a tu panel de control del SIAF-PT — Universidad Técnica de Manabí
+    </p>
+</div>
+
+<!-- Panel principal -->
+<div class="w3-row-padding" style="margin: 0 -8px;">
+
+    <!-- Tarjeta: Generador IA -->
+    <div class="w3-col l8 m12 s12" style="margin-bottom: 24px;">
+        <div class="glass-card" style="padding: 40px; min-height: 320px;">
+            <div style="display: flex; align-items: center; margin-bottom: 24px;">
+                <div style="width: 52px; height: 52px; border-radius: 12px; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                    <i class="fa-solid fa-brain" style="font-size: 24px; color: #2e7d32;"></i>
+                </div>
+                <div>
+                    <h2 style="margin: 0; font-weight: 700; font-size: 20px; color: #1a1a1a;">Generador de Propuestas de Titulación (IA)</h2>
+                    <p style="margin: 4px 0 0; color: #888; font-size: 13px;">Motor de procesamiento de lenguaje natural</p>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('main.generar_propuesta') }}" autocomplete="off">
+                <!-- Título tentativo -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                        <i class="fa-solid fa-heading" style="color: #2e7d32; margin-right: 4px;"></i> Título Tentativo de la Propuesta
+                    </label>
+                    <input type="text" name="titulo" required
+                        placeholder="Ej: Sistema inteligente de detección de plagio académico mediante NLP"
+                        style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none;"
+                        onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+                </div>
+
+                <!-- Resumen / Descripción -->
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                        <i class="fa-solid fa-align-left" style="color: #2e7d32; margin-right: 4px;"></i> Resumen / Descripción de la Idea
+                    </label>
+                    <textarea name="resumen" required rows="6"
+                        placeholder="Describe brevemente tu idea de investigación: el problema que aborda, la metodología que propones y los resultados esperados..."
+                        style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none; resize: vertical;"
+                        onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'"></textarea>
+                </div>
+
+                <!-- Botón de análisis -->
+                <button type="submit" class="btn-main utm-green"
+                    style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.3px;"
+                    id="btn-analizar" onclick="this.disabled=true; this.innerHTML='<i class=\'fa-solid fa-spinner fa-spin\' style=\'margin-right:8px;\'></i>Analizando con IA...'; this.form.submit();">
+                    <i class="fa-solid fa-brain" style="margin-right: 8px;"></i>Analizar Propuesta con IA
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar: Info del usuario -->
+    <div class="w3-col l4 m12 s12" style="margin-bottom: 24px;">
+        <div class="glass-card" style="padding: 32px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="width: 72px; height: 72px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                    <i class="fa-solid fa-user-graduate" style="font-size: 32px; color: #2e7d32;"></i>
+                </div>
+                <h3 style="margin: 0; font-weight: 600; font-size: 16px; color: #1a1a1a;">{{ g.user.nombre_completo }}</h3>
+                <p style="margin: 4px 0 0; color: #888; font-size: 13px;">{{ g.user.correo }}</p>
+                <span style="display: inline-block; margin-top: 8px; padding: 4px 12px; background: #e8f5e9; color: #2e7d32; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: capitalize;">
+                    {{ g.user.rol }}
+                </span>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+
+            <div style="font-size: 13px; color: #666;">
+                <p style="margin: 8px 0;"><i class="fa-solid fa-calendar-check w3-text-green" style="width: 20px;"></i> Miembro desde: {{ g.user.creado_en.strftime('%d/%m/%Y') if g.user.creado_en else 'N/A' }}</p>
+                <p style="margin: 8px 0;"><i class="fa-solid fa-file-lines w3-text-green" style="width: 20px;"></i> Propuestas: {{ propuestas|length }}</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══ Resultado del Generador IA ═══ -->
+{% if resultado_ia %}
+<div style="margin-bottom: 24px;" data-aos="fade-up">
+    <div class="glass-card" style="padding: 0; overflow: hidden; border: 2px solid #2e7d32;">
+
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #1b5e20, #2e7d32); padding: 24px 32px; color: white;">
+            <div style="display: flex; align-items: center;">
+                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                    <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 22px;"></i>
+                </div>
+                <div>
+                    <h2 style="margin: 0; font-weight: 700; font-size: 20px;">Propuesta Generada por IA</h2>
+                    <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.85;">Basada en tu idea: "{{ titulo_original[:80] }}{{ '...' if titulo_original|length > 80 }}"</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 28px 32px;">
+            <!-- Tema sugerido -->
+            <div style="margin-bottom: 20px; padding: 20px; background: #f1f8e9; border-radius: 10px; border-left: 4px solid #2e7d32;">
+                <p style="margin: 0 0 6px; font-size: 12px; font-weight: 600; color: #2e7d32; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="fa-solid fa-lightbulb" style="margin-right: 4px;"></i> Tema Final Sugerido
+                </p>
+                <p style="margin: 0; font-size: 17px; font-weight: 700; color: #1a1a1a; line-height: 1.4;">
+                    {{ resultado_ia.tema_sugerido }}
+                </p>
+            </div>
+
+            <!-- Justificación -->
+            <div style="margin-bottom: 20px;">
+                <p style="margin: 0 0 6px; font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="fa-solid fa-clipboard-check" style="margin-right: 4px; color: #2e7d32;"></i> Justificación
+                </p>
+                <p style="margin: 0; font-size: 14px; color: #444; line-height: 1.6;">
+                    {{ resultado_ia.justificacion }}
+                </p>
+            </div>
+
+            <!-- Tags de sublínea y modalidad -->
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+                {% if resultado_ia.sublinea_recomendada %}
+                <span style="display: inline-flex; align-items: center; padding: 6px 14px; background: #e8f5e9; color: #2e7d32; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                    <i class="fa-solid fa-diagram-project" style="margin-right: 6px;"></i> {{ resultado_ia.sublinea_recomendada }}
+                </span>
+                {% endif %}
+                {% if resultado_ia.modalidad_sugerida %}
+                <span style="display: inline-flex; align-items: center; padding: 6px 14px; background: #fff3e0; color: #e65100; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                    <i class="fa-solid fa-graduation-cap" style="margin-right: 6px;"></i> {{ resultado_ia.modalidad_sugerida }}
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Tesis de referencia -->
+            {% if resultado_ia.referencias %}
+            <div style="border-top: 1px solid #eee; padding-top: 20px;">
+                <p style="margin: 0 0 12px; font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="fa-solid fa-magnifying-glass-chart" style="margin-right: 4px; color: #2e7d32;"></i> Tesis Similares Encontradas
+                </p>
+                {% for ref in resultado_ia.referencias %}
+                <div style="padding: 12px 16px; background: #fafafa; border-radius: 8px; margin-bottom: 8px; border: 1px solid #eee;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <p style="margin: 0; font-size: 13px; font-weight: 600; color: #333; flex: 1;">
+                            <i class="fa-solid fa-file-lines w3-text-green" style="margin-right: 6px;"></i>{{ ref.titulo }}
+                        </p>
+                        <span style="flex-shrink: 0; margin-left: 12px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+                            {% if ref.similitud >= 70 %}
+                                background: #ffebee; color: #c62828;
+                            {% elif ref.similitud >= 40 %}
+                                background: #fff3e0; color: #e65100;
+                            {% else %}
+                                background: #e8f5e9; color: #2e7d32;
+                            {% endif %}">
+                            {{ ref.similitud }}% similitud
+                        </span>
+                    </div>
+                    <p style="margin: 4px 0 0; font-size: 11px; color: #888;">
+                        Sublínea: {{ ref.sublinea }} · {{ ref.modalidad }}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Mis Propuestas Recientes -->
+<div style="margin-bottom: 40px;">
+    <div class="glass-card" style="padding: 32px 40px;">
+        <div style="display: flex; align-items: center; margin-bottom: 24px;">
+            <div style="width: 44px; height: 44px; border-radius: 10px; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin-right: 14px;">
+                <i class="fa-solid fa-clock-rotate-left" style="font-size: 20px; color: #2e7d32;"></i>
+            </div>
+            <div>
+                <h2 style="margin: 0; font-weight: 700; font-size: 18px; color: #1a1a1a;">Mis Propuestas Recientes</h2>
+                <p style="margin: 2px 0 0; color: #888; font-size: 13px;">Historial de propuestas analizadas con IA</p>
+            </div>
+        </div>
+
+        {% for propuesta in propuestas %}
+            <div style="padding: 16px 20px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 12px; transition: box-shadow 0.2s;"
+                 onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 6px; font-weight: 600; font-size: 15px; color: #1a1a1a;">
+                            <i class="fa-solid fa-file-lines w3-text-green" style="margin-right: 6px;"></i>
+                            {{ propuesta.titulo }}
+                        </h4>
+                        <p style="margin: 0; color: #666; font-size: 13px; line-height: 1.5;">
+                            {{ propuesta.resumen[:150] }}{{ '...' if propuesta.resumen|length > 150 }}
+                        </p>
+                    </div>
+                    <div style="text-align: right; flex-shrink: 0; margin-left: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                        <span style="display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: capitalize;
+                            {% if propuesta.estado == 'borrador' %}
+                                background: #fff3e0; color: #e65100;
+                            {% else %}
+                                background: #e8f5e9; color: #2e7d32;
+                            {% endif %}">
+                            {{ propuesta.estado }}
+                        </span>
+                        <p style="margin: 0; font-size: 11px; color: #aaa;">
+                            {{ propuesta.fecha_creacion.strftime('%d/%m/%Y %H:%M') if propuesta.fecha_creacion else '' }}
+                        </p>
+                        <button onclick="verDetalle({{ propuesta.id }})"
+                            style="margin-top: 4px; padding: 6px 14px; border: 1.5px solid #2e7d32; background: white; color: #2e7d32; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s;"
+                            onmouseover="this.style.background='#2e7d32'; this.style.color='white'" onmouseout="this.style.background='white'; this.style.color='#2e7d32'">
+                            <i class="fa-solid fa-eye" style="margin-right: 4px;"></i>Ver Detalle
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 40px 20px;">
+                <i class="fa-solid fa-folder-open" style="font-size: 40px; color: #ddd; margin-bottom: 12px;"></i>
+                <p style="color: #999; font-size: 14px; margin: 0;">Aún no has generado ninguna propuesta.</p>
+                <p style="color: #bbb; font-size: 13px; margin: 4px 0 0;">Usa el formulario de arriba para analizar tu primera idea.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ═══ Modal de Detalle ═══ -->
+<div id="modal-detalle" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center; padding: 20px; box-sizing: border-box;"
+     onclick="if(event.target===this) cerrarModal()">
+    <div style="background:white; border-radius:16px; max-width:700px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.15); position:relative;">
+
+        <!-- Header del modal -->
+        <div style="background: linear-gradient(135deg, #1b5e20, #2e7d32); padding: 24px 28px; border-radius: 16px 16px 0 0; color: white; position: sticky; top: 0; z-index: 1;">
+            <button onclick="cerrarModal()" style="position:absolute; top:16px; right:20px; background:rgba(255,255,255,0.2); border:none; color:white; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div style="display: flex; align-items: center;">
+                <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; margin-right: 14px;">
+                    <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 18px;"></i>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-weight: 700; font-size: 18px;" id="modal-header-titulo">Detalle de Propuesta</h3>
+                    <p style="margin: 3px 0 0; font-size: 12px; opacity: 0.8;" id="modal-fecha"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cuerpo del modal -->
+        <div style="padding: 28px;" id="modal-body">
+            <!-- Loading -->
+            <div id="modal-loading" style="text-align: center; padding: 40px 0;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 28px; color: #2e7d32;"></i>
+                <p style="margin: 12px 0 0; color: #888; font-size: 14px;">Cargando detalle...</p>
+            </div>
+
+            <!-- Contenido (oculto hasta que carga) -->
+            <div id="modal-content" style="display: none;">
+
+                <!-- Idea original -->
+                <div style="margin-bottom: 20px; padding: 16px; background: #f5f5f5; border-radius: 10px;">
+                    <p style="margin: 0 0 4px; font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <i class="fa-solid fa-pen" style="margin-right: 4px;"></i> Idea Original del Estudiante
+                    </p>
+                    <h4 style="margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #1a1a1a;" id="modal-titulo"></h4>
+                    <p style="margin: 0; font-size: 13px; color: #555; line-height: 1.5;" id="modal-resumen"></p>
+                </div>
+
+                <!-- Tema sugerido por IA -->
+                <div id="modal-ia-section">
+                    <div style="margin-bottom: 20px; padding: 18px; background: #f1f8e9; border-radius: 10px; border-left: 4px solid #2e7d32;">
+                        <p style="margin: 0 0 6px; font-size: 11px; font-weight: 600; color: #2e7d32; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-lightbulb" style="margin-right: 4px;"></i> Tema Final Sugerido por IA
+                        </p>
+                        <p style="margin: 0; font-size: 16px; font-weight: 700; color: #1a1a1a; line-height: 1.4;" id="modal-tema-sugerido"></p>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <p style="margin: 0 0 6px; font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-clipboard-check" style="margin-right: 4px; color: #2e7d32;"></i> Justificación
+                        </p>
+                        <p style="margin: 0; font-size: 13px; color: #444; line-height: 1.6;" id="modal-justificacion"></p>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;" id="modal-tags"></div>
+
+                    <!-- Referencias -->
+                    <div id="modal-referencias-section" style="border-top: 1px solid #eee; padding-top: 16px;">
+                        <p style="margin: 0 0 10px; font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-magnifying-glass-chart" style="margin-right: 4px; color: #2e7d32;"></i> Tesis Similares Encontradas
+                        </p>
+                        <div id="modal-referencias"></div>
+                    </div>
+                </div>
+
+                <!-- Mensaje si no tiene resultado IA -->
+                <div id="modal-sin-ia" style="display: none; text-align: center; padding: 20px;">
+                    <i class="fa-solid fa-circle-info" style="font-size: 28px; color: #ccc; margin-bottom: 8px;"></i>
+                    <p style="color: #999; font-size: 13px; margin: 0;">Esta propuesta no tiene un análisis de IA asociado.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function verDetalle(id) {
+    const modal = document.getElementById('modal-detalle');
+    const loading = document.getElementById('modal-loading');
+    const content = document.getElementById('modal-content');
+
+    modal.style.display = 'flex';
+    loading.style.display = 'block';
+    content.style.display = 'none';
+    document.body.style.overflow = 'hidden';
+
+    fetch('/propuesta/' + id)
+        .then(r => {
+            if (!r.ok) throw new Error('Error ' + r.status);
+            return r.json();
+        })
+        .then(data => {
+            loading.style.display = 'none';
+            content.style.display = 'block';
+
+            document.getElementById('modal-titulo').textContent = data.titulo;
+            document.getElementById('modal-resumen').textContent = data.resumen;
+            document.getElementById('modal-fecha').textContent = data.fecha ? ('Generada el ' + data.fecha) : '';
+            document.getElementById('modal-header-titulo').textContent = 'Detalle de Propuesta #' + data.id;
+
+            const iaSection = document.getElementById('modal-ia-section');
+            const sinIa = document.getElementById('modal-sin-ia');
+
+            if (data.resultado_ia) {
+                const ia = data.resultado_ia;
+                iaSection.style.display = 'block';
+                sinIa.style.display = 'none';
+
+                document.getElementById('modal-tema-sugerido').textContent = ia.tema_sugerido || '';
+                document.getElementById('modal-justificacion').textContent = ia.justificacion || '';
+
+                // Tags
+                const tagsContainer = document.getElementById('modal-tags');
+                tagsContainer.innerHTML = '';
+                if (ia.sublinea_recomendada) {
+                    tagsContainer.innerHTML += '<span style="display:inline-flex;align-items:center;padding:5px 12px;background:#e8f5e9;color:#2e7d32;border-radius:20px;font-size:11px;font-weight:600;">' +
+                        '<i class="fa-solid fa-diagram-project" style="margin-right:5px;"></i>' + escHTML(ia.sublinea_recomendada) + '</span>';
+                }
+                if (ia.modalidad_sugerida) {
+                    tagsContainer.innerHTML += '<span style="display:inline-flex;align-items:center;padding:5px 12px;background:#fff3e0;color:#e65100;border-radius:20px;font-size:11px;font-weight:600;">' +
+                        '<i class="fa-solid fa-graduation-cap" style="margin-right:5px;"></i>' + escHTML(ia.modalidad_sugerida) + '</span>';
+                }
+                if (data.max_similitud != null) {
+                    const pct = (data.max_similitud * 100).toFixed(1);
+                    tagsContainer.innerHTML += '<span style="display:inline-flex;align-items:center;padding:5px 12px;background:#e3f2fd;color:#1565c0;border-radius:20px;font-size:11px;font-weight:600;">' +
+                        '<i class="fa-solid fa-chart-line" style="margin-right:5px;"></i>Similitud máx: ' + pct + '%</span>';
+                }
+
+                // Referencias
+                const refsContainer = document.getElementById('modal-referencias');
+                const refsSection = document.getElementById('modal-referencias-section');
+                refsContainer.innerHTML = '';
+                if (ia.referencias && ia.referencias.length > 0) {
+                    refsSection.style.display = 'block';
+                    ia.referencias.forEach(function(ref) {
+                        const bgColor = ref.similitud >= 70 ? '#ffebee' : (ref.similitud >= 40 ? '#fff3e0' : '#e8f5e9');
+                        const txtColor = ref.similitud >= 70 ? '#c62828' : (ref.similitud >= 40 ? '#e65100' : '#2e7d32');
+                        refsContainer.innerHTML +=
+                            '<div style="padding:10px 14px;background:#fafafa;border-radius:8px;margin-bottom:6px;border:1px solid #eee;">' +
+                                '<div style="display:flex;justify-content:space-between;align-items:start;">' +
+                                    '<p style="margin:0;font-size:12px;font-weight:600;color:#333;flex:1;"><i class="fa-solid fa-file-lines" style="color:#2e7d32;margin-right:5px;"></i>' + escHTML(ref.titulo) + '</p>' +
+                                    '<span style="flex-shrink:0;margin-left:10px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;background:' + bgColor + ';color:' + txtColor + ';">' + ref.similitud + '% similitud</span>' +
+                                '</div>' +
+                                '<p style="margin:3px 0 0;font-size:10px;color:#888;">Sublínea: ' + escHTML(ref.sublinea || 'N/A') + ' · ' + escHTML(ref.modalidad || 'N/A') + '</p>' +
+                            '</div>';
+                    });
+                } else {
+                    refsSection.style.display = 'none';
+                }
+            } else {
+                iaSection.style.display = 'none';
+                sinIa.style.display = 'block';
+            }
+        })
+        .catch(function(err) {
+            loading.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="font-size:28px;color:#c62828;"></i>' +
+                '<p style="margin:12px 0 0;color:#c62828;font-size:14px;">Error al cargar la propuesta.</p>';
+        });
+}
+
+function cerrarModal() {
+    document.getElementById('modal-detalle').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function escHTML(str) {
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') cerrarModal();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="w3-display-container w3-card-4" style="height: 500px; overflow: hidden; position: relative; width: 100vw; margin-left: calc(-50vw + 50%);">
+    
+    <img src="{{ url_for('static', filename='img/portadaestudiantes.jpg') }}" 
+         alt="SIAF-PT UTM" 
+         style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4);">
+
+    <div class="w3-display-middle w3-center w3-text-white" style="width: 90%;">
+        <div class="w3-margin-bottom">
+            <span class="w3-tag w3-round-large w3-green w3-padding" style="font-weight: 600; opacity: 0.9;">
+                <i class="fa-solid fa-building-columns"></i> Facultad de Ciencias Informáticas
+            </span>
+        </div>
+        
+        <h1 class="w3-xxlarge" style="font-weight: 800; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">
+            Sistema Inteligente de Apoyo a la <br>
+            <span class="w3-text-green">Formulación de Propuestas de Titulación</span>
+        </h1>
+        
+        <p class="w3-large w3-hide-small" style="font-weight: 400; text-shadow: 1px 1px 5px rgba(0,0,0,0.5);">
+            Alineadas al Currículo Académico de la Carrera de Tecnologías de la Información.
+        </p>
+        
+        <div class="w3-margin-top">
+            <a href="/registro" class="w3-button utm-green btn-main w3-padding-large w3-round-large">
+                <i class="fa-solid fa-shield-halved"></i> Acceso a estudiantes del FCI
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="w3-row-padding w3-margin-top w3-padding-32">
+    <div class="w3-third w3-margin-bottom">
+        <div class="w3-container glass-card w3-padding-24 w3-center">
+            <i class="fa-solid fa-brain w3-xxlarge w3-text-green"></i>
+            <h4 style="font-weight: 600;">IA Semántica</h4>
+            <p class="w3-small w3-text-grey">Comprensión profunda de las ideas de investigación mediante modelos de lenguaje avanzados.</p>
+        </div>
+    </div>
+    
+    <div class="w3-third w3-margin-bottom">
+        <div class="w3-container glass-card w3-padding-24 w3-center">
+            <i class="fa-solid fa-database w3-xxlarge w3-text-green"></i>
+            <h4 style="font-weight: 600;">Motor Vectorial</h4>
+            <p class="w3-small w3-text-grey">Búsqueda matemática en el repositorio histórico para garantizar proyectos 100% inéditos.</p>
+        </div>
+    </div>
+    
+    <div class="w3-third w3-margin-bottom">
+        <div class="w3-container glass-card w3-padding-24 w3-center">
+            <i class="fa-solid fa-crosshairs w3-xxlarge w3-text-green"></i>
+            <h4 style="font-weight: 600;">Alineación Curricular</h4>
+            <p class="w3-small w3-text-grey">Generación estructurada que respeta los lineamientos oficiales de la Universidad Técnica de Manabí.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

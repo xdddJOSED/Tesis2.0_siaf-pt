@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 16px;">
+    <div class="glass-card" style="width: 100%; max-width: 460px; padding: 48px 40px;">
+
+        <!-- Encabezado -->
+        <div style="text-align: center; margin-bottom: 32px;">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                <i class="fa-solid fa-user-plus" style="font-size: 28px; color: #2e7d32;"></i>
+            </div>
+            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;">Crear Cuenta de Estudiante</h2>
+            <p style="margin: 8px 0 0; color: #666; font-size: 14px;">Regístrate en el Sistema de Análisis de Propuestas de Tesis</p>
+        </div>
+
+        <!-- Mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div style="padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px;
+                    {% if category == 'error' %}
+                        background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb;
+                    {% else %}
+                        background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;
+                    {% endif %}">
+                    <i class="fa-solid {{ 'fa-circle-exclamation' if category == 'error' else 'fa-circle-check' }}" style="margin-right: 8px;"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Formulario -->
+        <form method="POST" action="{{ url_for('main.registro') }}" autocomplete="off">
+
+            <!-- Nombre Completo -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                    <i class="fa-solid fa-user" style="color: #2e7d32; margin-right: 4px;"></i> Nombre Completo
+                </label>
+                <input type="text" name="nombre_completo" required
+                    placeholder="Ej: María Fernanda López"
+                    style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none;"
+                    onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+            </div>
+
+            <!-- Correo Institucional -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                    <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> Correo Institucional UTM
+                </label>
+                <input type="email" name="correo" required id="correoField"
+                    placeholder="tu.nombre@utm.edu.ec"
+                    pattern=".+@utm\.edu\.ec$"
+                    title="Debes usar tu correo institucional UTM (@utm.edu.ec)"
+                    style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none;"
+                    onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+                <p style="margin: 4px 0 0; font-size: 11px; color: #999;">
+                    <i class="fa-solid fa-circle-info" style="margin-right: 3px;"></i> Solo se aceptan correos @utm.edu.ec
+                </p>
+            </div>
+
+            <!-- Contraseña -->
+            <div style="margin-bottom: 28px; position: relative;">
+                <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                    <i class="fa-solid fa-lock" style="color: #2e7d32; margin-right: 4px;"></i> Contraseña
+                </label>
+                <input type="password" name="password" id="passwordField" required minlength="6"
+                    placeholder="Mínimo 6 caracteres"
+                    style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none; padding-right: 44px;"
+                    onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+                <button type="button" onclick="togglePassword()"
+                    style="position: absolute; right: 12px; top: 32px; background: none; border: none; cursor: pointer; color: #999; font-size: 16px; padding: 4px;">
+                    <i class="fa-solid fa-eye" id="toggleIcon"></i>
+                </button>
+            </div>
+
+            <!-- Botón de registro -->
+            <button type="submit" class="btn-main utm-green" id="btn-registro"
+                style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.3px;"
+                onclick="this.disabled=true; this.innerHTML='<i class=\'fa-solid fa-spinner fa-spin\' style=\'margin-right:8px;\'></i>Creando cuenta...'; this.form.submit();">
+                <i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i>Crear Cuenta
+            </button>
+        </form>
+
+        <!-- Link a login -->
+        <div style="text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="color: #666; font-size: 14px; margin: 0;">
+                ¿Ya tienes cuenta?
+                <a href="{{ url_for('main.login') }}" style="color: #2e7d32; font-weight: 600; text-decoration: none;">Iniciar Sesión</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const field = document.getElementById('passwordField');
+    const icon = document.getElementById('toggleIcon');
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+{% endblock %}
