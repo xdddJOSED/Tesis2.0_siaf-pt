@@ -20,6 +20,7 @@ class Usuario(db.Model):
     correo = db.Column(db.String(120), nullable=False, unique=True, index=True)
     password_hash = db.Column(db.String(256), nullable=False)
     rol = db.Column(db.String(20), nullable=False, default="estudiante")
+    verificado = db.Column(db.Boolean, nullable=False, default=False)
     creado_en = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     # Relación bidireccional: un usuario puede tener muchas propuestas de tesis
@@ -33,6 +34,9 @@ class PropuestaTesis(db.Model):
     estudiante_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     titulo = db.Column(db.String(255), nullable=False)
     resumen = db.Column(db.Text, nullable=False)
+    objetivo_general = db.Column(db.Text, nullable=True)
+    objetivos_especificos = db.Column(db.Text, nullable=True)
+    justificacion = db.Column(db.Text, nullable=True)
     fecha_creacion = db.Column(db.DateTime(timezone=True), server_default=func.now())
     estado = db.Column(db.String(30), nullable=False, default="borrador")
 
@@ -59,5 +63,8 @@ class TesisExistente(db.Model):
     modalidad = db.Column(db.String(80), nullable=True)
     carrera = db.Column(db.String(120), nullable=True)
     resumen = db.Column(db.Text, nullable=True)
+    objetivo_general = db.Column(db.Text, nullable=True)
+    objetivos_especificos = db.Column(db.Text, nullable=True)
+    justificacion = db.Column(db.Text, nullable=True)
     embedding = db.Column(db.Text, nullable=True)
     creado_en = db.Column(db.DateTime(timezone=True), server_default=func.now())

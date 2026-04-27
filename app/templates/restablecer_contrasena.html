@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 16px;">
+    <div class="glass-card" style="width: 100%; max-width: 460px; padding: 48px 40px;">
+
+        <!-- Encabezado -->
+        <div style="text-align: center; margin-bottom: 32px;">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                <i class="fa-solid fa-lock-open" style="font-size: 28px; color: #2e7d32;"></i>
+            </div>
+            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;">Nueva contraseña</h2>
+            <p style="margin: 8px 0 0; color: #666; font-size: 14px;">Elige una contraseña segura de al menos 6 caracteres.</p>
+        </div>
+
+        <!-- Mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div style="padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px;
+                    {% if category == 'error' %}
+                        background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb;
+                    {% else %}
+                        background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;
+                    {% endif %}">
+                    <i class="fa-solid {{ 'fa-circle-exclamation' if category == 'error' else 'fa-circle-check' }}" style="margin-right: 8px;"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Formulario -->
+        <form method="POST" action="{{ url_for('main.restablecer_contrasena', token=token) }}" autocomplete="off">
+
+            <!-- Nueva contraseña -->
+            <div style="margin-bottom: 20px; position: relative;">
+                <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                    <i class="fa-solid fa-lock" style="color: #2e7d32; margin-right: 4px;"></i> Nueva contraseña
+                </label>
+                <input type="password" name="password" id="passwordField" required
+                    placeholder="Mínimo 6 caracteres"
+                    style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px;
+                           font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none; padding-right: 44px;"
+                    onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+                <button type="button" onclick="toggleVis('passwordField','icon1')"
+                    style="position: absolute; right: 12px; top: 32px; background: none; border: none; cursor: pointer; color: #999; font-size: 16px; padding: 4px;">
+                    <i class="fa-solid fa-eye" id="icon1"></i>
+                </button>
+            </div>
+
+            <!-- Confirmar contraseña -->
+            <div style="margin-bottom: 28px; position: relative;">
+                <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                    <i class="fa-solid fa-lock" style="color: #2e7d32; margin-right: 4px;"></i> Confirmar contraseña
+                </label>
+                <input type="password" name="confirmacion" id="confirmField" required
+                    placeholder="Repite tu contraseña"
+                    style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px;
+                           font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none; padding-right: 44px;"
+                    onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+                <button type="button" onclick="toggleVis('confirmField','icon2')"
+                    style="position: absolute; right: 12px; top: 32px; background: none; border: none; cursor: pointer; color: #999; font-size: 16px; padding: 4px;">
+                    <i class="fa-solid fa-eye" id="icon2"></i>
+                </button>
+            </div>
+
+            <button type="submit" class="btn-main utm-green"
+                style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;
+                       font-family: 'Inter', sans-serif; letter-spacing: 0.3px;">
+                <i class="fa-solid fa-floppy-disk" style="margin-right: 8px;"></i>Guardar nueva contraseña
+            </button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+function toggleVis(fieldId, iconId) {
+    const f = document.getElementById(fieldId);
+    const i = document.getElementById(iconId);
+    if (f.type === 'password') {
+        f.type = 'text';
+        i.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        f.type = 'password';
+        i.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+{% endblock %}

@@ -64,8 +64,15 @@
             </button>
         </form>
 
+        <!-- Link a olvidé contraseña -->
+        <div style="text-align: center; margin-top: 16px;">
+            <a href="{{ url_for('main.olvide_contrasena') }}" style="color: #888; font-size: 13px; text-decoration: none;">
+                <i class="fa-solid fa-key" style="margin-right: 4px;"></i>¿Olvidaste tu contraseña?
+            </a>
+        </div>
+
         <!-- Link a registro -->
-        <div style="text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid #eee;">
+        <div style="text-align: center; margin-top: 16px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="color: #666; font-size: 14px; margin: 0;">
                 ¿No tienes cuenta?
                 <a href="{{ url_for('main.registro') }}" style="color: #2e7d32; font-weight: 600; text-decoration: none;">Regístrate aquí</a>

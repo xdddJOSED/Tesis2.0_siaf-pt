@@ -126,32 +126,56 @@
                     <i class="fa-solid fa-lightbulb" style="margin-right: 4px;"></i> Tema Final Sugerido
                 </p>
                 <p style="margin: 0; font-size: 17px; font-weight: 700; color: #1a1a1a; line-height: 1.4;">
-                    {{ resultado_ia.tema_sugerido }}
+                    {{ resultado_ia.titulo }}
                 </p>
             </div>
 
-            <!-- Justificación -->
-            <div style="margin-bottom: 20px;">
-                <p style="margin: 0 0 6px; font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fa-solid fa-clipboard-check" style="margin-right: 4px; color: #2e7d32;"></i> Justificación
-                </p>
-                <p style="margin: 0; font-size: 14px; color: #444; line-height: 1.6;">
-                    {{ resultado_ia.justificacion }}
-                </p>
+            <div class="w3-row-padding" style="margin: 0 -8px 20px;">
+                <div class="w3-col l6 m12 s12" style="margin-bottom: 12px;">
+                    <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-round-large" style="margin:0;">
+                        <p class="w3-small" style="margin-bottom: 6px;"><strong>Resumen</strong></p>
+                        <p style="margin:0; line-height:1.6; color:#444;">{{ resultado_ia.resumen }}</p>
+                        {% if resultado_ia.palabras_clave %}
+                        <div style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;">
+                            {% for palabra in resultado_ia.palabras_clave %}
+                            <span class="w3-tag w3-round w3-green" style="font-size: 11px; padding: 4px 10px;">{{ palabra }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="w3-col l6 m12 s12" style="margin-bottom: 12px;">
+                    <div class="w3-panel w3-light-grey w3-round-large" style="margin:0;">
+                        <p class="w3-small" style="margin-bottom: 6px;"><strong>Objetivo General</strong></p>
+                        <p style="margin:0; line-height:1.6; color:#444;">{{ resultado_ia.objetivo_general }}</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Tags de sublínea y modalidad -->
-            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
-                {% if resultado_ia.sublinea_recomendada %}
-                <span style="display: inline-flex; align-items: center; padding: 6px 14px; background: #e8f5e9; color: #2e7d32; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                    <i class="fa-solid fa-diagram-project" style="margin-right: 6px;"></i> {{ resultado_ia.sublinea_recomendada }}
-                </span>
-                {% endif %}
-                {% if resultado_ia.modalidad_sugerida %}
-                <span style="display: inline-flex; align-items: center; padding: 6px 14px; background: #fff3e0; color: #e65100; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                    <i class="fa-solid fa-graduation-cap" style="margin-right: 6px;"></i> {{ resultado_ia.modalidad_sugerida }}
-                </span>
-                {% endif %}
+            <div class="w3-card w3-round-large w3-white" style="margin-bottom: 20px; border: 1px solid #e7efe7;">
+                <div class="w3-container" style="padding: 18px 20px;">
+                    <p class="w3-small" style="margin-bottom: 8px;"><strong>Objetivos Específicos</strong></p>
+                    <ul class="w3-ul" style="margin:0;">
+                        {% for objetivo in resultado_ia.objetivos_especificos %}
+                        <li style="padding-left: 0; border-bottom: 1px solid #edf2ed; color:#444;">
+                            <i class="fa-solid fa-circle-check w3-text-green" style="margin-right: 8px;"></i>{{ objetivo }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin:0 0 24px;">
+                <p class="w3-small" style="margin-bottom: 10px;"><strong>Justificación</strong></p>
+                {% for parrafo in resultado_ia.justificacion %}
+                <div class="w3-panel w3-sand w3-round-large w3-margin-bottom" style="margin-top:0;">
+                    <p style="margin:0; font-size:14px; color:#444; line-height:1.7;">{{ parrafo }}</p>
+                </div>
+                {% else %}
+                <div class="w3-panel w3-sand w3-round-large w3-margin-bottom" style="margin-top:0;">
+                    <p style="margin:0; font-size:14px; color:#444; line-height:1.7;">No disponible.</p>
+                </div>
+                {% endfor %}
             </div>
 
             <!-- Tesis de referencia -->
@@ -161,26 +185,29 @@
                     <i class="fa-solid fa-magnifying-glass-chart" style="margin-right: 4px; color: #2e7d32;"></i> Tesis Similares Encontradas
                 </p>
                 {% for ref in resultado_ia.referencias %}
-                <div style="padding: 12px 16px; background: #fafafa; border-radius: 8px; margin-bottom: 8px; border: 1px solid #eee;">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <p style="margin: 0; font-size: 13px; font-weight: 600; color: #333; flex: 1;">
+                <details class="w3-card w3-round-large" style="margin-bottom:10px; border:1px solid #e8ece8; background:#fafafa;">
+                    <summary class="w3-button w3-block" style="text-align:left; padding:14px 16px; white-space:normal;">
+                        <span style="font-size:13px; font-weight:600; color:#333;">
                             <i class="fa-solid fa-file-lines w3-text-green" style="margin-right: 6px;"></i>{{ ref.titulo }}
-                        </p>
-                        <span style="flex-shrink: 0; margin-left: 12px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
-                            {% if ref.similitud >= 70 %}
-                                background: #ffebee; color: #c62828;
-                            {% elif ref.similitud >= 40 %}
-                                background: #fff3e0; color: #e65100;
-                            {% else %}
-                                background: #e8f5e9; color: #2e7d32;
-                            {% endif %}">
+                        </span>
+                        <span class="w3-tag w3-round" style="float:right; margin-left:10px; {% if ref.similitud >= 70 %}background:#ffebee;color:#c62828;{% elif ref.similitud >= 40 %}background:#fff3e0;color:#e65100;{% else %}background:#e8f5e9;color:#2e7d32;{% endif %}">
                             {{ ref.similitud }}% similitud
                         </span>
+                    </summary>
+                    <div class="w3-container" style="padding: 0 16px 16px;">
+                        <p class="w3-small" style="color:#777;">Sublínea: {{ ref.sublinea }} · {{ ref.modalidad }}</p>
+                        <p style="color:#444; line-height:1.6;"><strong>Resumen:</strong> {{ ref.resumen or 'No disponible.' }}</p>
+                        <p style="color:#444; line-height:1.6;"><strong>Objetivo general:</strong> {{ ref.objetivo_general or 'No disponible.' }}</p>
+                        <p class="w3-small" style="margin-bottom:6px;"><strong>Objetivos específicos</strong></p>
+                        <ul class="w3-ul" style="margin:0;">
+                            {% for objetivo in ref.objetivos_especificos %}
+                            <li style="padding-left:0;"><i class="fa-solid fa-angle-right w3-text-green" style="margin-right:8px;"></i>{{ objetivo }}</li>
+                            {% else %}
+                            <li style="padding-left:0; color:#666;">No disponibles.</li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                    <p style="margin: 4px 0 0; font-size: 11px; color: #888;">
-                        Sublínea: {{ ref.sublinea }} · {{ ref.modalidad }}
-                    </p>
-                </div>
+                </details>
                 {% endfor %}
             </div>
             {% endif %}
@@ -252,6 +279,11 @@
 
         <!-- Header del modal -->
         <div style="background: linear-gradient(135deg, #1b5e20, #2e7d32); padding: 24px 28px; border-radius: 16px 16px 0 0; color: white; position: sticky; top: 0; z-index: 1;">
+            <button onclick="descargarPDF()" style="position:absolute; top:16px; right:62px; background:#0d47a1; border:none; color:white; min-width:138px; height:32px; border-radius:999px; cursor:pointer; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px; padding:0 14px;"
+                    onmouseover="this.style.background='#08306b'" onmouseout="this.style.background='#0d47a1'">
+                <i class="fa-solid fa-file-pdf"></i>
+                Descargar PDF
+            </button>
             <button onclick="cerrarModal()" style="position:absolute; top:16px; right:20px; background:rgba(255,255,255,0.2); border:none; color:white; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;"
                     onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
                 <i class="fa-solid fa-xmark"></i>
@@ -277,40 +309,68 @@
 
             <!-- Contenido (oculto hasta que carga) -->
             <div id="modal-content" style="display: none;">
-
-                <!-- Idea original -->
-                <div style="margin-bottom: 20px; padding: 16px; background: #f5f5f5; border-radius: 10px;">
-                    <p style="margin: 0 0 4px; font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
-                        <i class="fa-solid fa-pen" style="margin-right: 4px;"></i> Idea Original del Estudiante
-                    </p>
-                    <h4 style="margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #1a1a1a;" id="modal-titulo"></h4>
-                    <p style="margin: 0; font-size: 13px; color: #555; line-height: 1.5;" id="modal-resumen"></p>
-                </div>
-
-                <!-- Tema sugerido por IA -->
-                <div id="modal-ia-section">
-                    <div style="margin-bottom: 20px; padding: 18px; background: #f1f8e9; border-radius: 10px; border-left: 4px solid #2e7d32;">
-                        <p style="margin: 0 0 6px; font-size: 11px; font-weight: 600; color: #2e7d32; text-transform: uppercase; letter-spacing: 0.5px;">
-                            <i class="fa-solid fa-lightbulb" style="margin-right: 4px;"></i> Tema Final Sugerido por IA
-                        </p>
-                        <p style="margin: 0; font-size: 16px; font-weight: 700; color: #1a1a1a; line-height: 1.4;" id="modal-tema-sugerido"></p>
+                <div id="modal-pdf-content" style="background:#fff; color:#1a1a1a;">
+                    <div class="pdf-avoid-break" style="margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #e5e5e5;">
+                        <p style="margin: 0 0 4px; font-size: 11px; font-weight: 700; color: #2e7d32; text-transform: uppercase; letter-spacing: 0.7px;">SIAF-PT · Universidad Técnica de Manabí</p>
+                        <h3 style="margin: 0; font-size: 20px; font-weight: 700; color: #1a1a1a;" id="modal-pdf-titulo"></h3>
+                        <p style="margin: 6px 0 0; font-size: 12px; color: #666;" id="modal-pdf-fecha"></p>
                     </div>
 
-                    <div style="margin-bottom: 20px;">
-                        <p style="margin: 0 0 6px; font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px;">
-                            <i class="fa-solid fa-clipboard-check" style="margin-right: 4px; color: #2e7d32;"></i> Justificación
+                    <!-- Idea original -->
+                    <div class="pdf-avoid-break" style="margin-bottom: 20px; padding: 16px; background: #f5f5f5; border-radius: 10px;">
+                        <p style="margin: 0 0 4px; font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-pen" style="margin-right: 4px;"></i> Idea Original del Estudiante
                         </p>
-                        <p style="margin: 0; font-size: 13px; color: #444; line-height: 1.6;" id="modal-justificacion"></p>
+                        <h4 style="margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #1a1a1a;" id="modal-titulo"></h4>
+                        <p style="margin: 0; font-size: 13px; color: #555; line-height: 1.5;" id="modal-resumen"></p>
                     </div>
 
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;" id="modal-tags"></div>
+                    <!-- Tema sugerido por IA -->
+                    <div id="modal-ia-section">
+                        <div class="pdf-avoid-break" style="margin-bottom: 20px; padding: 18px; background: #f1f8e9; border-radius: 10px; border-left: 4px solid #2e7d32;">
+                            <p style="margin: 0 0 6px; font-size: 11px; font-weight: 600; color: #2e7d32; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fa-solid fa-lightbulb" style="margin-right: 4px;"></i> Tema Final Sugerido por IA
+                            </p>
+                            <p style="margin: 0; font-size: 16px; font-weight: 700; color: #1a1a1a; line-height: 1.4;" id="modal-tema-sugerido"></p>
+                        </div>
 
-                    <!-- Referencias -->
-                    <div id="modal-referencias-section" style="border-top: 1px solid #eee; padding-top: 16px;">
-                        <p style="margin: 0 0 10px; font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px;">
-                            <i class="fa-solid fa-magnifying-glass-chart" style="margin-right: 4px; color: #2e7d32;"></i> Tesis Similares Encontradas
-                        </p>
-                        <div id="modal-referencias"></div>
+                        <div class="w3-row-padding" style="margin: 0 -8px 18px;">
+                            <div class="w3-col l6 m12 s12 pdf-avoid-break" style="margin-bottom:12px;">
+                                <div class="w3-panel w3-pale-green w3-round-large pdf-avoid-break" style="margin:0;">
+                                    <p class="w3-small"><strong>Resumen</strong></p>
+                                    <p id="modal-ia-resumen" style="margin: 0; font-size: 13px; color: #444; line-height: 1.6;"></p>
+                                    <div id="modal-palabras-clave" class="pdf-avoid-break" style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;"></div>
+                                </div>
+                            </div>
+                            <div class="w3-col l6 m12 s12 pdf-avoid-break" style="margin-bottom:12px;">
+                                <div class="w3-panel w3-light-grey w3-round-large pdf-avoid-break" style="margin:0;">
+                                    <p class="w3-small"><strong>Objetivo General</strong></p>
+                                    <p id="modal-objetivo-general" style="margin: 0; font-size: 13px; color: #444; line-height: 1.6;"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w3-card w3-round-large pdf-avoid-break" style="margin-bottom:18px; border:1px solid #eef2ee;">
+                            <div class="w3-container" style="padding: 16px 18px;">
+                                <p class="w3-small"><strong>Objetivos Específicos</strong></p>
+                                <ul class="w3-ul" id="modal-objetivos-especificos"></ul>
+                            </div>
+                        </div>
+
+                        <div id="modal-pdf-justificacion" style="margin-bottom: 20px;">
+                            <p class="w3-small"><strong>Justificación</strong></p>
+                            <div id="modal-justificacion"></div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;" id="modal-tags"></div>
+
+                        <!-- Referencias -->
+                        <div id="modal-referencias-section" style="border-top: 1px solid #eee; padding-top: 16px;">
+                            <p style="margin: 0 0 10px; font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <i class="fa-solid fa-magnifying-glass-chart" style="margin-right: 4px; color: #2e7d32;"></i> Tesis Similares Encontradas
+                            </p>
+                            <div id="modal-referencias"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -318,6 +378,7 @@
                 <div id="modal-sin-ia" style="display: none; text-align: center; padding: 20px;">
                     <i class="fa-solid fa-circle-info" style="font-size: 28px; color: #ccc; margin-bottom: 8px;"></i>
                     <p style="color: #999; font-size: 13px; margin: 0;">Esta propuesta no tiene un análisis de IA asociado.</p>
+                </div>
                 </div>
             </div>
         </div>
@@ -348,6 +409,10 @@ function verDetalle(id) {
             document.getElementById('modal-resumen').textContent = data.resumen;
             document.getElementById('modal-fecha').textContent = data.fecha ? ('Generada el ' + data.fecha) : '';
             document.getElementById('modal-header-titulo').textContent = 'Detalle de Propuesta #' + data.id;
+            document.getElementById('modal-pdf-titulo').textContent = data.resultado_ia && data.resultado_ia.titulo ? data.resultado_ia.titulo : data.titulo;
+            document.getElementById('modal-pdf-fecha').textContent = data.fecha ? ('Generada el ' + data.fecha) : 'Fecha no disponible';
+            content.dataset.pdfTitulo = data.resultado_ia && data.resultado_ia.titulo ? data.resultado_ia.titulo : data.titulo;
+            content.dataset.pdfFecha = data.fecha || '';
 
             const iaSection = document.getElementById('modal-ia-section');
             const sinIa = document.getElementById('modal-sin-ia');
@@ -357,20 +422,50 @@ function verDetalle(id) {
                 iaSection.style.display = 'block';
                 sinIa.style.display = 'none';
 
-                document.getElementById('modal-tema-sugerido').textContent = ia.tema_sugerido || '';
-                document.getElementById('modal-justificacion').textContent = ia.justificacion || '';
+                document.getElementById('modal-tema-sugerido').textContent = ia.titulo || '';
+                document.getElementById('modal-ia-resumen').textContent = ia.resumen || '';
+                document.getElementById('modal-objetivo-general').textContent = ia.objetivo_general || '';
+                const justificacionContainer = document.getElementById('modal-justificacion');
+                justificacionContainer.innerHTML = '';
+                const justificaciones = Array.isArray(ia.justificacion)
+                    ? ia.justificacion
+                    : (typeof ia.justificacion === 'string' && ia.justificacion.trim()
+                        ? ia.justificacion.split(/\n\n+/).filter(Boolean)
+                        : []);
+                if (justificaciones.length > 0) {
+                    justificaciones.forEach(function(parrafo) {
+                        justificacionContainer.innerHTML += '<div class="w3-panel w3-sand w3-round-large w3-margin-bottom pdf-avoid-break" style="margin-top:0;">' +
+                            '<p style="margin:0;font-size:13px;color:#444;line-height:1.6;">' + escHTML(parrafo) + '</p>' +
+                        '</div>';
+                    });
+                } else {
+                    justificacionContainer.innerHTML = '<div class="w3-panel w3-sand w3-round-large w3-margin-bottom pdf-avoid-break" style="margin-top:0;">' +
+                        '<p style="margin:0;font-size:13px;color:#444;line-height:1.6;">No disponible.</p>' +
+                    '</div>';
+                }
+
+                const palabrasClaveContainer = document.getElementById('modal-palabras-clave');
+                palabrasClaveContainer.innerHTML = '';
+                if (ia.palabras_clave && ia.palabras_clave.length > 0) {
+                    ia.palabras_clave.forEach(function(palabra) {
+                        palabrasClaveContainer.innerHTML += '<span class="w3-tag w3-round w3-green" style="font-size:11px;padding:4px 10px;">' + escHTML(palabra) + '</span>';
+                    });
+                }
+
+                const objetivosContainer = document.getElementById('modal-objetivos-especificos');
+                objetivosContainer.innerHTML = '';
+                if (ia.objetivos_especificos && ia.objetivos_especificos.length > 0) {
+                    ia.objetivos_especificos.forEach(function(objetivo) {
+                        objetivosContainer.innerHTML += '<li style="padding-left:0;border-bottom:1px solid #edf2ed;color:#444;">' +
+                            '<i class="fa-solid fa-circle-check" style="margin-right:8px;color:#2e7d32;"></i>' + escHTML(objetivo) + '</li>';
+                    });
+                } else {
+                    objetivosContainer.innerHTML = '<li style="padding-left:0;color:#777;">No disponibles.</li>';
+                }
 
                 // Tags
                 const tagsContainer = document.getElementById('modal-tags');
                 tagsContainer.innerHTML = '';
-                if (ia.sublinea_recomendada) {
-                    tagsContainer.innerHTML += '<span style="display:inline-flex;align-items:center;padding:5px 12px;background:#e8f5e9;color:#2e7d32;border-radius:20px;font-size:11px;font-weight:600;">' +
-                        '<i class="fa-solid fa-diagram-project" style="margin-right:5px;"></i>' + escHTML(ia.sublinea_recomendada) + '</span>';
-                }
-                if (ia.modalidad_sugerida) {
-                    tagsContainer.innerHTML += '<span style="display:inline-flex;align-items:center;padding:5px 12px;background:#fff3e0;color:#e65100;border-radius:20px;font-size:11px;font-weight:600;">' +
-                        '<i class="fa-solid fa-graduation-cap" style="margin-right:5px;"></i>' + escHTML(ia.modalidad_sugerida) + '</span>';
-                }
                 if (data.max_similitud != null) {
                     const pct = (data.max_similitud * 100).toFixed(1);
                     tagsContainer.innerHTML += '<span style="display:inline-flex;align-items:center;padding:5px 12px;background:#e3f2fd;color:#1565c0;border-radius:20px;font-size:11px;font-weight:600;">' +
@@ -386,14 +481,23 @@ function verDetalle(id) {
                     ia.referencias.forEach(function(ref) {
                         const bgColor = ref.similitud >= 70 ? '#ffebee' : (ref.similitud >= 40 ? '#fff3e0' : '#e8f5e9');
                         const txtColor = ref.similitud >= 70 ? '#c62828' : (ref.similitud >= 40 ? '#e65100' : '#2e7d32');
+                        const objetivosHtml = Array.isArray(ref.objetivos_especificos) && ref.objetivos_especificos.length > 0
+                            ? ref.objetivos_especificos.map(obj => '<li style="padding-left:0;"><i class="fa-solid fa-angle-right" style="margin-right:8px;color:#2e7d32;"></i>' + escHTML(obj) + '</li>').join('')
+                            : '<li style="padding-left:0;color:#666;">No disponibles.</li>';
                         refsContainer.innerHTML +=
-                            '<div style="padding:10px 14px;background:#fafafa;border-radius:8px;margin-bottom:6px;border:1px solid #eee;">' +
-                                '<div style="display:flex;justify-content:space-between;align-items:start;">' +
-                                    '<p style="margin:0;font-size:12px;font-weight:600;color:#333;flex:1;"><i class="fa-solid fa-file-lines" style="color:#2e7d32;margin-right:5px;"></i>' + escHTML(ref.titulo) + '</p>' +
-                                    '<span style="flex-shrink:0;margin-left:10px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;background:' + bgColor + ';color:' + txtColor + ';">' + ref.similitud + '% similitud</span>' +
+                            '<details class="w3-card w3-round-large" style="margin-bottom:8px;border:1px solid #e8ece8;background:#fafafa;">' +
+                                '<summary class="w3-button w3-block" style="text-align:left;padding:14px 16px;white-space:normal;">' +
+                                    '<span style="font-size:12px;font-weight:600;color:#333;"><i class="fa-solid fa-file-lines" style="color:#2e7d32;margin-right:5px;"></i>' + escHTML(ref.titulo) + '</span>' +
+                                    '<span style="float:right;margin-left:10px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;background:' + bgColor + ';color:' + txtColor + ';">' + ref.similitud + '% similitud</span>' +
+                                '</summary>' +
+                                '<div class="w3-container" style="padding:0 16px 16px;">' +
+                                    '<p style="margin:6px 0;font-size:10px;color:#888;">Sublínea: ' + escHTML(ref.sublinea || 'N/A') + ' · ' + escHTML(ref.modalidad || 'N/A') + '</p>' +
+                                    '<p style="margin:0 0 8px;font-size:12px;color:#444;line-height:1.6;"><strong>Resumen:</strong> ' + escHTML(ref.resumen || 'No disponible.') + '</p>' +
+                                    '<p style="margin:0 0 8px;font-size:12px;color:#444;line-height:1.6;"><strong>Objetivo general:</strong> ' + escHTML(ref.objetivo_general || 'No disponible.') + '</p>' +
+                                    '<p style="margin:0 0 6px;font-size:11px;color:#444;"><strong>Objetivos específicos</strong></p>' +
+                                    '<ul class="w3-ul" style="margin:0;">' + objetivosHtml + '</ul>' +
                                 '</div>' +
-                                '<p style="margin:3px 0 0;font-size:10px;color:#888;">Sublínea: ' + escHTML(ref.sublinea || 'N/A') + ' · ' + escHTML(ref.modalidad || 'N/A') + '</p>' +
-                            '</div>';
+                            '</details>';
                     });
                 } else {
                     refsSection.style.display = 'none';
@@ -412,6 +516,86 @@ function verDetalle(id) {
 function cerrarModal() {
     document.getElementById('modal-detalle').style.display = 'none';
     document.body.style.overflow = '';
+}
+
+function descargarPDF() {
+    const content = document.getElementById('modal-content');
+    const source = document.getElementById('modal-pdf-content');
+
+    if (!source || content.style.display === 'none') {
+        alert('Abre primero una propuesta para descargar el PDF.');
+        return;
+    }
+
+    if (typeof html2pdf === 'undefined') {
+        alert('La librería de exportación PDF no está disponible en este momento.');
+        return;
+    }
+
+    const tituloBase = (content.dataset.pdfTitulo || 'propuesta').trim();
+    const fechaBase = (content.dataset.pdfFecha || '').replace(/[^0-9]/g, '');
+    const tituloSanitizado = tituloBase
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '')
+        .slice(0, 40) || 'propuesta';
+    const nombreArchivo = 'Propuesta_' + tituloSanitizado + (fechaBase ? '_' + fechaBase : '') + '.pdf';
+
+    const clone = source.cloneNode(true);
+    clone.querySelectorAll('details').forEach(function(detail) {
+        detail.open = true;
+    });
+    const tagsClone = clone.querySelector('#modal-tags');
+    if (tagsClone) {
+        tagsClone.remove();
+    }
+    const referenciasClone = clone.querySelector('#modal-referencias-section');
+    if (referenciasClone) {
+        referenciasClone.remove();
+    }
+    clone.style.width = '190mm';
+    clone.style.padding = '0';
+    clone.style.margin = '0';
+    clone.style.background = '#ffffff';
+
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'fixed';
+    wrapper.style.left = '-99999px';
+    wrapper.style.top = '0';
+    wrapper.style.width = '190mm';
+    wrapper.style.padding = '0';
+    wrapper.style.margin = '0';
+    wrapper.style.background = '#ffffff';
+    const printStyle = document.createElement('style');
+    printStyle.textContent = [
+        '@page { size: A4; margin: 25mm 10mm 10mm 10mm; }',
+        '.pdf-avoid-break { break-inside: avoid !important; page-break-inside: avoid !important; }',
+        '#modal-palabras-clave { break-inside: avoid !important; page-break-inside: avoid !important; }',
+        '#modal-pdf-justificacion > p { break-after: avoid !important; page-break-after: avoid !important; }',
+        '#modal-justificacion .pdf-avoid-break { break-inside: avoid !important; page-break-inside: avoid !important; }',
+        '@media print { .pdf-avoid-break { break-inside: avoid !important; page-break-inside: avoid !important; } }'
+    ].join(' ');
+    wrapper.appendChild(printStyle);
+    wrapper.appendChild(clone);
+    document.body.appendChild(wrapper);
+
+    const options = {
+        margin: [25, 10, 10, 10],
+        filename: nombreArchivo,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'], avoid: ['.pdf-avoid-break', '#modal-palabras-clave'] },
+    };
+
+    html2pdf()
+        .set(options)
+        .from(clone)
+        .save()
+        .finally(function() {
+            document.body.removeChild(wrapper);
+        });
 }
 
 function escHTML(str) {

@@ -31,29 +31,206 @@
     </div>
 </div>
 
-<div class="w3-row-padding w3-margin-top w3-padding-32">
-    <div class="w3-third w3-margin-bottom">
-        <div class="w3-container glass-card w3-padding-24 w3-center">
-            <i class="fa-solid fa-brain w3-xxlarge w3-text-green"></i>
-            <h4 style="font-weight: 600;">IA Semántica</h4>
-            <p class="w3-small w3-text-grey">Comprensión profunda de las ideas de investigación mediante modelos de lenguaje avanzados.</p>
+<style>
+    /* ── Zig-Zag Feature Sections ── */
+    .features-wrapper {
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+    }
+
+    .feature-section {
+        padding: 6rem 2rem;
+        background: #f4f6f8;
+    }
+
+    .feature-section--alt {
+        background: #ffffff;
+    }
+
+    .feature-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 5rem;
+    }
+
+    .feature-inner--reversed {
+        flex-direction: row-reverse;
+    }
+
+    .feature-text,
+    .feature-visual {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* Mobile: image always on top */
+    @media (max-width: 768px) {
+        .feature-inner,
+        .feature-inner--reversed {
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+        .feature-visual {
+            order: -1;
+            width: 100%;
+        }
+        .feature-section {
+            padding: 4rem 1.5rem;
+        }
+    }
+
+    .feature-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        background: #e8f5e9;
+        border-radius: 16px;
+        color: #19521b;
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-text h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 1rem 0;
+        line-height: 1.25;
+    }
+
+    .feature-text p {
+        font-size: 1.05rem;
+        color: #555;
+        line-height: 1.85;
+        margin: 0 0 1.75rem 0;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .feature-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.95rem;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .feature-list li i {
+        color: #19521b;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .feature-img {
+        width: 100%;
+        height: auto;
+        border-radius: 20px;
+        box-shadow: 0 24px 64px rgba(25, 82, 27, 0.15);
+        transition: box-shadow 0.3s, transform 0.3s;
+        display: block;
+    }
+
+    .feature-img:hover {
+        box-shadow: 0 32px 80px rgba(25, 82, 27, 0.25);
+        transform: translateY(-4px);
+    }
+</style>
+
+<!-- ── Zig-Zag Features ── -->
+<div class="features-wrapper">
+
+    <!-- Feature 1 — Texto izq · Imagen der -->
+    <section class="feature-section" data-aos="fade-up">
+        <div class="feature-inner">
+            <div class="feature-text">
+                <div class="feature-badge">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h2>IA Semántica</h2>
+                <p>
+                    Comprensión profunda de las ideas de investigación mediante modelos de lenguaje avanzados.
+                    El motor semántico analiza el contexto y la intención detrás de cada propuesta, 
+                    entregando resultados precisos y con significado real.
+                </p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-circle-check"></i> Análisis contextual del lenguaje natural</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Modelos de lenguaje de última generación</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Resultados semánticos en tiempo real</li>
+                </ul>
+            </div>
+            <div class="feature-visual" data-aos="fade-left" data-aos-delay="150">
+                <img src="{{ url_for('static', filename='img/GIF1_Semanctica.gif') }}"
+                     alt="IA Semántica – Demo"
+                     class="feature-img">
+            </div>
         </div>
-    </div>
-    
-    <div class="w3-third w3-margin-bottom">
-        <div class="w3-container glass-card w3-padding-24 w3-center">
-            <i class="fa-solid fa-database w3-xxlarge w3-text-green"></i>
-            <h4 style="font-weight: 600;">Motor Vectorial</h4>
-            <p class="w3-small w3-text-grey">Búsqueda matemática en el repositorio histórico para garantizar proyectos 100% inéditos.</p>
+    </section>
+
+    <!-- Feature 2 — Imagen izq · Texto der (invertido) -->
+    <section class="feature-section feature-section--alt" data-aos="fade-up">
+        <div class="feature-inner feature-inner--reversed">
+            <div class="feature-text">
+                <div class="feature-badge">
+                    <i class="fa-solid fa-database"></i>
+                </div>
+                <h2>Motor Vectorial</h2>
+                <p>
+                    Búsqueda matemática en el repositorio histórico para garantizar proyectos 100&nbsp;% inéditos.
+                    Utilizamos embeddings vectoriales para calcular similitud semántica entre propuestas 
+                    con una precisión que va más allá de las palabras clave.
+                </p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-circle-check"></i> Comparación por similitud semántica</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Repositorio histórico completo de la UTM</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Detección de duplicados de alta precisión</li>
+                </ul>
+            </div>
+            <div class="feature-visual" data-aos="fade-right" data-aos-delay="150">
+                <img src="{{ url_for('static', filename='img/GIF2_Motor_Vectorial.gif') }}"
+                     alt="Motor Vectorial – Demo"
+                     class="feature-img">
+            </div>
         </div>
-    </div>
-    
-    <div class="w3-third w3-margin-bottom">
-        <div class="w3-container glass-card w3-padding-24 w3-center">
-            <i class="fa-solid fa-crosshairs w3-xxlarge w3-text-green"></i>
-            <h4 style="font-weight: 600;">Alineación Curricular</h4>
-            <p class="w3-small w3-text-grey">Generación estructurada que respeta los lineamientos oficiales de la Universidad Técnica de Manabí.</p>
+    </section>
+
+    <!-- Feature 3 — Texto izq · Imagen der -->
+    <section class="feature-section" data-aos="fade-up">
+        <div class="feature-inner">
+            <div class="feature-text">
+                <div class="feature-badge">
+                    <i class="fa-solid fa-crosshairs"></i>
+                </div>
+                <h2>Alineación Curricular</h2>
+                <p>
+                    Generación estructurada que respeta los lineamientos oficiales de la 
+                    Universidad Técnica de Manabí. Cada propuesta es validada automáticamente 
+                    contra el currículo vigente de la Carrera de Tecnologías de la Información.
+                </p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-circle-check"></i> Lineamientos oficiales UTM integrados</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Estructura de propuesta normativa válida</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Coherencia con el currículo académico vigente</li>
+                </ul>
+            </div>
+            <div class="feature-visual" data-aos="fade-left" data-aos-delay="150">
+                <img src="{{ url_for('static', filename='img/gif4_alineacion_curricular.gif') }}"
+                     alt="Alineación Curricular – Demo"
+                     class="feature-img">
+            </div>
         </div>
-    </div>
+    </section>
+
 </div>
 {% endblock %}
