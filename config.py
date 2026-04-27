@@ -10,6 +10,9 @@ load_dotenv(BASE_DIR / ".env", override=True)
 def _resolve_database_uri() -> str:
     database_url = os.environ.get("DATABASE_URL", "").strip()
     if database_url:
+        # SQLAlchemy 1.4+ requiere postgresql://, no postgres://
+        if database_url.startswith("postgres://"):
+            database_url = database_url.replace("postgres://", "postgresql://", 1)
         print("USANDO SUPABASE")
         return database_url
 
