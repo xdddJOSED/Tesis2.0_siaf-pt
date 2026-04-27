@@ -131,7 +131,15 @@ def verificar_correo(token):
         return redirect(url_for("main.login"))
 
     usuario.verificado = True
-    db.session.commit()
+    db.session.add(usuario)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error("Error al verificar correo para %s: %s", correo, e)
+        flash("Ocurrió un error al guardar la verificación. Intenta de nuevo.", "error")
+        return redirect(url_for("main.login"))
+
     flash("¡Correo verificado con éxito! Ya puedes iniciar sesión.", "success")
     return redirect(url_for("main.login"))
 

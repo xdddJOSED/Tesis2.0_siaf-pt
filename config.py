@@ -24,6 +24,10 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "devkey")
     SQLALCHEMY_DATABASE_URI = _resolve_database_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,   # re-valida conexiones caídas (crítico con pgBouncer)
+        "pool_recycle": 280,     # recicla antes del timeout de 300 s de Supabase
+    }
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
     VECTOR_DIMENSIONS = 1536
 
