@@ -22,7 +22,7 @@
 </head>
 <body>
     <div class="w3-top" style="z-index: 1000;">
-        <div class="w3-bar w3-white w3-padding w3-card" style="display: flex; align-items: center;">
+        <div class="w3-bar w3-white w3-padding w3-card" style="display: flex; align-items: center; overflow: visible;">
             <a href="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-green w3-large" style="font-weight: 700;">
                 <i class="fa-solid fa-graduation-cap w3-text-green"></i> SIAF<span class="w3-text-green">-PT</span>
             </a>
@@ -157,7 +157,9 @@
       function toggleUserDropdown(event) {
           event.stopPropagation();
           var dd = document.getElementById('user-dropdown');
-          if (dd) dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+          if (!dd) return;
+          var hidden = dd.style.display === '' || dd.style.display === 'none';
+          dd.style.display = hidden ? 'block' : 'none';
       }
       // Cerrar dropdown al hacer clic fuera
       document.addEventListener('click', function(e) {

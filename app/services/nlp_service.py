@@ -7,8 +7,22 @@ from dotenv import load_dotenv
 # Forzar la carga de las variables de entorno
 load_dotenv()
 
-# Inicializar el cliente pasando la llave explícitamente
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+# Inicialización diferida: el cliente se crea la primera vez que se necesita,
+# no al importar el módulo. Esto evita que la app crashee en startup si la
+# variable de entorno aún no está disponible en ese instante.
+_client = None
+
+def _get_client() -> OpenAI:
+    global _client
+    if _client is None:
+        api_key = os.environ.get("OPENAI_API_KEY", "")
+        if not api_key:
+            raise RuntimeError(
+                "OPENAI_API_KEY no está configurada. "
+                "Agrégala en Render → Environment → Add Environment Variable."
+            )
+        _client = OpenAI(api_key=api_key)
+    return _client
 
 
 def construir_super_embedding(
@@ -31,7 +45,7 @@ def construir_super_embedding(
 def generar_embedding(texto: str) -> list:
     """Genera un vector de embedding usando la API de OpenAI."""
     try:
-        respuesta = client.embeddings.create(
+        respuesta = _get_client().embeddings.create(
             input=texto,
             model="text-embedding-3-small",
         )
@@ -205,7 +219,7 @@ Responde EXACTAMENTE con esta estructura:
 }}"""
 
     try:
-        respuesta = client.chat.completions.create(
+        respuesta = _get_client().chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                                 {
