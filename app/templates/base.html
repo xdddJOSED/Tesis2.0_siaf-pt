@@ -26,6 +26,7 @@
             <a href="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-green w3-large" style="font-weight: 700;">
                 <i class="fa-solid fa-graduation-cap w3-text-green"></i> SIAF<span class="w3-text-green">-PT</span>
             </a>
+            <!-- Links desktop (ocultos en móvil) -->
             <div class="w3-right w3-hide-small" style="margin-left: auto; display: flex; align-items: center;">
                 {% if g.user %}
                     <a href="{{ url_for('main.dashboard') }}" class="w3-bar-item w3-button w3-round w3-hover-light-grey">
@@ -42,6 +43,45 @@
                     <a href="{{ url_for('main.registro') }}" class="w3-bar-item w3-button utm-green btn-main w3-margin-left"><i class="fa-solid fa-user-plus"></i> Registrate ahora </a>
                 {% endif %}
             </div>
+            <!-- Botón hamburguesa (solo en móvil) -->
+            <button class="w3-right w3-hide-medium w3-hide-large" onclick="toggleMobileMenu()"
+                style="background:none; border:none; cursor:pointer; padding:8px 12px; font-size:20px; color:#2e7d32; margin-left:auto;">
+                <i class="fa-solid fa-bars" id="hamburger-icon"></i>
+            </button>
+        </div>
+        <!-- Menú móvil desplegable -->
+        <div id="mobile-menu" class="w3-bar-block w3-white w3-hide w3-hide-medium w3-hide-large w3-card"
+             style="border-top: 1px solid #e8f5e9; padding: 8px 0;">
+            {% if g.user %}
+                <div style="padding: 12px 20px 8px; border-bottom: 1px solid #f0f0f0; margin-bottom: 4px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="width:36px; height:36px; border-radius:50%; background:#e8f5e9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fa-solid fa-user-graduate" style="color:#2e7d32; font-size:16px;"></i>
+                        </div>
+                        <div>
+                            <p style="margin:0; font-weight:700; font-size:14px; color:#1a1a1a;">{{ g.user.nombre_completo }}</p>
+                            <p style="margin:0; font-size:12px; color:#888;">{{ g.user.correo }}</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ url_for('main.dashboard') }}" class="w3-bar-item w3-button"
+                   style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-table-columns w3-text-green"></i> Panel de Control
+                </a>
+                <a href="{{ url_for('main.logout') }}" class="w3-bar-item w3-button"
+                   style="padding:14px 20px; font-size:14px; color:#c62828; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
+                </a>
+            {% else %}
+                <a href="{{ url_for('main.login') }}" class="w3-bar-item w3-button"
+                   style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-right-to-bracket w3-text-green"></i> Iniciar Sesión
+                </a>
+                <a href="{{ url_for('main.registro') }}" class="w3-bar-item w3-button"
+                   style="padding:14px 20px; font-size:14px; color:#19521b; font-weight:600; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-user-plus"></i> Registrate ahora
+                </a>
+            {% endif %}
         </div>
     </div>
 
@@ -53,6 +93,28 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
+      function toggleMobileMenu() {
+          var menu = document.getElementById('mobile-menu');
+          var icon = document.getElementById('hamburger-icon');
+          if (menu.classList.contains('w3-hide')) {
+              menu.classList.remove('w3-hide');
+              icon.classList.replace('fa-bars', 'fa-xmark');
+          } else {
+              menu.classList.add('w3-hide');
+              icon.classList.replace('fa-xmark', 'fa-bars');
+          }
+      }
+      // Cerrar menú al hacer clic fuera
+      document.addEventListener('click', function(e) {
+          var menu = document.getElementById('mobile-menu');
+          var btn = document.querySelector('[onclick="toggleMobileMenu()"]');
+          if (menu && !menu.classList.contains('w3-hide') && !menu.contains(e.target) && btn && !btn.contains(e.target)) {
+              menu.classList.add('w3-hide');
+              var icon = document.getElementById('hamburger-icon');
+              if (icon) icon.classList.replace('fa-xmark', 'fa-bars');
+          }
+      });
+
       // Esta función detecta cuando el navegador está listo para mover los cuadros
       document.addEventListener('DOMContentLoaded', function() {
           AOS.init({
