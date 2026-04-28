@@ -188,7 +188,7 @@
                 <details class="w3-card w3-round-large" style="margin-bottom:10px; border:1px solid #e8ece8; background:#fafafa;">
                     <summary class="w3-button w3-block" style="text-align:left; padding:14px 16px; white-space:normal; list-style:none;">
                         <div style="display:flex; flex-direction:column; align-items:flex-start; gap:6px;">
-                            <span style="font-size:13px; font-weight:600; color:#333; word-break:break-word; width:100%;">
+                            <span style="font-size:13px; font-weight:600; color:#333; word-break:break-word; overflow-wrap:break-word; width:100%; box-sizing:border-box; padding-right:12px;">
                                 <i class="fa-solid fa-file-lines w3-text-green" style="margin-right: 6px;"></i>{{ ref.titulo }}
                             </span>
                             <span class="w3-tag w3-round" style="display:inline-block; {% if ref.similitud >= 70 %}background:#ffebee;color:#c62828;{% elif ref.similitud >= 40 %}background:#fff3e0;color:#e65100;{% else %}background:#e8f5e9;color:#2e7d32;{% endif %}">
@@ -515,7 +515,7 @@ function verDetalle(id) {
                             '<details class="w3-card w3-round-large" style="margin-bottom:8px;border:1px solid #e8ece8;background:#fafafa;">' +
                                 '<summary class="w3-button w3-block" style="text-align:left;padding:14px 16px;white-space:normal;list-style:none;">' +
                                     '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:6px;">' +
-                                        '<span style="font-size:12px;font-weight:600;color:#333;word-break:break-word;width:100%;"><i class="fa-solid fa-file-lines" style="color:#2e7d32;margin-right:5px;"></i>' + escHTML(ref.titulo) + '</span>' +
+                                        '<span style="font-size:12px;font-weight:600;color:#333;word-break:break-word;overflow-wrap:break-word;width:100%;box-sizing:border-box;padding-right:12px;"><i class="fa-solid fa-file-lines" style="color:#2e7d32;margin-right:5px;"></i>' + escHTML(ref.titulo) + '</span>' +
                                         '<span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;background:' + bgColor + ';color:' + txtColor + ';">' + ref.similitud + '% similitud</span>' +
                                     '</div>' +
                                 '</summary>' +
