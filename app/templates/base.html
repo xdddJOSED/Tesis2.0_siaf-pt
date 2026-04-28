@@ -27,17 +27,63 @@
                 <i class="fa-solid fa-graduation-cap w3-text-green"></i> SIAF<span class="w3-text-green">-PT</span>
             </a>
             <!-- Links desktop (ocultos en móvil) -->
-            <div class="w3-right w3-hide-small" style="margin-left: auto; display: flex; align-items: center;">
+            <div class="w3-right w3-hide-small" style="margin-left: auto; display: flex; align-items: center; gap: 4px;">
                 {% if g.user %}
-                    <a href="{{ url_for('main.dashboard') }}" class="w3-bar-item w3-button w3-round w3-hover-light-grey">
+                    <a href="{{ url_for('main.dashboard') }}" class="w3-bar-item w3-button w3-round w3-hover-light-grey" style="font-size:14px;">
                         <i class="fa-solid fa-table-columns"></i> Panel de Control
                     </a>
-                    <span class="w3-bar-item" style="color: #555; font-weight: 500; font-size: 14px;">
-                        <i class="fa-solid fa-circle-user w3-text-green"></i> Hola, {{ g.user.nombre_completo.split()[0] }}
-                    </span>
-                    <a href="{{ url_for('main.logout') }}" class="w3-bar-item w3-button w3-round w3-hover-light-grey" style="color: #c62828;">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
-                    </a>
+                    <!-- Dropdown de usuario -->
+                    <div style="position: relative;" id="user-dropdown-wrap">
+                        <button onclick="toggleUserDropdown(event)"
+                                style="background: none; border: none; cursor: pointer; display: flex; align-items: center;
+                                       gap: 8px; padding: 6px 10px; border-radius: 24px; transition: background 0.2s;"
+                                onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='none'">
+                            {% if g.user.avatar_url %}
+                                <img src="{{ g.user.avatar_url }}" alt="avatar"
+                                     style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid #2e7d32;">
+                            {% else %}
+                                <div style="width:32px; height:32px; border-radius:50%; background:#e8f5e9;
+                                            display:flex; align-items:center; justify-content:center;
+                                            border:2px solid #2e7d32; flex-shrink:0;">
+                                    <i class="fa-solid fa-user-graduate" style="font-size:14px; color:#2e7d32;"></i>
+                                </div>
+                            {% endif %}
+                            <span style="font-size:14px; font-weight:600; color:#1a1a1a;">{{ g.user.nombre_completo.split()[0] }}</span>
+                            <i class="fa-solid fa-chevron-down" style="font-size:11px; color:#888;"></i>
+                        </button>
+                        <!-- Panel desplegable -->
+                        <div id="user-dropdown"
+                             style="display:none; position:absolute; right:0; top:calc(100% + 6px); min-width:200px;
+                                    background:white; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.12);
+                                    border:1px solid #eee; z-index:2000; overflow:hidden;">
+                            <div style="padding:14px 16px; border-bottom:1px solid #f0f0f0;">
+                                <p style="margin:0; font-weight:700; font-size:13px; color:#1a1a1a; word-break:break-word;">{{ g.user.nombre_completo }}</p>
+                                <p style="margin:2px 0 0; font-size:11px; color:#888; word-break:break-all;">{{ g.user.correo }}</p>
+                            </div>
+                            <a href="{{ url_for('main.perfil') }}"
+                               style="display:flex; align-items:center; gap:10px; padding:12px 16px;
+                                      font-size:14px; color:#1a1a1a; text-decoration:none;
+                                      transition:background 0.15s;"
+                               onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='none'">
+                                <i class="fa-solid fa-circle-user" style="color:#2e7d32; width:16px;"></i> Perfil
+                            </a>
+                            <a href="#"
+                               style="display:flex; align-items:center; gap:10px; padding:12px 16px;
+                                      font-size:14px; color:#1a1a1a; text-decoration:none;
+                                      transition:background 0.15s;"
+                               onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='none'">
+                                <i class="fa-solid fa-language" style="color:#2e7d32; width:16px;"></i> Idioma
+                            </a>
+                            <div style="border-top:1px solid #f0f0f0; margin:4px 0;"></div>
+                            <a href="{{ url_for('main.logout') }}"
+                               style="display:flex; align-items:center; gap:10px; padding:12px 16px;
+                                      font-size:14px; color:#c62828; text-decoration:none;
+                                      transition:background 0.15s;"
+                               onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
+                                <i class="fa-solid fa-arrow-right-from-bracket" style="width:16px;"></i> Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
                 {% else %}
                     <a href="{{ url_for('main.login') }}" class="w3-bar-item w3-button w3-round w3-hover-light-grey"><i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión</a>
                     <a href="{{ url_for('main.registro') }}" class="w3-bar-item w3-button utm-green btn-main w3-margin-left"><i class="fa-solid fa-user-plus"></i> Registrate ahora </a>
@@ -55,9 +101,15 @@
             {% if g.user %}
                 <div style="padding: 12px 20px 8px; border-bottom: 1px solid #f0f0f0; margin-bottom: 4px;">
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="width:36px; height:36px; border-radius:50%; background:#e8f5e9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                            <i class="fa-solid fa-user-graduate" style="color:#2e7d32; font-size:16px;"></i>
-                        </div>
+                        {% if g.user.avatar_url %}
+                            <img src="{{ g.user.avatar_url }}" alt="avatar"
+                                 style="width:36px; height:36px; border-radius:50%; object-fit:cover;
+                                        border:2px solid #2e7d32; flex-shrink:0;">
+                        {% else %}
+                            <div style="width:36px; height:36px; border-radius:50%; background:#e8f5e9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <i class="fa-solid fa-user-graduate" style="color:#2e7d32; font-size:16px;"></i>
+                            </div>
+                        {% endif %}
                         <div>
                             <p style="margin:0; font-weight:700; font-size:14px; color:#1a1a1a;">{{ g.user.nombre_completo }}</p>
                             <p style="margin:0; font-size:12px; color:#888;">{{ g.user.correo }}</p>
@@ -68,6 +120,15 @@
                    style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
                     <i class="fa-solid fa-table-columns w3-text-green"></i> Panel de Control
                 </a>
+                <a href="{{ url_for('main.perfil') }}" class="w3-bar-item w3-button"
+                   style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-circle-user w3-text-green"></i> Perfil
+                </a>
+                <a href="#" class="w3-bar-item w3-button"
+                   style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-language w3-text-green"></i> Idioma
+                </a>
+                <div style="border-top:1px solid #f0f0f0; margin: 4px 0;"></div>
                 <a href="{{ url_for('main.logout') }}" class="w3-bar-item w3-button"
                    style="padding:14px 20px; font-size:14px; color:#c62828; display:flex; align-items:center; gap:10px;">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
@@ -93,6 +154,18 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
+      function toggleUserDropdown(event) {
+          event.stopPropagation();
+          var dd = document.getElementById('user-dropdown');
+          if (dd) dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+      }
+      // Cerrar dropdown al hacer clic fuera
+      document.addEventListener('click', function(e) {
+          var wrap = document.getElementById('user-dropdown-wrap');
+          var dd = document.getElementById('user-dropdown');
+          if (dd && wrap && !wrap.contains(e.target)) dd.style.display = 'none';
+      });
+
       function toggleMobileMenu() {
           var menu = document.getElementById('mobile-menu');
           var icon = document.getElementById('hamburger-icon');

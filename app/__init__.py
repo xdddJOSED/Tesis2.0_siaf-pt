@@ -151,6 +151,87 @@ def logout():
     return redirect(url_for("main.index"))
 
 
+@main_bp.route("/perfil", methods=["GET", "POST"])
+def perfil():
+    usuario_id = session.get("usuario_id")
+    if not usuario_id:
+        flash("Debes iniciar sesión para acceder a tu perfil.", "error")
+        return redirect(url_for("main.login"))
+
+    usuario = Usuario.query.get(usuario_id)
+    if not usuario:
+        flash("Usuario no encontrado.", "error")
+        return redirect(url_for("main.login"))
+
+    if request.method == "POST":
+        from flask import current_app
+        import uuid, httpx
+
+        # 1. Actualizar nombre
+        nuevo_nombre = request.form.get("nombre_completo", "").strip()
+        if nuevo_nombre and len(nuevo_nombre) >= 3:
+            usuario.nombre_completo = nuevo_nombre
+
+        # 2. Subir foto a Supabase Storage si se envió una
+        foto = request.files.get("foto")
+        ALLOWED = {"image/jpeg", "image/png", "image/jpg"}
+        if foto and foto.filename:
+            if foto.mimetype not in ALLOWED:
+                flash("Formato de imagen no válido. Usa JPG o PNG.", "error")
+                return redirect(url_for("main.perfil"))
+
+            # Leer contenido y limitar a 2 MB
+            imagen_bytes = foto.read()
+            if len(imagen_bytes) > 2 * 1024 * 1024:
+                flash("La imagen no puede superar los 2 MB.", "error")
+                return redirect(url_for("main.perfil"))
+
+            ext = "jpg" if "jpeg" in foto.mimetype else "png"
+            nombre_archivo = f"{usuario.id}_{uuid.uuid4().hex}.{ext}"
+
+            supabase_url = current_app.config.get("SUPABASE_URL", "")
+            service_key  = current_app.config.get("SUPABASE_SERVICE_KEY", "")
+
+            if not supabase_url or not service_key or service_key == "your-service-role-key-here":
+                flash("La subida de avatares no está configurada todavía. Contacta al administrador.", "error")
+                return redirect(url_for("main.perfil"))
+
+            try:
+                upload_url = f"{supabase_url}/storage/v1/object/avatares/{nombre_archivo}"
+                headers = {
+                    "Authorization": f"Bearer {service_key}",
+                    "Content-Type": foto.mimetype,
+                    "x-upsert": "true",   # sobreescribe si ya existe el nombre
+                }
+                resp = httpx.post(upload_url, content=imagen_bytes, headers=headers, timeout=30)
+                resp.raise_for_status()
+
+                # URL pública del bucket
+                usuario.avatar_url = f"{supabase_url}/storage/v1/object/public/avatares/{nombre_archivo}"
+            except httpx.HTTPStatusError as e:
+                current_app.logger.error("Storage upload error %s: %s", e.response.status_code, e.response.text)
+                flash("No se pudo subir la imagen. Verifica la configuración del bucket.", "error")
+                return redirect(url_for("main.perfil"))
+            except Exception as e:
+                current_app.logger.error("Storage error: %s", e)
+                flash("Error inesperado al subir la imagen. Intenta de nuevo.", "error")
+                return redirect(url_for("main.perfil"))
+
+        # 3. Guardar en BD
+        try:
+            db.session.add(usuario)
+            db.session.commit()
+            flash("Perfil actualizado correctamente.", "success")
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error("Error al actualizar perfil: %s", e)
+            flash("No se pudo guardar el perfil. Intenta de nuevo.", "error")
+
+        return redirect(url_for("main.perfil"))
+
+    return render_template("perfil.html", usuario=usuario)
+
+
 @main_bp.route("/olvide_contrasena", methods=["GET", "POST"])
 def olvide_contrasena():
     if request.method == "GET":

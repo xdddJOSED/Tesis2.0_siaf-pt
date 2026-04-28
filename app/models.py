@@ -21,6 +21,7 @@ class Usuario(db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     rol = db.Column(db.String(20), nullable=False, default="estudiante")
     verificado = db.Column(db.Boolean, nullable=False, default=False)
+    avatar_url = db.Column(db.String(255), nullable=True)
     creado_en = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     # Relación bidireccional: un usuario puede tener muchas propuestas de tesis

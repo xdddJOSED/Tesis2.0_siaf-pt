@@ -31,6 +31,10 @@ class Config:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
     VECTOR_DIMENSIONS = 1536
 
+    # Supabase Storage
+    SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+    SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+
     # Flask-Mail
     MAIL_SERVER = os.getenv("MAIL_SERVER", "smtp.gmail.com")
     MAIL_PORT = int(os.getenv("MAIL_PORT", 465))

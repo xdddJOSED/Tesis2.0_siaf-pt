@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Mensajes flash -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div style="padding: 12px 16px; border-radius: 8px; margin: 16px 0; font-size: 14px;
+            {% if category == 'error' %}
+                background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb;
+            {% else %}
+                background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;
+            {% endif %}">
+            <i class="fa-solid {{ 'fa-circle-exclamation' if category == 'error' else 'fa-circle-check' }}" style="margin-right: 8px;"></i>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endwith %}
+
+<div style="padding: 40px 0 24px;">
+    <h1 style="margin: 0; font-weight: 700; font-size: 26px; color: #1a1a1a;">
+        <i class="fa-solid fa-circle-user" style="color: #2e7d32;"></i> Mi Perfil
+    </h1>
+    <p style="margin: 6px 0 0; color: #666; font-size: 14px;">Administra tu información personal y foto de perfil.</p>
+</div>
+
+<div class="w3-row-padding" style="margin: 0 -8px 40px;">
+
+    <!-- Columna avatar -->
+    <div class="w3-col l4 m12 s12" style="margin-bottom: 24px;">
+        <div class="glass-card" style="padding: 32px; text-align: center;">
+            <!-- Avatar actual -->
+            <div style="position: relative; display: inline-block; margin-bottom: 16px;">
+                {% if usuario.avatar_url %}
+                    <img src="{{ usuario.avatar_url }}"
+                         alt="Foto de perfil"
+                         id="avatar-preview"
+                         style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+                                border: 3px solid #2e7d32; box-shadow: 0 4px 16px rgba(46,125,50,0.2);">
+                {% else %}
+                    <div id="avatar-placeholder"
+                         style="width: 120px; height: 120px; border-radius: 50%; background: #e8f5e9;
+                                display: flex; align-items: center; justify-content: center;
+                                border: 3px solid #2e7d32; margin: 0 auto;">
+                        <i class="fa-solid fa-user-graduate" style="font-size: 48px; color: #2e7d32;"></i>
+                    </div>
+                    <img id="avatar-preview" src="" alt="Vista previa"
+                         style="display:none; width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+                                border: 3px solid #2e7d32; box-shadow: 0 4px 16px rgba(46,125,50,0.2);">
+                {% endif %}
+            </div>
+
+            <h3 style="margin: 0 0 4px; font-weight: 700; font-size: 17px; color: #1a1a1a; word-break: break-word;">
+                {{ usuario.nombre_completo }}
+            </h3>
+            <p style="margin: 0 0 4px; color: #888; font-size: 13px; word-break: break-all;">{{ usuario.correo }}</p>
+            <span style="display: inline-block; padding: 4px 14px; background: #e8f5e9; color: #2e7d32;
+                          border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: capitalize;">
+                {{ usuario.rol }}
+            </span>
+
+            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+
+            <p style="margin: 0; font-size: 12px; color: #aaa;">
+                <i class="fa-solid fa-calendar-check" style="margin-right: 4px;"></i>
+                Miembro desde {{ usuario.creado_en.strftime('%d/%m/%Y') if usuario.creado_en else 'N/A' }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Columna formulario -->
+    <div class="w3-col l8 m12 s12" style="margin-bottom: 24px;">
+        <div class="glass-card" style="padding: 36px 32px;">
+            <h2 style="margin: 0 0 24px; font-size: 18px; font-weight: 700; color: #1a1a1a;">
+                <i class="fa-solid fa-pen-to-square" style="color: #2e7d32; margin-right: 8px;"></i>Editar información
+            </h2>
+
+            <form method="POST" action="{{ url_for('main.perfil') }}" enctype="multipart/form-data" autocomplete="off">
+
+                <!-- Nombre completo -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                        <i class="fa-solid fa-user" style="color: #2e7d32; margin-right: 4px;"></i> Nombre Completo
+                    </label>
+                    <input type="text" name="nombre_completo"
+                           value="{{ usuario.nombre_completo }}"
+                           placeholder="Tu nombre completo"
+                           style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px;
+                                  font-size: 15px; font-family: 'Inter', sans-serif; box-sizing: border-box;
+                                  transition: border-color 0.3s; outline: none;"
+                           onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
+                </div>
+
+                <!-- Correo (solo lectura) -->
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                        <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> Correo Institucional
+                    </label>
+                    <input type="text" value="{{ usuario.correo }}" disabled
+                           style="width: 100%; padding: 12px 16px; border: 1.5px solid #eee; border-radius: 8px;
+                                  font-size: 15px; font-family: 'Inter', sans-serif; box-sizing: border-box;
+                                  background: #f9f9f9; color: #999; cursor: not-allowed;">
+                    <p style="margin: 4px 0 0; font-size: 12px; color: #bbb;">El correo institucional no puede modificarse.</p>
+                </div>
+
+                <!-- Foto de perfil -->
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
+                        <i class="fa-solid fa-camera" style="color: #2e7d32; margin-right: 4px;"></i> Foto de Perfil
+                    </label>
+                    <div style="border: 2px dashed #ddd; border-radius: 10px; padding: 20px; text-align: center;
+                                transition: border-color 0.3s; cursor: pointer;"
+                         id="drop-zone"
+                         onclick="document.getElementById('foto-input').click()"
+                         ondragover="event.preventDefault(); this.style.borderColor='#2e7d32';"
+                         ondragleave="this.style.borderColor='#ddd';"
+                         ondrop="handleDrop(event)">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: #ccc; margin-bottom: 8px;"></i>
+                        <p style="margin: 0; font-size: 14px; color: #888;">Haz clic o arrastra una imagen aquí</p>
+                        <p style="margin: 4px 0 0; font-size: 12px; color: #bbb;">JPG, PNG — máximo 2 MB</p>
+                    </div>
+                    <input type="file" id="foto-input" name="foto" accept="image/jpeg,image/png"
+                           style="display:none;" onchange="previewAvatar(event)">
+                    <p style="margin: 8px 0 0; font-size: 12px; color: #aaa; text-align: center;">
+                        <i class="fa-solid fa-circle-info" style="margin-right: 4px;"></i>
+                        La subida a la nube se activará en la próxima actualización.
+                    </p>
+                </div>
+
+                <!-- Botón guardar -->
+                <button type="submit" class="btn-main utm-green"
+                        style="width: 100%; padding: 13px; border: none; border-radius: 8px;
+                               font-size: 15px; font-weight: 600; cursor: pointer;
+                               font-family: 'Inter', sans-serif; letter-spacing: 0.3px;">
+                    <i class="fa-solid fa-floppy-disk" style="margin-right: 8px;"></i>Guardar Cambios
+                </button>
+
+                <a href="{{ url_for('main.dashboard') }}"
+                   style="display: block; text-align: center; margin-top: 14px; font-size: 13px;
+                          color: #888; text-decoration: none;">
+                    <i class="fa-solid fa-arrow-left" style="margin-right: 4px;"></i> Volver al Panel
+                </a>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function previewAvatar(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+        alert('La imagen no puede superar los 2 MB.');
+        event.target.value = '';
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const preview = document.getElementById('avatar-preview');
+        const placeholder = document.getElementById('avatar-placeholder');
+        if (preview) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        if (placeholder) placeholder.style.display = 'none';
+        document.getElementById('drop-zone').style.borderColor = '#2e7d32';
+    };
+    reader.readAsDataURL(file);
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    document.getElementById('drop-zone').style.borderColor = '#ddd';
+    const file = event.dataTransfer.files[0];
+    if (!file) return;
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    const input = document.getElementById('foto-input');
+    input.files = dt.files;
+    previewAvatar({ target: input });
+}
+</script>
+{% endblock %}
