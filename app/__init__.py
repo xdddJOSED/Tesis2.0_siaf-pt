@@ -197,18 +197,20 @@ def perfil():
                 return redirect(url_for("main.perfil"))
 
             try:
-                upload_url = f"{supabase_url}/storage/v1/object/avatares/{nombre_archivo}"
+                base_url = supabase_url.rstrip("/")
+                upload_url = f"{base_url}/storage/v1/object/avatares/{nombre_archivo}"
+                current_app.logger.info("URL de subida Supabase: %s", upload_url)
                 headers = {
                     "Authorization": f"Bearer {service_key}",
-                    "apikey": service_key,          # requerido por la REST API de Supabase
+                    "apikey": service_key,
                     "Content-Type": foto.mimetype,
-                    "x-upsert": "true",             # sobreescribe si ya existe el nombre
+                    "x-upsert": "true",
                 }
                 resp = httpx.post(upload_url, content=imagen_bytes, headers=headers, timeout=30)
                 resp.raise_for_status()
 
                 # URL pública del bucket
-                usuario.avatar_url = f"{supabase_url}/storage/v1/object/public/avatares/{nombre_archivo}"
+                usuario.avatar_url = f"{base_url}/storage/v1/object/public/avatares/{nombre_archivo}"
             except httpx.HTTPStatusError as e:
                 current_app.logger.error("Storage upload error %s: %s", e.response.status_code, e.response.text)
                 flash("No se pudo subir la imagen. Verifica la configuración del bucket.", "error")
