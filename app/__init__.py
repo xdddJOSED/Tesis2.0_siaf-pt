@@ -14,6 +14,18 @@ mail = Mail()
 main_bp = Blueprint("main", __name__)
 
 
+def _enviar_correo_async(app, msg):
+    """Envía un correo en un hilo separado para no bloquear el worker de Gunicorn."""
+    import threading
+    def _send():
+        with app.app_context():
+            try:
+                mail.send(msg)
+            except Exception as e:
+                app.logger.error("Error enviando correo a %s: %s", msg.recipients, e)
+    threading.Thread(target=_send, daemon=True).start()
+
+
 @main_bp.before_app_request
 def cargar_usuario():
     usuario_id = session.get("usuario_id")
@@ -68,26 +80,23 @@ def registro():
     db.session.add(nuevo_usuario)
     db.session.commit()
 
-    # Enviar correo de verificación
+    # Enviar correo de verificación (en hilo para no bloquear el worker)
     from flask import current_app
-    token = _generar_token(correo, current_app._get_current_object())
+    _app = current_app._get_current_object()
+    token = _generar_token(correo, _app)
     enlace = url_for("main.verificar_correo", token=token, _external=True)
-    try:
-        msg = Message(
-            subject="Verifica tu cuenta – Sistema de Tesis UTM",
-            recipients=[correo],
-        )
-        msg.body = (
-            f"Hola {nombre_completo},\n\n"
-            f"Gracias por registrarte. Por favor verifica tu correo haciendo clic en el enlace:\n\n"
-            f"{enlace}\n\n"
-            f"El enlace expira en 1 hora.\n\nSistema de Tesis UTM"
-        )
-        mail.send(msg)
-        flash("¡Cuenta creada! Revisa tu correo institucional para verificar tu cuenta.", "success")
-    except Exception as e:
-        flash(f"Cuenta creada, pero no se pudo enviar el correo de verificación: {e}", "warning")
-
+    msg = Message(
+        subject="Verifica tu cuenta – Sistema de Tesis UTM",
+        recipients=[correo],
+    )
+    msg.body = (
+        f"Hola {nombre_completo},\n\n"
+        f"Gracias por registrarte. Por favor verifica tu correo haciendo clic en el enlace:\n\n"
+        f"{enlace}\n\n"
+        f"El enlace expira en 1 hora.\n\nSistema de Tesis UTM"
+    )
+    _enviar_correo_async(_app, msg)
+    flash("¡Cuenta creada! Revisa tu correo institucional para verificar tu cuenta.", "success")
     return redirect(url_for("main.login"))
 
 
@@ -245,25 +254,56 @@ def olvide_contrasena():
     # No revelamos si el correo existe o no (seguridad)
     if usuario:
         from flask import current_app
-        token = _generar_token(correo, current_app._get_current_object())
+        _app = current_app._get_current_object()
+        token = _generar_token(correo, _app)
         enlace = url_for("main.restablecer_contrasena", token=token, _external=True)
-        try:
-            msg = Message(
-                subject="Recupera tu contraseña – SIAF-PT UTM",
-                recipients=[correo],
-            )
-            msg.body = (
-                f"Hola {usuario.nombre_completo},\n\n"
-                f"Recibimos una solicitud para restablecer tu contraseña.\n"
-                f"Haz clic en el siguiente enlace (válido por 1 hora):\n\n"
-                f"{enlace}\n\n"
-                f"Si no solicitaste esto, ignora este mensaje.\n\nSIAF-PT UTM"
-            )
-            mail.send(msg)
-        except Exception as e:
-            print(f"\n[DEV] Envío de correo fallido ({e}). Usa este enlace manualmente:\n{enlace}\n")
+        msg = Message(
+            subject="Recupera tu contraseña – SIAF-PT UTM",
+            recipients=[correo],
+        )
+        msg.body = (
+            f"Hola {usuario.nombre_completo},\n\n"
+            f"Recibimos una solicitud para restablecer tu contraseña.\n"
+            f"Haz clic en el siguiente enlace (válido por 1 hora):\n\n"
+            f"{enlace}\n\n"
+            f"Si no solicitaste esto, ignora este mensaje.\n\nSIAF-PT UTM"
+        )
+        _enviar_correo_async(_app, msg)
 
-    flash("Si el correo existe, recibirás un enlace (o revisa la terminal en modo desarrollo).", "success")
+    flash("Si el correo existe, recibirás un enlace en tu correo institucional.", "success")
+    return redirect(url_for("main.login"))
+
+
+@main_bp.route("/reenviar_verificacion", methods=["GET", "POST"])
+def reenviar_verificacion():
+    if request.method == "GET":
+        return render_template("reenviar_verificacion.html")
+
+    correo = request.form.get("correo", "").strip().lower()
+    if not correo:
+        flash("Ingresa tu correo institucional.", "error")
+        return redirect(url_for("main.reenviar_verificacion"))
+
+    usuario = Usuario.query.filter_by(correo=correo).first()
+    if usuario and not usuario.verificado:
+        from flask import current_app
+        _app = current_app._get_current_object()
+        token = _generar_token(correo, _app)
+        enlace = url_for("main.verificar_correo", token=token, _external=True)
+        msg = Message(
+            subject="Verifica tu cuenta – Sistema de Tesis UTM",
+            recipients=[correo],
+        )
+        msg.body = (
+            f"Hola {usuario.nombre_completo},\n\n"
+            f"Aquí tienes un nuevo enlace de verificación:\n\n"
+            f"{enlace}\n\n"
+            f"El enlace expira en 1 hora.\n\nSistema de Tesis UTM"
+        )
+        _enviar_correo_async(_app, msg)
+
+    # Mensaje genérico por seguridad
+    flash("Si el correo está registrado y sin verificar, recibirás el enlace en breve.", "success")
     return redirect(url_for("main.login"))
 
 
