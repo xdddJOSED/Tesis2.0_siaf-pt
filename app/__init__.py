@@ -202,14 +202,14 @@ def perfil():
                 sb = create_client(base_url, service_key)
                 bucket_path = f"{usuario.id}/{nombre_archivo}"
                 current_app.logger.info("Supabase upload → bucket=avatares path=%s", bucket_path)
-                print(f"--- DEBUG: bucket=avatares path={bucket_path} supabase_url={base_url} ---", flush=True)
-                sb.storage.from_("avatares").upload(
+                print(f"--- DEBUG: bucket=avatars path={bucket_path} supabase_url={base_url} ---", flush=True)
+                sb.storage.from_("avatars").upload(
                     path=bucket_path,
                     file=imagen_bytes,
                     file_options={"content-type": foto.mimetype, "upsert": "true"},
                 )
                 # URL pública del bucket
-                usuario.avatar_url = sb.storage.from_("avatares").get_public_url(bucket_path)
+                usuario.avatar_url = sb.storage.from_("avatars").get_public_url(bucket_path)
             except Exception as e:
                 current_app.logger.error("Storage upload error: %s", e)
                 print(f"--- DEBUG Storage error: {e} ---", flush=True)
