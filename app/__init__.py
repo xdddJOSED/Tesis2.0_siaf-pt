@@ -200,8 +200,9 @@ def perfil():
                 upload_url = f"{supabase_url}/storage/v1/object/avatares/{nombre_archivo}"
                 headers = {
                     "Authorization": f"Bearer {service_key}",
+                    "apikey": service_key,          # requerido por la REST API de Supabase
                     "Content-Type": foto.mimetype,
-                    "x-upsert": "true",   # sobreescribe si ya existe el nombre
+                    "x-upsert": "true",             # sobreescribe si ya existe el nombre
                 }
                 resp = httpx.post(upload_url, content=imagen_bytes, headers=headers, timeout=30)
                 resp.raise_for_status()
