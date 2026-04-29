@@ -200,6 +200,8 @@ def perfil():
                 base_url = supabase_url.rstrip("/")
                 upload_url = f"{base_url}/storage/v1/object/avatares/{nombre_archivo}"
                 current_app.logger.info("URL de subida Supabase: %s", upload_url)
+                print(f"--- DEBUG URL: {upload_url} ---", flush=True)
+                print(f"--- DEBUG HEADERS: {{'apikey': '{service_key[:10]}...', 'Authorization': 'Bearer {service_key[:10]}...'}} ---", flush=True)
                 headers = {
                     "Authorization": f"Bearer {service_key}",
                     "apikey": service_key,
