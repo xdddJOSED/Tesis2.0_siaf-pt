@@ -197,29 +197,23 @@ def perfil():
                 return redirect(url_for("main.perfil"))
 
             try:
+                from supabase import create_client
                 base_url = supabase_url.rstrip("/")
-                upload_url = f"{base_url}/storage/v1/object/avatares/{nombre_archivo}"
-                current_app.logger.info("URL de subida Supabase: %s", upload_url)
-                print(f"--- DEBUG URL: {upload_url} ---", flush=True)
-                print(f"--- DEBUG HEADERS: {{'apikey': '{service_key[:10]}...', 'Authorization': 'Bearer {service_key[:10]}...'}} ---", flush=True)
-                headers = {
-                    "Authorization": f"Bearer {service_key}",
-                    "apikey": service_key,
-                    "Content-Type": foto.mimetype,
-                    "x-upsert": "true",
-                }
-                resp = httpx.post(upload_url, content=imagen_bytes, headers=headers, timeout=30)
-                resp.raise_for_status()
-
+                sb = create_client(base_url, service_key)
+                bucket_path = f"{usuario.id}/{nombre_archivo}"
+                current_app.logger.info("Supabase upload → bucket=avatares path=%s", bucket_path)
+                print(f"--- DEBUG: bucket=avatares path={bucket_path} supabase_url={base_url} ---", flush=True)
+                sb.storage.from_("avatares").upload(
+                    path=bucket_path,
+                    file=imagen_bytes,
+                    file_options={"content-type": foto.mimetype, "upsert": "true"},
+                )
                 # URL pública del bucket
-                usuario.avatar_url = f"{base_url}/storage/v1/object/public/avatares/{nombre_archivo}"
-            except httpx.HTTPStatusError as e:
-                current_app.logger.error("Storage upload error %s: %s", e.response.status_code, e.response.text)
-                flash("No se pudo subir la imagen. Verifica la configuración del bucket.", "error")
-                return redirect(url_for("main.perfil"))
+                usuario.avatar_url = sb.storage.from_("avatares").get_public_url(bucket_path)
             except Exception as e:
-                current_app.logger.error("Storage error: %s", e)
-                flash("Error inesperado al subir la imagen. Intenta de nuevo.", "error")
+                current_app.logger.error("Storage upload error: %s", e)
+                print(f"--- DEBUG Storage error: {e} ---", flush=True)
+                flash("No se pudo subir la imagen. Verifica la configuración del bucket.", "error")
                 return redirect(url_for("main.perfil"))
 
         # 3. Guardar en BD
