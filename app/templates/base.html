@@ -34,10 +34,7 @@
                     </a>
                     <!-- Dropdown de usuario -->
                     <div style="position: relative;" id="user-dropdown-wrap">
-                        <button onclick="toggleUserDropdown(event)"
-                                style="background: none; border: none; cursor: pointer; display: flex; align-items: center;
-                                       gap: 8px; padding: 6px 10px; border-radius: 24px; transition: background 0.2s;"
-                                onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='none'">
+                        <div style="display:flex; align-items:center; gap:8px; padding:6px 10px;">
                             {% if g.user.avatar_url %}
                                 <img src="{{ g.user.avatar_url }}" alt="avatar"
                                      style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid #2e7d32;">
@@ -49,8 +46,14 @@
                                 </div>
                             {% endif %}
                             <span style="font-size:14px; font-weight:600; color:#1a1a1a;">{{ g.user.nombre_completo.split()[0] }}</span>
-                            <i class="fa-solid fa-chevron-down" style="font-size:11px; color:#888;"></i>
-                        </button>
+                            <button onclick="toggleUserDropdown(event)"
+                                    title="Configuración de cuenta"
+                                    style="background:none; border:none; cursor:pointer; display:flex; align-items:center;
+                                           padding:4px 6px; border-radius:6px; transition:background 0.2s;"
+                                    onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='none'">
+                                <i class="fa-solid fa-gear" style="font-size:15px; color:#888;"></i>
+                            </button>
+                        </div>
                         <!-- Panel desplegable -->
                         <div id="user-dropdown"
                              style="display:none; position:absolute; right:0; top:calc(100% + 6px); min-width:200px;
