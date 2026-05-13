@@ -18,6 +18,9 @@
         .glass-card { background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.01); }
         .btn-main { transition: 0.3s; border-radius: 8px; font-weight: 600; text-decoration: none; }
         .btn-main:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(46,125,50,0.3); }
+        @media (max-width: 600px) {
+            .w3-content { padding-left: 12px !important; padding-right: 12px !important; }
+        }
     </style>
 </head>
 <body>
@@ -92,9 +95,27 @@
                     <a href="{{ url_for('main.registro') }}" class="w3-bar-item w3-button utm-green btn-main w3-margin-left"><i class="fa-solid fa-user-plus"></i> Registrate ahora </a>
                 {% endif %}
             </div>
+            <!-- Mini usuario en barra móvil (solo pequeño, logueado) -->
+            {% if g.user %}
+            <div class="w3-hide-medium w3-hide-large" style="margin-left:auto; display:flex; align-items:center; gap:6px; padding-right:4px;">
+                {% if g.user.avatar_url %}
+                    <img src="{{ g.user.avatar_url }}" alt="avatar"
+                         style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:2px solid #2e7d32; flex-shrink:0;">
+                {% else %}
+                    <div style="width:28px; height:28px; border-radius:50%; background:#e8f5e9; display:flex; align-items:center; justify-content:center; border:2px solid #2e7d32; flex-shrink:0;">
+                        <i class="fa-solid fa-user-graduate" style="font-size:12px; color:#2e7d32;"></i>
+                    </div>
+                {% endif %}
+                <span style="font-size:13px; font-weight:600; color:#1a1a1a; max-width:90px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ g.user.nombre_completo.split()[0] }}</span>
+                <button onclick="toggleMobileMenu()" title="Configuración de cuenta"
+                        style="background:none; border:none; cursor:pointer; display:flex; align-items:center; padding:4px 6px; border-radius:6px; flex-shrink:0;">
+                    <i class="fa-solid fa-gear" style="font-size:15px; color:#888;"></i>
+                </button>
+            </div>
+            {% endif %}
             <!-- Botón hamburguesa (solo en móvil) -->
             <button class="w3-right w3-hide-medium w3-hide-large" onclick="toggleMobileMenu()"
-                style="background:none; border:none; cursor:pointer; padding:8px 12px; font-size:20px; color:#2e7d32; margin-left:auto;">
+                style="background:none; border:none; cursor:pointer; padding:8px 12px; font-size:20px; color:#2e7d32;{% if not g.user %} margin-left:auto;{% endif %}">
                 <i class="fa-solid fa-bars" id="hamburger-icon"></i>
             </button>
         </div>
