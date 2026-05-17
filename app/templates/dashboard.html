@@ -130,67 +130,94 @@
                 </p>
             </div>
 
-            <!-- 2. Resumen (ancho completo) -->
-            <div style="margin-bottom: 20px;">
-                <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-round-large" style="margin:0;">
-                    <p class="w3-small" style="margin-bottom: 6px;"><strong>Resumen</strong></p>
-                    <p style="margin:0; line-height:1.6; color:#444;">{{ resultado_ia.resumen }}</p>
-                    {% if resultado_ia.palabras_clave %}
-                    <div style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;">
-                        {% for palabra in resultado_ia.palabras_clave %}
-                        <span class="w3-tag w3-round w3-green" style="font-size: 11px; padding: 4px 10px;">{{ palabra }}</span>
+            <!-- 2–5. Acordeón: Resumen / Planteamiento / Justificación / Objetivos -->
+            <div style="margin-bottom: 24px;">
+
+                <!-- Resumen -->
+                <details open style="margin-bottom: 8px; border-radius: 10px; overflow: hidden; border: 1.5px solid #a5d6a7;">
+                    <summary style="list-style: none; padding: 16px 20px; background: #e8f5e9; cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none;">
+                        <span style="width: 36px; height: 36px; border-radius: 8px; background: #2e7d32; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fa-solid fa-align-left" style="color: white; font-size: 15px;"></i>
+                        </span>
+                        <span style="font-size: 16px; font-weight: 700; color: #1b5e20; flex: 1;">Resumen</span>
+                        <i class="fa-solid fa-chevron-down" style="color: #2e7d32; font-size: 13px; transition: transform 0.2s;"></i>
+                    </summary>
+                    <div style="padding: 20px; background: #f9fdf9; border-top: 1px solid #c8e6c9;">
+                        <p style="margin: 0 0 12px; line-height: 1.7; color: #333; font-size: 14px;">{{ resultado_ia.resumen }}</p>
+                        {% if resultado_ia.palabras_clave %}
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
+                            {% for palabra in resultado_ia.palabras_clave %}
+                            <span class="w3-tag w3-round w3-green" style="font-size: 11px; padding: 4px 10px;">{{ palabra }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </details>
+
+                <!-- Planteamiento del Problema -->
+                {% if resultado_ia.planteamiento_del_problema %}
+                <details style="margin-bottom: 8px; border-radius: 10px; overflow: hidden; border: 1.5px solid #ffcc80;">
+                    <summary style="list-style: none; padding: 16px 20px; background: #fff3e0; cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none;">
+                        <span style="width: 36px; height: 36px; border-radius: 8px; background: #e65100; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fa-solid fa-triangle-exclamation" style="color: white; font-size: 15px;"></i>
+                        </span>
+                        <span style="font-size: 16px; font-weight: 700; color: #bf360c; flex: 1;">Planteamiento del Problema</span>
+                        <i class="fa-solid fa-chevron-down" style="color: #e65100; font-size: 13px; transition: transform 0.2s;"></i>
+                    </summary>
+                    <div style="padding: 20px; background: #fff8e1; border-top: 1px solid #ffcc80; border-left: 4px solid #e65100;">
+                        {% for parrafo in resultado_ia.planteamiento_del_problema.split('\n\n') %}
+                        <p style="margin: 0 0 14px; font-size: 14px; color: #444; line-height: 1.8;">{{ parrafo }}</p>
                         {% endfor %}
                     </div>
-                    {% endif %}
-                </div>
-            </div>
+                </details>
+                {% endif %}
 
-            <!-- 3. Planteamiento del Problema -->
-            {% if resultado_ia.planteamiento_del_problema %}
-            <div style="margin:0 0 24px;">
-                <p class="w3-small" style="margin-bottom: 10px;">
-                    <strong><i class="fa-solid fa-triangle-exclamation" style="color:#e65100; margin-right:6px;"></i>Planteamiento del Problema</strong>
-                </p>
-                <div class="w3-round-large" style="border-left:4px solid #e65100; background:#fff8e1; padding: 16px 20px;">
-                    {% for parrafo in resultado_ia.planteamiento_del_problema.split('\n\n') %}
-                    <p style="margin:0 0 12px; font-size:14px; color:#444; line-height:1.8;">{{ parrafo }}</p>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
+                <!-- Justificación -->
+                <details style="margin-bottom: 8px; border-radius: 10px; overflow: hidden; border: 1.5px solid #d7ccc8;">
+                    <summary style="list-style: none; padding: 16px 20px; background: #efebe9; cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none;">
+                        <span style="width: 36px; height: 36px; border-radius: 8px; background: #6d4c41; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fa-solid fa-scale-balanced" style="color: white; font-size: 15px;"></i>
+                        </span>
+                        <span style="font-size: 16px; font-weight: 700; color: #4e342e; flex: 1;">Justificación</span>
+                        <i class="fa-solid fa-chevron-down" style="color: #6d4c41; font-size: 13px; transition: transform 0.2s;"></i>
+                    </summary>
+                    <div style="padding: 20px; background: #faf7f5; border-top: 1px solid #d7ccc8;">
+                        {% for parrafo in resultado_ia.justificacion %}
+                        <div style="padding: 14px 16px; background: #fff8f5; border-radius: 8px; border-left: 3px solid #a1887f; margin-bottom: 10px;">
+                            <p style="margin: 0; font-size: 14px; color: #444; line-height: 1.7;">{{ parrafo }}</p>
+                        </div>
+                        {% else %}
+                        <p style="margin: 0; color: #888; font-size: 14px;">No disponible.</p>
+                        {% endfor %}
+                    </div>
+                </details>
 
-            <!-- 4. Justificación -->
-            <div style="margin:0 0 24px;">
-                <p class="w3-small" style="margin-bottom: 10px;"><strong>Justificación</strong></p>
-                {% for parrafo in resultado_ia.justificacion %}
-                <div class="w3-panel w3-sand w3-round-large w3-margin-bottom" style="margin-top:0;">
-                    <p style="margin:0; font-size:14px; color:#444; line-height:1.7;">{{ parrafo }}</p>
-                </div>
-                {% else %}
-                <div class="w3-panel w3-sand w3-round-large w3-margin-bottom" style="margin-top:0;">
-                    <p style="margin:0; font-size:14px; color:#444; line-height:1.7;">No disponible.</p>
-                </div>
-                {% endfor %}
-            </div>
-
-            <!-- 5. Objetivos: General + Específicos -->
-            <div style="margin-bottom: 20px;">
-                <div class="w3-panel w3-light-grey w3-round-large" style="margin:0 0 12px;">
-                    <p class="w3-small" style="margin-bottom: 6px;"><strong>Objetivo General</strong></p>
-                    <p style="margin:0; line-height:1.6; color:#444;">{{ resultado_ia.objetivo_general }}</p>
-                </div>
-                <div class="w3-card w3-round-large w3-white" style="border: 1px solid #e7efe7;">
-                    <div class="w3-container" style="padding: 18px 20px;">
-                        <p class="w3-small" style="margin-bottom: 8px;"><strong>Objetivos Específicos</strong></p>
-                        <ul class="w3-ul" style="margin:0;">
+                <!-- Objetivos -->
+                <details style="margin-bottom: 8px; border-radius: 10px; overflow: hidden; border: 1.5px solid #b0bec5;">
+                    <summary style="list-style: none; padding: 16px 20px; background: #eceff1; cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none;">
+                        <span style="width: 36px; height: 36px; border-radius: 8px; background: #37474f; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fa-solid fa-bullseye" style="color: white; font-size: 15px;"></i>
+                        </span>
+                        <span style="font-size: 16px; font-weight: 700; color: #263238; flex: 1;">Objetivos</span>
+                        <i class="fa-solid fa-chevron-down" style="color: #37474f; font-size: 13px; transition: transform 0.2s;"></i>
+                    </summary>
+                    <div style="padding: 20px; background: #f5f7f8; border-top: 1px solid #b0bec5;">
+                        <div style="padding: 14px 16px; background: #e8eaf6; border-radius: 8px; border-left: 3px solid #3949ab; margin-bottom: 14px;">
+                            <p style="margin: 0 0 4px; font-size: 12px; font-weight: 600; color: #3949ab; text-transform: uppercase; letter-spacing: 0.4px;">Objetivo General</p>
+                            <p style="margin: 0; font-size: 14px; color: #333; line-height: 1.7;">{{ resultado_ia.objetivo_general }}</p>
+                        </div>
+                        <p style="margin: 0 0 10px; font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.4px;">Objetivos Específicos</p>
+                        <ul style="margin: 0; padding: 0; list-style: none;">
                             {% for objetivo in resultado_ia.objetivos_especificos %}
-                            <li style="padding-left: 0; border-bottom: 1px solid #edf2ed; color:#444;">
-                                <i class="fa-solid fa-circle-check w3-text-green" style="margin-right: 8px;"></i>{{ objetivo }}
+                            <li style="padding: 10px 12px; border-bottom: 1px solid #e0e0e0; color: #444; font-size: 14px; line-height: 1.6; display: flex; align-items: flex-start; gap: 10px;">
+                                <i class="fa-solid fa-circle-check" style="color: #2e7d32; margin-top: 3px; flex-shrink: 0;"></i>
+                                <span>{{ objetivo }}</span>
                             </li>
                             {% endfor %}
                         </ul>
                     </div>
-                </div>
+                </details>
+
             </div>
 
             <!-- Tesis de referencia -->
