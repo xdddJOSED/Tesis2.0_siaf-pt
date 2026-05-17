@@ -7,7 +7,7 @@ import re
 
 # ── 1. Leer el Excel con openpyxl (preserva celdas combinadas) ──
 df = pd.read_excel(
-    "listado_de_temas.xlsx",
+    "listado_temas_tesis.xlsx",
     engine="openpyxl",
     header=0,
     dtype=str,

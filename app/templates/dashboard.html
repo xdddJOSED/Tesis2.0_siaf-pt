@@ -178,6 +178,17 @@
                 {% endfor %}
             </div>
 
+            {% if resultado_ia.planteamiento_del_problema %}
+            <div style="margin:0 0 24px;">
+                <p class="w3-small" style="margin-bottom: 10px;">
+                    <strong><i class="fa-solid fa-triangle-exclamation" style="color:#e65100; margin-right:6px;"></i>Planteamiento del Problema</strong>
+                </p>
+                <div class="w3-panel w3-round-large w3-margin-bottom" style="margin-top:0; background:#fff8e1; border-left:4px solid #e65100;">
+                    <p style="margin:0; font-size:14px; color:#444; line-height:1.7;">{{ resultado_ia.planteamiento_del_problema }}</p>
+                </div>
+            </div>
+            {% endif %}
+
             <!-- Tesis de referencia -->
             {% if resultado_ia.referencias %}
             <div style="border-top: 1px solid #eee; padding-top: 20px;">

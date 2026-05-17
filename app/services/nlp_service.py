@@ -132,6 +132,7 @@ def normalizar_resultado_ia(resultado: dict) -> dict:
         "objetivos_especificos": normalizar_objetivos_especificos(resultado.get("objetivos_especificos", []))[:4],
         "palabras_clave": normalizar_palabras_clave(resultado.get("palabras_clave", [])),
         "justificacion": normalizar_justificacion(resultado.get("justificacion", [])),
+        "planteamiento_del_problema": str(resultado.get("planteamiento_del_problema", "")).strip(),
         "referencias": resultado.get("referencias", []),
     }
 
@@ -192,6 +193,13 @@ Reglas ESTRICTAS para el campo "justificacion":
 5. Cada string debe estar bien desarrollado, con lenguaje académico universitario y verbos formales como: diagnosticar, obstaculizar, coadyuvar, mitigar, fortalecer, optimizar, consolidar, contribuir.
 6. No debe ser genérica, breve ni promocional; debe sonar como una fundamentación de tesis real.
 
+Reglas ESTRICTAS para el campo "planteamiento_del_problema":
+1. Debe ser un string único (no lista).
+2. Debe tener al menos 3 oraciones bien desarrolladas.
+3. Debe describir claramente: el problema central que origina la investigación, las causas identificadas que lo generan, las consecuencias negativas si no se resuelve, y el contexto institucional o social específico.
+4. Debe usar lenguaje académico universitario formal y no ser genérico.
+5. Debe sonar como el "Planteamiento del Problema" real de una tesis de pregrado de la UTM.
+
 Debes responder con JSON estricto válido, sin texto adicional, sin markdown y sin claves extra.
 Responde EXACTAMENTE con esta estructura:
 {{
@@ -215,7 +223,8 @@ Responde EXACTAMENTE con esta estructura:
         "Párrafo 1 sobre problemática y contexto.",
         "Párrafo 2 sobre solución tecnológica e impacto.",
         "Párrafo 3 sobre beneficiarios directos e indirectos."
-    ]
+    ],
+    "planteamiento_del_problema": "Descripción del problema central que motiva la investigación, con evidencia del contexto institucional o social, las causas identificadas y las consecuencias si no se resuelve."
 }}"""
 
     try:
@@ -228,12 +237,14 @@ Responde EXACTAMENTE con esta estructura:
                                             "Eres un tutor de tesis estricto de la Universidad Técnica de Manabí, "
                                             "especialista en redacción académica universitaria y generador de JSON estricto. "
                                             "Respondes solo con un objeto JSON válido que contenga exactamente las claves "
-                                            "titulo, resumen, objetivo_general, objetivos_especificos, palabras_clave y justificacion. "
+                                            "titulo, resumen, objetivo_general, objetivos_especificos, palabras_clave, justificacion y planteamiento_del_problema. "
                                             "objetivos_especificos debe ser una lista de exactamente 4 strings. "
                                             "palabras_clave debe ser una lista de exactamente 5 a 6 strings cortos. "
                                             "La justificacion debe ser una lista de exactamente 3 strings y seguir esta estructura obligatoria: "
                                             "primer string problemática y contexto; segundo string solución tecnológica e impacto; "
                                             "tercer string beneficiarios directos e indirectos. "
+                                            "planteamiento_del_problema debe ser un string de al menos 3 oraciones que describa el problema central, "
+                                            "sus causas identificadas, las consecuencias de no resolverlo y el contexto institucional o social. "
                                             "Debes usar tono académico formal, vocabulario universitario y verbos como diagnosticar, "
                                             "obstaculizar, coadyuvar y mitigar. No aceptes justificaciones genéricas ni demasiado cortas."
                                         ),
