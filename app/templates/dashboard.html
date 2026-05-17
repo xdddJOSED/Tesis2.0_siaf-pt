@@ -130,41 +130,36 @@
                 </p>
             </div>
 
-            <div class="w3-row-padding" style="margin: 0 -8px 20px;">
-                <div class="w3-col l6 m12 s12" style="margin-bottom: 12px;">
-                    <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-round-large" style="margin:0;">
-                        <p class="w3-small" style="margin-bottom: 6px;"><strong>Resumen</strong></p>
-                        <p style="margin:0; line-height:1.6; color:#444;">{{ resultado_ia.resumen }}</p>
-                        {% if resultado_ia.palabras_clave %}
-                        <div style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;">
-                            {% for palabra in resultado_ia.palabras_clave %}
-                            <span class="w3-tag w3-round w3-green" style="font-size: 11px; padding: 4px 10px;">{{ palabra }}</span>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="w3-col l6 m12 s12" style="margin-bottom: 12px;">
-                    <div class="w3-panel w3-light-grey w3-round-large" style="margin:0;">
-                        <p class="w3-small" style="margin-bottom: 6px;"><strong>Objetivo General</strong></p>
-                        <p style="margin:0; line-height:1.6; color:#444;">{{ resultado_ia.objetivo_general }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="w3-card w3-round-large w3-white" style="margin-bottom: 20px; border: 1px solid #e7efe7;">
-                <div class="w3-container" style="padding: 18px 20px;">
-                    <p class="w3-small" style="margin-bottom: 8px;"><strong>Objetivos Específicos</strong></p>
-                    <ul class="w3-ul" style="margin:0;">
-                        {% for objetivo in resultado_ia.objetivos_especificos %}
-                        <li style="padding-left: 0; border-bottom: 1px solid #edf2ed; color:#444;">
-                            <i class="fa-solid fa-circle-check w3-text-green" style="margin-right: 8px;"></i>{{ objetivo }}
-                        </li>
+            <!-- 2. Resumen (ancho completo) -->
+            <div style="margin-bottom: 20px;">
+                <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-round-large" style="margin:0;">
+                    <p class="w3-small" style="margin-bottom: 6px;"><strong>Resumen</strong></p>
+                    <p style="margin:0; line-height:1.6; color:#444;">{{ resultado_ia.resumen }}</p>
+                    {% if resultado_ia.palabras_clave %}
+                    <div style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;">
+                        {% for palabra in resultado_ia.palabras_clave %}
+                        <span class="w3-tag w3-round w3-green" style="font-size: 11px; padding: 4px 10px;">{{ palabra }}</span>
                         {% endfor %}
-                    </ul>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 
+            <!-- 3. Planteamiento del Problema -->
+            {% if resultado_ia.planteamiento_del_problema %}
+            <div style="margin:0 0 24px;">
+                <p class="w3-small" style="margin-bottom: 10px;">
+                    <strong><i class="fa-solid fa-triangle-exclamation" style="color:#e65100; margin-right:6px;"></i>Planteamiento del Problema</strong>
+                </p>
+                <div class="w3-round-large" style="border-left:4px solid #e65100; background:#fff8e1; padding: 16px 20px;">
+                    {% for parrafo in resultado_ia.planteamiento_del_problema.split('\n\n') %}
+                    <p style="margin:0 0 12px; font-size:14px; color:#444; line-height:1.8;">{{ parrafo }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 4. Justificación -->
             <div style="margin:0 0 24px;">
                 <p class="w3-small" style="margin-bottom: 10px;"><strong>Justificación</strong></p>
                 {% for parrafo in resultado_ia.justificacion %}
@@ -178,18 +173,25 @@
                 {% endfor %}
             </div>
 
-            {% if resultado_ia.planteamiento_del_problema %}
-            <div style="margin:0 0 24px;">
-                <p class="w3-small" style="margin-bottom: 10px;">
-                    <strong><i class="fa-solid fa-triangle-exclamation" style="color:#e65100; margin-right:6px;"></i>Planteamiento del Problema</strong>
-                </p>
-                <div class="w3-round-large" style="border-left:4px solid #e65100; background:#fff8e1; padding: 16px 20px;">
-                    {% for parrafo in resultado_ia.planteamiento_del_problema.split('\n\n') %}
-                    <p style="margin:0 0 12px; font-size:14px; color:#444; line-height:1.8;">{{ parrafo }}</p>
-                    {% endfor %}
+            <!-- 5. Objetivos: General + Específicos -->
+            <div style="margin-bottom: 20px;">
+                <div class="w3-panel w3-light-grey w3-round-large" style="margin:0 0 12px;">
+                    <p class="w3-small" style="margin-bottom: 6px;"><strong>Objetivo General</strong></p>
+                    <p style="margin:0; line-height:1.6; color:#444;">{{ resultado_ia.objetivo_general }}</p>
+                </div>
+                <div class="w3-card w3-round-large w3-white" style="border: 1px solid #e7efe7;">
+                    <div class="w3-container" style="padding: 18px 20px;">
+                        <p class="w3-small" style="margin-bottom: 8px;"><strong>Objetivos Específicos</strong></p>
+                        <ul class="w3-ul" style="margin:0;">
+                            {% for objetivo in resultado_ia.objetivos_especificos %}
+                            <li style="padding-left: 0; border-bottom: 1px solid #edf2ed; color:#444;">
+                                <i class="fa-solid fa-circle-check w3-text-green" style="margin-right: 8px;"></i>{{ objetivo }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
-            {% endif %}
 
             <!-- Tesis de referencia -->
             {% if resultado_ia.referencias %}
