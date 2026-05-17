@@ -194,11 +194,15 @@ Reglas ESTRICTAS para el campo "justificacion":
 6. No debe ser genérica, breve ni promocional; debe sonar como una fundamentación de tesis real.
 
 Reglas ESTRICTAS para el campo "planteamiento_del_problema":
-1. Debe ser un string único (no lista).
-2. Debe tener al menos 3 oraciones bien desarrolladas.
-3. Debe describir claramente: el problema central que origina la investigación, las causas identificadas que lo generan, las consecuencias negativas si no se resuelve, y el contexto institucional o social específico.
-4. Debe usar lenguaje académico universitario formal y no ser genérico.
-5. Debe sonar como el "Planteamiento del Problema" real de una tesis de pregrado de la UTM.
+1. Debe ser un string único (NO una lista). Usa \n\n para separar párrafos dentro del string.
+2. Debe tener una extensión mínima de 200 a 300 palabras. No puede ser corto.
+3. Debe seguir obligatoriamente la estructura de embudo (Macro → Meso → Micro):
+   - MACRO (párrafo 1): Describe el contexto global o mundial del problema. Menciona estadísticas, tendencias tecnológicas o realidades del sector a nivel internacional que evidencian que el problema es relevante más allá del ámbito local.
+   - MESO (párrafo 2): Aterriza el problema al nivel nacional o regional (Ecuador / provincia de Manabí). Explica cómo este problema se manifiesta en instituciones educativas, empresas u organizaciones del contexto ecuatoriano o de la UTM específicamente.
+   - MICRO (párrafo 3): Detalla el cuello de botella específico en el área, departamento, unidad o proceso concreto objeto de estudio. Identifica causas directas, actores afectados y consecuencias tangibles de no resolver el problema.
+4. El último párrafo DEBE SER la Formulación del Problema: una pregunta de investigación clara, directa y bien redactada que sintetice el problema. Ejemplo de formato: '¿De qué manera el desarrollo de un [solución tecnológica] permitirá [beneficio esperado] en [unidad/organización]?'
+5. Usar lenguaje académico universitario formal. Verbos como: evidenciar, obstaculizar, coadyuvar, incrementar, generar, deteriorar, limitar, comprometer, potenciar, consolidar, mitigar.
+6. NO debe ser genérico, ni repetir literalmente el título. Debe sonar como el Planteamiento del Problema real de una tesis de pregrado de la UTM.
 
 Debes responder con JSON estricto válido, sin texto adicional, sin markdown y sin claves extra.
 Responde EXACTAMENTE con esta estructura:
@@ -224,7 +228,7 @@ Responde EXACTAMENTE con esta estructura:
         "Párrafo 2 sobre solución tecnológica e impacto.",
         "Párrafo 3 sobre beneficiarios directos e indirectos."
     ],
-    "planteamiento_del_problema": "Descripción del problema central que motiva la investigación, con evidencia del contexto institucional o social, las causas identificadas y las consecuencias si no se resuelve."
+    "planteamiento_del_problema": "Párrafo 1 (Macro): contexto global del problema con evidencia internacional.\\n\\nPárrafo 2 (Meso): manifestación del problema en Ecuador o en la UTM con datos o referencias institucionales.\\n\\nPárrafo 3 (Micro): cuello de botella específico en el área de estudio, causas directas, actores afectados y consecuencias concretas si no se resuelve.\\n\\nFormulación del Problema: ¿De qué manera el desarrollo de un [solución tecnológica] permitirá [beneficio esperado] en [unidad u organización concreta]?"
 }}"""
 
     try:
@@ -243,16 +247,20 @@ Responde EXACTAMENTE con esta estructura:
                                             "La justificacion debe ser una lista de exactamente 3 strings y seguir esta estructura obligatoria: "
                                             "primer string problemática y contexto; segundo string solución tecnológica e impacto; "
                                             "tercer string beneficiarios directos e indirectos. "
-                                            "planteamiento_del_problema debe ser un string de al menos 3 oraciones que describa el problema central, "
-                                            "sus causas identificadas, las consecuencias de no resolverlo y el contexto institucional o social. "
-                                            "Debes usar tono académico formal, vocabulario universitario y verbos como diagnosticar, "
-                                            "obstaculizar, coadyuvar y mitigar. No aceptes justificaciones genéricas ni demasiado cortas."
+                                            "planteamiento_del_problema debe ser un string único con párrafos separados por \\n\\n y una extensión mínima de 200 a 300 palabras. "
+                                            "Sigue obligatoriamente la estructura de embudo Macro→Meso→Micro: "
+                                            "párrafo 1 (Macro) describe el contexto global del problema con estadísticas o tendencias internacionales; "
+                                            "párrafo 2 (Meso) aterriza el problema a nivel nacional, ecuatoriano o de la UTM; "
+                                            "párrafo 3 (Micro) detalla el cuello de botella específico con causas y consecuencias concretas; "
+                                            "párrafo final es la Formulación del Problema: una pregunta de investigación clara con el formato "
+                                            "'¿De qué manera el desarrollo de un [solución] permitirá [beneficio] en [unidad/organización]?'. "
+                                            "Usa lenguaje académico universitario. No aceptes textos cortos ni genéricos para este campo."
                                         ),
                                 },
                 {"role": "user", "content": prompt},
             ],
             temperature=0.7,
-                            max_tokens=1000,
+                            max_tokens=1800,
         )
         contenido = respuesta.choices[0].message.content.strip()
         # Limpiar posibles bloques de código markdown

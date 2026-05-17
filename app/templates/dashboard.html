@@ -183,8 +183,10 @@
                 <p class="w3-small" style="margin-bottom: 10px;">
                     <strong><i class="fa-solid fa-triangle-exclamation" style="color:#e65100; margin-right:6px;"></i>Planteamiento del Problema</strong>
                 </p>
-                <div class="w3-panel w3-round-large w3-margin-bottom" style="margin-top:0; background:#fff8e1; border-left:4px solid #e65100;">
-                    <p style="margin:0; font-size:14px; color:#444; line-height:1.7;">{{ resultado_ia.planteamiento_del_problema }}</p>
+                <div class="w3-round-large" style="border-left:4px solid #e65100; background:#fff8e1; padding: 16px 20px;">
+                    {% for parrafo in resultado_ia.planteamiento_del_problema.split('\n\n') %}
+                    <p style="margin:0 0 12px; font-size:14px; color:#444; line-height:1.8;">{{ parrafo }}</p>
+                    {% endfor %}
                 </div>
             </div>
             {% endif %}
