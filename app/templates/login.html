@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    /* Fondo de pantalla completa solo en la página de login */
+    body {
+        background-color: transparent !important;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+            url("{{ url_for('static', filename='img/fondo_inicio_sesion.jpeg') }}") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+        min-height: 100vh !important;
+    }
+</style>
 <div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 40px 16px;">
     <div class="glass-card" style="width: 100%; max-width: 460px; padding: 48px 40px;">
 
