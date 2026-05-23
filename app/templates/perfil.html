@@ -114,7 +114,8 @@
                          ondragover="event.preventDefault(); this.style.borderColor='#2e7d32';"
                          ondragleave="this.style.borderColor='#ddd';"
                          ondrop="handleDrop(event)">
-                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: #ccc; margin-bottom: 8px;"></i>
+                        <i id="drop-icon" class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: #ccc; margin-bottom: 8px;"></i>
+                        <img id="drop-preview" src="" alt="" style="display:none; width:80px; height:80px; border-radius:8px; object-fit:cover; margin: 0 auto 8px; border: 2px solid #2e7d32; pointer-events:none;">
                         <p style="margin: 0; font-size: 14px; color: #888;"><span class="i18n" data-es="Haz clic o arrastra una imagen aquí" data-en="Click or drag an image here">Haz clic o arrastra una imagen aquí</span></p>
                         <p style="margin: 4px 0 0; font-size: 12px; color: #bbb;"><span class="i18n" data-es="JPG, PNG — máximo 2 MB" data-en="JPG, PNG — maximum 2 MB">JPG, PNG — máximo 2 MB</span></p>
                     </div>
@@ -156,13 +157,23 @@ function previewAvatar(event) {
     }
     const reader = new FileReader();
     reader.onload = function(e) {
+        const src = e.target.result;
+
+        // — Círculo principal (tarjeta superior izquierda) —
         const preview = document.getElementById('avatar-preview');
         const placeholder = document.getElementById('avatar-placeholder');
         if (preview) {
-            preview.src = e.target.result;
+            preview.src = src;
             preview.style.display = 'block';
         }
         if (placeholder) placeholder.style.display = 'none';
+
+        // — Miniatura dentro del recuadro inferior (drop-zone) —
+        const dropIcon    = document.getElementById('drop-icon');
+        const dropPreview = document.getElementById('drop-preview');
+        if (dropIcon)    dropIcon.style.display    = 'none';
+        if (dropPreview) { dropPreview.src = src; dropPreview.style.display = 'block'; }
+
         document.getElementById('drop-zone').style.borderColor = '#2e7d32';
     };
     reader.readAsDataURL(file);
