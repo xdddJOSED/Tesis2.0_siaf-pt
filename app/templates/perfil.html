@@ -29,23 +29,16 @@
     <div class="w3-col l4 m12 s12" style="margin-bottom: 24px;">
         <div class="glass-card" style="padding: 32px; text-align: center;">
             <!-- Avatar actual -->
-            <div style="position: relative; display: inline-block; margin-bottom: 16px;">
+            <div id="avatar-circle"
+                 style="width: 120px; height: 120px; border-radius: 50%; background: #e8f5e9;
+                        display: flex; align-items: center; justify-content: center;
+                        border: 3px solid #2e7d32; margin: 0 auto 16px; overflow: hidden;
+                        box-shadow: 0 4px 16px rgba(46,125,50,0.2);">
                 {% if usuario.avatar_url %}
-                    <img src="{{ usuario.avatar_url }}"
-                         alt="Foto de perfil"
-                         id="avatar-preview"
-                         style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
-                                border: 3px solid #2e7d32; box-shadow: 0 4px 16px rgba(46,125,50,0.2);">
+                    <img src="{{ usuario.avatar_url }}" alt="Foto de perfil"
+                         style="width: 100%; height: 100%; object-fit: cover;">
                 {% else %}
-                    <div id="avatar-placeholder"
-                         style="width: 120px; height: 120px; border-radius: 50%; background: #e8f5e9;
-                                display: flex; align-items: center; justify-content: center;
-                                border: 3px solid #2e7d32; margin: 0 auto;">
-                        <i class="fa-solid fa-user-graduate" style="font-size: 48px; color: #2e7d32;"></i>
-                    </div>
-                    <img id="avatar-preview" src="" alt="Vista previa"
-                         style="display:none; width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
-                                border: 3px solid #2e7d32; box-shadow: 0 4px 16px rgba(46,125,50,0.2);">
+                    <i class="fa-solid fa-user-graduate" style="font-size: 48px; color: #2e7d32;"></i>
                 {% endif %}
             </div>
 
@@ -114,8 +107,7 @@
                          ondragover="event.preventDefault(); this.style.borderColor='#2e7d32';"
                          ondragleave="this.style.borderColor='#ddd';"
                          ondrop="handleDrop(event)">
-                        <i id="drop-icon" class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: #ccc; margin-bottom: 8px;"></i>
-                        <img id="drop-preview" src="" alt="" style="display:none; width:80px; height:80px; border-radius:8px; object-fit:cover; margin: 0 auto 8px; border: 2px solid #2e7d32; pointer-events:none;">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: #ccc; margin-bottom: 8px;"></i>
                         <p style="margin: 0; font-size: 14px; color: #888;"><span class="i18n" data-es="Haz clic o arrastra una imagen aquí" data-en="Click or drag an image here">Haz clic o arrastra una imagen aquí</span></p>
                         <p style="margin: 4px 0 0; font-size: 12px; color: #bbb;"><span class="i18n" data-es="JPG, PNG — máximo 2 MB" data-en="JPG, PNG — maximum 2 MB">JPG, PNG — máximo 2 MB</span></p>
                     </div>
@@ -160,21 +152,15 @@ function previewAvatar(event) {
         const src = e.target.result;
 
         // — Círculo principal (tarjeta superior izquierda) —
-        const preview = document.getElementById('avatar-preview');
-        const placeholder = document.getElementById('avatar-placeholder');
-        if (preview) {
-            preview.src = src;
-            preview.style.display = 'block';
+        const circle = document.getElementById('avatar-circle');
+        if (circle) circle.innerHTML = '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover;">';
+
+        // — Recuadro inferior (drop-zone) —
+        const dropZone = document.getElementById('drop-zone');
+        if (dropZone) {
+            dropZone.style.borderColor = '#2e7d32';
+            dropZone.innerHTML = '<img src="' + src + '" style="width:80px;height:80px;border-radius:8px;object-fit:cover;border:2px solid #2e7d32;display:block;margin:auto;">';
         }
-        if (placeholder) placeholder.style.display = 'none';
-
-        // — Miniatura dentro del recuadro inferior (drop-zone) —
-        const dropIcon    = document.getElementById('drop-icon');
-        const dropPreview = document.getElementById('drop-preview');
-        if (dropIcon)    dropIcon.style.display    = 'none';
-        if (dropPreview) { dropPreview.src = src; dropPreview.style.display = 'block'; }
-
-        document.getElementById('drop-zone').style.borderColor = '#2e7d32';
     };
     reader.readAsDataURL(file);
 }
