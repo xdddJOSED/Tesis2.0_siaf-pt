@@ -80,8 +80,13 @@
     <div class="w3-col l4 m12 s12" style="margin-bottom: 24px;">
         <div class="glass-card" style="padding: 24px 20px;">
             <div style="text-align: center; margin-bottom: 20px;">
-                <div style="width: 72px; height: 72px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
-                    <i class="fa-solid fa-user-graduate" style="font-size: 32px; color: #2e7d32;"></i>
+                <div style="width: 72px; height: 72px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; overflow: hidden; border: 2px solid #2e7d32;">
+                    {% if g.user.avatar_url %}
+                        <img src="{{ g.user.avatar_url }}" alt="avatar"
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                        <i class="fa-solid fa-user-graduate" style="font-size: 32px; color: #2e7d32;"></i>
+                    {% endif %}
                 </div>
                 <h3 style="margin: 0; font-weight: 600; font-size: 16px; color: #1a1a1a; word-break: break-word;">{{ g.user.nombre_completo }}</h3>
                 <p style="margin: 4px 0 0; color: #888; font-size: 13px; word-break: break-all;">{{ g.user.correo }}</p>
