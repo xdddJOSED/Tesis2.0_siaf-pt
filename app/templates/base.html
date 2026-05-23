@@ -21,10 +21,18 @@
         @media (max-width: 600px) {
             .w3-content { padding-left: 12px !important; padding-right: 12px !important; }
         }
+        .auth-page-bg {
+            background-image: url("{{ url_for('static', filename='img/fondo_dashboard_sesion.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: transparent;
+        }
     </style>
     {% block extra_styles %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <div class="w3-top" style="z-index: 1000;">
         <div class="w3-bar w3-white w3-padding w3-card" style="display: flex; align-items: center; overflow: visible;">
             <a href="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-green w3-large" style="font-weight: 700;">

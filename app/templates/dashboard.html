@@ -1,18 +1,5 @@
 {% extends 'base.html' %}
 
-{% block extra_styles %}
-<style>
-    body {
-        background-image: url("{{ url_for('static', filename='img/fondo_dashboard_sesion.png') }}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-color: transparent;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <!-- Mensajes flash -->
 {% with messages = get_flashed_messages(with_categories=true) %}
