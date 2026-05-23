@@ -11,9 +11,9 @@
             <div style="width: 64px; height: 64px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
                 <i class="fa-solid fa-key" style="font-size: 28px; color: #2e7d32;"></i>
             </div>
-            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;">Recuperar contraseña</h2>
+            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;"><span class="i18n" data-es="Recuperar contraseña" data-en="Recover Password">Recuperar contraseña</span></h2>
             <p style="margin: 8px 0 0; color: #666; font-size: 14px;">
-                Ingresa tu correo institucional y te enviaremos un enlace para restablecer tu contraseña.
+                <span class="i18n" data-es="Ingresa tu correo institucional y te enviaremos un enlace para restablecer tu contraseña." data-en="Enter your institutional email and we'll send you a link to reset your password.">Ingresa tu correo institucional y te enviaremos un enlace para restablecer tu contraseña.</span>
             </p>
         </div>
 
@@ -36,7 +36,7 @@
         <form method="POST" action="{{ url_for('main.olvide_contrasena') }}" autocomplete="off">
             <div style="margin-bottom: 24px;">
                 <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                    <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> Correo Institucional
+                    <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Correo Institucional" data-en="Institutional Email">Correo Institucional</span>
                 </label>
                 <input type="email" name="correo" required
                     placeholder="ejemplo@utm.edu.ec"
@@ -48,14 +48,14 @@
             <button type="submit" class="btn-main utm-green"
                 style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;
                        font-family: 'Inter', sans-serif; letter-spacing: 0.3px;">
-                <i class="fa-solid fa-paper-plane" style="margin-right: 8px;"></i>Enviar enlace de recuperación
+                <i class="fa-solid fa-paper-plane" style="margin-right: 8px;"></i><span class="i18n" data-es="Enviar enlace de recuperación" data-en="Send recovery link">Enviar enlace de recuperación</span>
             </button>
         </form>
 
         <!-- Volver al login -->
         <div style="text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid #eee;">
             <a href="{{ url_for('main.login') }}" style="color: #2e7d32; font-size: 14px; font-weight: 600; text-decoration: none;">
-                <i class="fa-solid fa-arrow-left" style="margin-right: 4px;"></i>Volver al inicio de sesión
+                <i class="fa-solid fa-arrow-left" style="margin-right: 4px;"></i><span class="i18n" data-es="Volver al inicio de sesión" data-en="Back to log in">Volver al inicio de sesión</span>
             </a>
         </div>
 

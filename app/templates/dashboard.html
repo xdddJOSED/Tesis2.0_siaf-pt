@@ -23,7 +23,7 @@
         Hola, {{ g.user.nombre_completo.split()[0] }}
     </h1>
     <p style="margin: 8px 0 0; color: #666; font-size: 15px;">
-        Bienvenido/a a tu panel de control del SIAF-PT — Universidad Técnica de Manabí
+        <span class="i18n" data-es="Bienvenido/a a tu panel de control del SIAF-PT — Universidad Técnica de Manabí" data-en="Welcome to your SIAF-PT control panel — Technical University of Manabí">Bienvenido/a a tu panel de control del SIAF-PT — Universidad Técnica de Manabí</span>
     </p>
 </div>
 
@@ -38,8 +38,8 @@
                     <i class="fa-solid fa-brain" style="font-size: 24px; color: #2e7d32;"></i>
                 </div>
                 <div>
-                    <h2 style="margin: 0; font-weight: 700; font-size: 20px; color: #1a1a1a;">Generador de Propuestas de Titulación (IA)</h2>
-                    <p style="margin: 4px 0 0; color: #888; font-size: 13px;">Motor de procesamiento de lenguaje natural</p>
+                    <h2 style="margin: 0; font-weight: 700; font-size: 20px; color: #1a1a1a;"><span class="i18n" data-es="Generador de Propuestas de Titulación (IA)" data-en="Thesis Proposal Generator (AI)">Generador de Propuestas de Titulación (IA)</span></h2>
+                    <p style="margin: 4px 0 0; color: #888; font-size: 13px;"><span class="i18n" data-es="Motor de procesamiento de lenguaje natural" data-en="Natural language processing engine">Motor de procesamiento de lenguaje natural</span></p>
                 </div>
             </div>
 
@@ -47,7 +47,7 @@
                 <!-- Título tentativo -->
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                        <i class="fa-solid fa-heading" style="color: #2e7d32; margin-right: 4px;"></i> Título Tentativo de la Propuesta
+                        <i class="fa-solid fa-heading" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Título Tentativo de la Propuesta" data-en="Tentative Proposal Title">Título Tentativo de la Propuesta</span>
                     </label>
                     <input type="text" name="titulo" required
                         placeholder="Ej: Sistema inteligente de detección de plagio académico mediante NLP"
@@ -58,7 +58,7 @@
                 <!-- Resumen / Descripción -->
                 <div style="margin-bottom: 24px;">
                     <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                        <i class="fa-solid fa-align-left" style="color: #2e7d32; margin-right: 4px;"></i> Resumen / Descripción de la Idea
+                        <i class="fa-solid fa-align-left" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Resumen / Descripción de la Idea" data-en="Summary / Idea Description">Resumen / Descripción de la Idea</span>
                     </label>
                     <textarea name="resumen" required rows="6"
                         placeholder="Describe brevemente tu idea de investigación: el problema que aborda, la metodología que propones y los resultados esperados..."
@@ -70,7 +70,7 @@
                 <button type="submit" class="btn-main utm-green"
                     style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.3px;"
                     id="btn-analizar">
-                    <i class="fa-solid fa-brain" style="margin-right: 8px;"></i>Analizar Propuesta con IA
+                    <i class="fa-solid fa-brain" style="margin-right: 8px;"></i><span class="i18n" data-es="Analizar Propuesta con IA" data-en="Analyze Proposal with AI">Analizar Propuesta con IA</span>
                 </button>
             </form>
         </div>
@@ -93,8 +93,8 @@
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
 
             <div style="font-size: 13px; color: #666; text-align: center;">
-                <p style="margin: 8px 0; display:flex; align-items:center; justify-content:center; gap:6px;"><i class="fa-solid fa-calendar-check w3-text-green"></i> Miembro desde: {{ g.user.creado_en.strftime('%d/%m/%Y') if g.user.creado_en else 'N/A' }}</p>
-                <p style="margin: 8px 0; display:flex; align-items:center; justify-content:center; gap:6px;"><i class="fa-solid fa-file-lines w3-text-green"></i> Propuestas: {{ propuestas|length }}</p>
+                <p style="margin: 8px 0; display:flex; align-items:center; justify-content:center; gap:6px;"><i class="fa-solid fa-calendar-check w3-text-green"></i> <span class="i18n" data-es="Miembro desde:" data-en="Member since:">Miembro desde:</span> {{ g.user.creado_en.strftime('%d/%m/%Y') if g.user.creado_en else 'N/A' }}</p>
+                <p style="margin: 8px 0; display:flex; align-items:center; justify-content:center; gap:6px;"><i class="fa-solid fa-file-lines w3-text-green"></i> <span class="i18n" data-es="Propuestas:" data-en="Proposals:">Propuestas:</span> {{ propuestas|length }}</p>
             </div>
         </div>
     </div>
@@ -113,7 +113,7 @@
                     <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 22px;"></i>
                 </div>
                 <div>
-                    <h2 style="margin: 0; font-weight: 700; font-size: 20px;">Propuesta Generada por IA</h2>
+                    <h2 style="margin: 0; font-weight: 700; font-size: 20px;"><span class="i18n" data-es="Propuesta Generada por IA" data-en="AI-Generated Proposal">Propuesta Generada por IA</span></h2>
                     <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.85;">Basada en tu idea: "{{ titulo_original[:80] }}{{ '...' if titulo_original|length > 80 }}"</p>
                 </div>
             </div>
@@ -139,7 +139,7 @@
                         <span style="width: 36px; height: 36px; border-radius: 8px; background: #2e7d32; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <i class="fa-solid fa-align-left" style="color: white; font-size: 15px;"></i>
                         </span>
-                        <span style="font-size: 16px; font-weight: 700; color: #1b5e20; flex: 1;">Resumen</span>
+                        <span class="i18n" data-es="Resumen" data-en="Abstract" style="font-size: 16px; font-weight: 700; color: #1b5e20; flex: 1;">Resumen</span>
                         <i class="fa-solid fa-chevron-down" style="color: #2e7d32; font-size: 13px; transition: transform 0.2s;"></i>
                     </summary>
                     <div style="padding: 20px; background: #f9fdf9; border-top: 1px solid #c8e6c9;">
@@ -161,7 +161,7 @@
                         <span style="width: 36px; height: 36px; border-radius: 8px; background: #e65100; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <i class="fa-solid fa-triangle-exclamation" style="color: white; font-size: 15px;"></i>
                         </span>
-                        <span style="font-size: 16px; font-weight: 700; color: #bf360c; flex: 1;">Planteamiento del Problema</span>
+                        <span class="i18n" data-es="Planteamiento del Problema" data-en="Problem Statement" style="font-size: 16px; font-weight: 700; color: #bf360c; flex: 1;">Planteamiento del Problema</span>
                         <i class="fa-solid fa-chevron-down" style="color: #e65100; font-size: 13px; transition: transform 0.2s;"></i>
                     </summary>
                     <div style="padding: 20px; background: #fff8e1; border-top: 1px solid #ffcc80; border-left: 4px solid #e65100;">
@@ -178,7 +178,7 @@
                         <span style="width: 36px; height: 36px; border-radius: 8px; background: #6d4c41; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <i class="fa-solid fa-scale-balanced" style="color: white; font-size: 15px;"></i>
                         </span>
-                        <span style="font-size: 16px; font-weight: 700; color: #4e342e; flex: 1;">Justificación</span>
+                        <span class="i18n" data-es="Justificación" data-en="Justification" style="font-size: 16px; font-weight: 700; color: #4e342e; flex: 1;">Justificación</span>
                         <i class="fa-solid fa-chevron-down" style="color: #6d4c41; font-size: 13px; transition: transform 0.2s;"></i>
                     </summary>
                     <div style="padding: 20px; background: #faf7f5; border-top: 1px solid #d7ccc8;">
@@ -198,15 +198,15 @@
                         <span style="width: 36px; height: 36px; border-radius: 8px; background: #37474f; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <i class="fa-solid fa-bullseye" style="color: white; font-size: 15px;"></i>
                         </span>
-                        <span style="font-size: 16px; font-weight: 700; color: #263238; flex: 1;">Objetivos</span>
+                        <span class="i18n" data-es="Objetivos" data-en="Objectives" style="font-size: 16px; font-weight: 700; color: #263238; flex: 1;">Objetivos</span>
                         <i class="fa-solid fa-chevron-down" style="color: #37474f; font-size: 13px; transition: transform 0.2s;"></i>
                     </summary>
                     <div style="padding: 20px; background: #f5f7f8; border-top: 1px solid #b0bec5;">
                         <div style="padding: 14px 16px; background: #e8eaf6; border-radius: 8px; border-left: 3px solid #3949ab; margin-bottom: 14px;">
-                            <p style="margin: 0 0 4px; font-size: 12px; font-weight: 600; color: #3949ab; text-transform: uppercase; letter-spacing: 0.4px;">Objetivo General</p>
+                            <p style="margin: 0 0 4px; font-size: 12px; font-weight: 600; color: #3949ab; text-transform: uppercase; letter-spacing: 0.4px;"><span class="i18n" data-es="Objetivo General" data-en="General Objective">Objetivo General</span></p>
                             <p style="margin: 0; font-size: 14px; color: #333; line-height: 1.7;">{{ resultado_ia.objetivo_general }}</p>
                         </div>
-                        <p style="margin: 0 0 10px; font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.4px;">Objetivos Específicos</p>
+                        <p style="margin: 0 0 10px; font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.4px;"><span class="i18n" data-es="Objetivos Específicos" data-en="Specific Objectives">Objetivos Específicos</span></p>
                         <ul style="margin: 0; padding: 0; list-style: none;">
                             {% for objetivo in resultado_ia.objetivos_especificos %}
                             <li style="padding: 10px 12px; border-bottom: 1px solid #e0e0e0; color: #444; font-size: 14px; line-height: 1.6; display: flex; align-items: flex-start; gap: 10px;">
@@ -268,8 +268,8 @@
                 <i class="fa-solid fa-clock-rotate-left" style="font-size: 20px; color: #2e7d32;"></i>
             </div>
             <div>
-                <h2 style="margin: 0; font-weight: 700; font-size: 18px; color: #1a1a1a;">Mis Propuestas Recientes</h2>
-                <p style="margin: 2px 0 0; color: #888; font-size: 13px;">Historial de propuestas analizadas con IA</p>
+                <h2 style="margin: 0; font-weight: 700; font-size: 18px; color: #1a1a1a;"><span class="i18n" data-es="Mis Propuestas Recientes" data-en="My Recent Proposals">Mis Propuestas Recientes</span></h2>
+                <p style="margin: 2px 0 0; color: #888; font-size: 13px;"><span class="i18n" data-es="Historial de propuestas analizadas con IA" data-en="History of AI-analyzed proposals">Historial de propuestas analizadas con IA</span></p>
             </div>
         </div>
 
@@ -301,7 +301,7 @@
                         <button onclick="verDetalle({{ propuesta.id }})"
                             style="margin-top: 4px; padding: 6px 14px; border: 1.5px solid #2e7d32; background: white; color: #2e7d32; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s;"
                             onmouseover="this.style.background='#2e7d32'; this.style.color='white'" onmouseout="this.style.background='white'; this.style.color='#2e7d32'">
-                            <i class="fa-solid fa-eye" style="margin-right: 4px;"></i>Ver Detalle
+                            <i class="fa-solid fa-eye" style="margin-right: 4px;"></i><span class="i18n" data-es="Ver Detalle" data-en="View Details">Ver Detalle</span>
                         </button>
                     </div>
                 </div>
@@ -309,8 +309,8 @@
         {% else %}
             <div style="text-align: center; padding: 40px 20px;">
                 <i class="fa-solid fa-folder-open" style="font-size: 40px; color: #ddd; margin-bottom: 12px;"></i>
-                <p style="color: #999; font-size: 14px; margin: 0;">Aún no has generado ninguna propuesta.</p>
-                <p style="color: #bbb; font-size: 13px; margin: 4px 0 0;">Usa el formulario de arriba para analizar tu primera idea.</p>
+                <p style="color: #999; font-size: 14px; margin: 0;"><span class="i18n" data-es="Aún no has generado ninguna propuesta." data-en="You haven't generated any proposal yet.">Aún no has generado ninguna propuesta.</span></p>
+                <p style="color: #bbb; font-size: 13px; margin: 4px 0 0;"><span class="i18n" data-es="Usa el formulario de arriba para analizar tu primera idea." data-en="Use the form above to analyze your first idea.">Usa el formulario de arriba para analizar tu primera idea.</span></p>
             </div>
         {% endfor %}
     </div>
@@ -325,9 +325,9 @@
         <div style="margin-bottom:18px;">
             <i class="fa-solid fa-spinner fa-spin" style="font-size:30px; color:#2e7d32;"></i>
         </div>
-        <h3 style="margin:0 0 10px; font-size:18px; font-weight:700; color:#1a1a1a;">Generando propuesta con IA...</h3>
-        <p style="margin:0 0 4px; font-size:14px; color:#555; line-height:1.7;">Esto puede tomar hasta un minuto.</p>
-        <p style="margin:0; font-size:14px; color:#c62828; font-weight:600;">Por favor, <strong>no recargues la página</strong>.</p>
+        <h3 style="margin:0 0 10px; font-size:18px; font-weight:700; color:#1a1a1a;"><span class="i18n" data-es="Generando propuesta con IA..." data-en="Generating proposal with AI...">Generando propuesta con IA...</span></h3>
+        <p style="margin:0 0 4px; font-size:14px; color:#555; line-height:1.7;"><span class="i18n" data-es="Esto puede tomar hasta un minuto." data-en="This may take up to one minute.">Esto puede tomar hasta un minuto.</span></p>
+        <p style="margin:0; font-size:14px; color:#c62828; font-weight:600;"><span class="i18n" data-es="Por favor," data-en="Please,">Por favor,</span> <strong><span class="i18n" data-es="no recargues la página" data-en="do not reload the page">no recargues la página</span></strong>.</p>
         <div style="margin-top:22px; background:#f1f8e9; border-radius:8px; padding:10px 16px; border:1px solid #c8e6c9;">
             <p style="margin:0; font-size:12px; color:#555;"><i class="fa-solid fa-microchip" style="margin-right:5px; color:#2e7d32;"></i>El motor de NLP está analizando tu idea y estructurando el contenido académico.</p>
         </div>
@@ -349,7 +349,7 @@
                         <i class="fa-solid fa-wand-magic-sparkles" style="font-size:18px;"></i>
                     </div>
                     <div style="min-width:0;">
-                        <h3 style="margin:0; font-weight:700; font-size:17px; word-break:break-word;" id="modal-header-titulo">Detalle de Propuesta</h3>
+                        <h3 style="margin:0; font-weight:700; font-size:17px; word-break:break-word;" id="modal-header-titulo"><span class="i18n" data-es="Detalle de Propuesta" data-en="Proposal Details">Detalle de Propuesta</span></h3>
                         <p style="margin:3px 0 0; font-size:12px; opacity:0.8; white-space:normal;" id="modal-fecha"></p>
                     </div>
                 </div>
@@ -358,7 +358,7 @@
                     <button onclick="descargarPDF()" style="background:#0d47a1; border:none; color:white; height:32px; border-radius:999px; cursor:pointer; font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; padding:0 14px; white-space:nowrap;"
                             onmouseover="this.style.background='#08306b'" onmouseout="this.style.background='#0d47a1'">
                         <i class="fa-solid fa-file-pdf"></i>
-                        Descargar PDF
+                        <span class="i18n" data-es="Descargar PDF" data-en="Download PDF">Descargar PDF</span>
                     </button>
                     <button onclick="cerrarModal()" style="background:rgba(255,255,255,0.2); border:none; color:white; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0;"
                             onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
@@ -373,7 +373,7 @@
             <!-- Loading -->
             <div id="modal-loading" style="text-align: center; padding: 40px 0;">
                 <i class="fa-solid fa-spinner fa-spin" style="font-size: 28px; color: #2e7d32;"></i>
-                <p style="margin: 12px 0 0; color: #888; font-size: 14px;">Cargando detalle...</p>
+                <p style="margin: 12px 0 0; color: #888; font-size: 14px;"><span class="i18n" data-es="Cargando detalle..." data-en="Loading details...">Cargando detalle...</span></p>
             </div>
 
             <!-- Contenido (oculto hasta que carga) -->

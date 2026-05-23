@@ -11,8 +11,8 @@
             <div style="width: 64px; height: 64px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
                 <i class="fa-solid fa-right-to-bracket" style="font-size: 28px; color: #2e7d32;"></i>
             </div>
-            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;">Iniciar Sesión en SIAF-PT</h2>
-            <p style="margin: 8px 0 0; color: #666; font-size: 14px;">Accede al Sistema de Análisis de Propuestas de Tesis</p>
+            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;"><span class="i18n" data-es="Iniciar Sesión en SIAF-PT" data-en="Log In to SIAF-PT">Iniciar Sesión en SIAF-PT</span></h2>
+            <p style="margin: 8px 0 0; color: #666; font-size: 14px;"><span class="i18n" data-es="Accede al Sistema de Análisis de Propuestas de Tesis" data-en="Access the Thesis Proposal Analysis System">Accede al Sistema de Análisis de Propuestas de Tesis</span></p>
         </div>
 
         <!-- Mensajes flash -->
@@ -36,7 +36,7 @@
             <!-- Correo Institucional -->
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                    <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> Correo Institucional
+                    <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Correo Institucional" data-en="Institutional Email">Correo Institucional</span>
                 </label>
                 <input type="email" name="correo" required
                     placeholder="ejemplo@utm.edu.ec"
@@ -47,7 +47,7 @@
             <!-- Contraseña -->
             <div style="margin-bottom: 28px; position: relative;">
                 <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                    <i class="fa-solid fa-lock" style="color: #2e7d32; margin-right: 4px;"></i> Contraseña
+                    <i class="fa-solid fa-lock" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Contraseña" data-en="Password">Contraseña</span>
                 </label>
                 <input type="password" name="password" id="passwordField" required
                     placeholder="Ingresa tu contraseña"
@@ -62,29 +62,29 @@
             <!-- Botón de login -->
             <button type="submit" class="btn-main utm-green"
                 style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.3px;">
-                <i class="fa-solid fa-right-to-bracket" style="margin-right: 8px;"></i>Ingresar
+                <i class="fa-solid fa-right-to-bracket" style="margin-right: 8px;"></i><span class="i18n" data-es="Ingresar" data-en="Log In">Ingresar</span>
             </button>
         </form>
 
         <!-- Link a olvidé contraseña -->
         <div style="text-align: center; margin-top: 16px;">
             <a href="{{ url_for('main.olvide_contrasena') }}" style="color: #888; font-size: 13px; text-decoration: none;">
-                <i class="fa-solid fa-key" style="margin-right: 4px;"></i>¿Olvidaste tu contraseña?
+                <i class="fa-solid fa-key" style="margin-right: 4px;"></i><span class="i18n" data-es="¿Olvidaste tu contraseña?" data-en="Forgot your password?">¿Olvidaste tu contraseña?</span>
             </a>
         </div>
 
         <!-- Link a reenviar verificación -->
         <div style="text-align: center; margin-top: 10px;">
             <a href="{{ url_for('main.reenviar_verificacion') }}" style="color: #888; font-size: 13px; text-decoration: none;">
-                <i class="fa-solid fa-envelope-circle-check" style="margin-right: 4px;"></i>¿No recibiste el correo de verificación?
+                <i class="fa-solid fa-envelope-circle-check" style="margin-right: 4px;"></i><span class="i18n" data-es="¿No recibiste el correo de verificación?" data-en="Didn't receive the verification email?">¿No recibiste el correo de verificación?</span>
             </a>
         </div>
 
         <!-- Link a registro -->
         <div style="text-align: center; margin-top: 16px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="color: #666; font-size: 14px; margin: 0;">
-                ¿No tienes cuenta?
-                <a href="{{ url_for('main.registro') }}" style="color: #2e7d32; font-weight: 600; text-decoration: none;">Regístrate aquí</a>
+                <span class="i18n" data-es="¿No tienes cuenta?" data-en="Don't have an account?">¿No tienes cuenta?</span>
+                <a href="{{ url_for('main.registro') }}" style="color: #2e7d32; font-weight: 600; text-decoration: none;"><span class="i18n" data-es="Regístrate aquí" data-en="Sign up here">Regístrate aquí</span></a>
             </p>
         </div>
 

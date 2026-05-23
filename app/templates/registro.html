@@ -11,8 +11,8 @@
             <div style="width: 64px; height: 64px; border-radius: 50%; background: #e8f5e9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
                 <i class="fa-solid fa-user-plus" style="font-size: 28px; color: #2e7d32;"></i>
             </div>
-            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;">Crear Cuenta de Estudiante</h2>
-            <p style="margin: 8px 0 0; color: #666; font-size: 14px;">Regístrate en el Sistema de Análisis de Propuestas de Tesis</p>
+            <h2 style="margin: 0; font-weight: 700; color: #1a1a1a; font-size: 24px;"><span class="i18n" data-es="Crear Cuenta de Estudiante" data-en="Create Student Account">Crear Cuenta de Estudiante</span></h2>
+            <p style="margin: 8px 0 0; color: #666; font-size: 14px;"><span class="i18n" data-es="Regístrate en el Sistema de Análisis de Propuestas de Tesis" data-en="Register in the Thesis Proposal Analysis System">Regístrate en el Sistema de Análisis de Propuestas de Tesis</span></p>
         </div>
 
         <!-- Mensajes flash -->
@@ -36,7 +36,7 @@
             <!-- Nombre Completo -->
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                    <i class="fa-solid fa-user" style="color: #2e7d32; margin-right: 4px;"></i> Nombre Completo
+                    <i class="fa-solid fa-user" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Nombre Completo" data-en="Full Name">Nombre Completo</span>
                 </label>
                 <input type="text" name="nombre_completo" required
                     placeholder="Ej: María Fernanda López"
@@ -47,7 +47,7 @@
             <!-- Correo Institucional -->
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                    <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> Correo Institucional UTM
+                    <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Correo Institucional UTM" data-en="UTM Institutional Email">Correo Institucional UTM</span>
                 </label>
                 <input type="email" name="correo" required id="correoField"
                     placeholder="tu.nombre@utm.edu.ec"
@@ -56,14 +56,14 @@
                     style="width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; box-sizing: border-box; outline: none;"
                     onfocus="this.style.borderColor='#2e7d32'" onblur="this.style.borderColor='#ddd'">
                 <p style="margin: 4px 0 0; font-size: 11px; color: #999;">
-                    <i class="fa-solid fa-circle-info" style="margin-right: 3px;"></i> Solo se aceptan correos @utm.edu.ec
+                    <i class="fa-solid fa-circle-info" style="margin-right: 3px;"></i> <span class="i18n" data-es="Solo se aceptan correos @utm.edu.ec" data-en="Only @utm.edu.ec emails are accepted">Solo se aceptan correos @utm.edu.ec</span>
                 </p>
             </div>
 
             <!-- Contraseña -->
             <div style="margin-bottom: 28px; position: relative;">
                 <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                    <i class="fa-solid fa-lock" style="color: #2e7d32; margin-right: 4px;"></i> Contraseña
+                    <i class="fa-solid fa-lock" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Contraseña" data-en="Password">Contraseña</span>
                 </label>
                 <input type="password" name="password" id="passwordField" required minlength="6"
                     placeholder="Mínimo 6 caracteres"
@@ -79,15 +79,15 @@
             <button type="submit" class="btn-main utm-green" id="btn-registro"
                 style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.3px;"
                 onclick="this.disabled=true; this.innerHTML='<i class=\'fa-solid fa-spinner fa-spin\' style=\'margin-right:8px;\'></i>Creando cuenta...'; this.form.submit();">
-                <i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i>Crear Cuenta
+                <i class="fa-solid fa-user-plus" style="margin-right: 8px;"></i><span class="i18n" data-es="Crear Cuenta" data-en="Create Account">Crear Cuenta</span>
             </button>
         </form>
 
         <!-- Link a login -->
         <div style="text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="color: #666; font-size: 14px; margin: 0;">
-                ¿Ya tienes cuenta?
-                <a href="{{ url_for('main.login') }}" style="color: #2e7d32; font-weight: 600; text-decoration: none;">Iniciar Sesión</a>
+                <span class="i18n" data-es="¿Ya tienes cuenta?" data-en="Already have an account?">¿Ya tienes cuenta?</span>
+                <a href="{{ url_for('main.login') }}" style="color: #2e7d32; font-weight: 600; text-decoration: none;"><span class="i18n" data-es="Iniciar Sesión" data-en="Log In">Iniciar Sesión</span></a>
             </p>
         </div>
 

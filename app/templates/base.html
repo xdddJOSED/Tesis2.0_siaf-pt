@@ -71,7 +71,7 @@
             <div class="w3-right w3-hide-small" style="margin-left: auto; display: flex; align-items: center; gap: 4px;">
                 {% if g.user %}
                     <a href="{{ url_for('main.dashboard') }}" class="w3-bar-item w3-button w3-round w3-hover-light-grey" style="font-size:14px;">
-                        <i class="fa-solid fa-table-columns"></i> Panel de Control
+                        <i class="fa-solid fa-table-columns"></i> <span class="i18n" data-es="Panel de Control" data-en="Control Panel">Panel de Control</span>
                     </a>
                     <!-- Dropdown de usuario -->
                     <div style="position: relative;" id="user-dropdown-wrap">
@@ -109,12 +109,12 @@
                                       font-size:14px; color:#1a1a1a; text-decoration:none;
                                       transition:background 0.15s;"
                                onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='none'">
-                                <i class="fa-solid fa-circle-user" style="color:#2e7d32; width:16px;"></i> Perfil
+                                <i class="fa-solid fa-circle-user" style="color:#2e7d32; width:16px;"></i> <span class="i18n" data-es="Perfil" data-en="Profile">Perfil</span>
                             </a>
                             <!-- Modo Nocturno -->
                             <div style="display:flex; align-items:center; gap:10px; padding:12px 16px;">
                                 <i class="fa-solid fa-moon" style="color:#2e7d32; width:16px;"></i>
-                                <span class="dd-label" style="font-size:14px; flex:1;">Modo Nocturno</span>
+                                <span class="dd-label i18n" data-es="Modo Nocturno" data-en="Dark Mode" style="font-size:14px; flex:1;">Modo Nocturno</span>
                                 <label class="dm-toggle">
                                     <input type="checkbox" id="dark-mode-chk" onchange="applyDarkMode(this.checked)">
                                     <span class="dm-slider"></span>
@@ -123,7 +123,7 @@
                             <!-- Idioma -->
                             <div style="display:flex; align-items:center; gap:10px; padding:10px 16px 12px;">
                                 <i class="fa-solid fa-language" style="color:#2e7d32; width:16px;"></i>
-                                <span class="dd-label" style="font-size:14px; flex:1;">Idioma</span>
+                                <span class="dd-label i18n" data-es="Idioma" data-en="Language" style="font-size:14px; flex:1;">Idioma</span>
                                 <div style="display:flex; gap:4px;">
                                     <button class="lang-btn" id="dd-lang-es" onclick="setLang('es')">ES</button>
                                     <button class="lang-btn" id="dd-lang-en" onclick="setLang('en')">EN</button>
@@ -135,13 +135,13 @@
                                       font-size:14px; color:#c62828; text-decoration:none;
                                       transition:background 0.15s;"
                                onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
-                                <i class="fa-solid fa-arrow-right-from-bracket" style="width:16px;"></i> Cerrar Sesión
+                                <i class="fa-solid fa-arrow-right-from-bracket" style="width:16px;"></i> <span class="i18n" data-es="Cerrar Sesión" data-en="Log Out">Cerrar Sesión</span>
                             </a>
                         </div>
                     </div>
                 {% else %}
-                    <a href="{{ url_for('main.login') }}" class="w3-bar-item w3-button w3-round w3-hover-light-grey"><i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión</a>
-                    <a href="{{ url_for('main.registro') }}" class="w3-bar-item w3-button utm-green btn-main w3-margin-left"><i class="fa-solid fa-user-plus"></i> Registrate ahora </a>
+                    <a href="{{ url_for('main.login') }}" class="w3-bar-item w3-button w3-round w3-hover-light-grey"><i class="fa-solid fa-right-to-bracket"></i> <span class="i18n" data-es="Iniciar Sesión" data-en="Log In">Iniciar Sesión</span></a>
+                    <a href="{{ url_for('main.registro') }}" class="w3-bar-item w3-button utm-green btn-main w3-margin-left"><i class="fa-solid fa-user-plus"></i> <span class="i18n" data-es="Regístrate ahora" data-en="Sign Up">Registrate ahora</span></a>
                 {% endif %}
             </div>
             <!-- Mini usuario en barra móvil (solo pequeño, logueado) -->
@@ -191,16 +191,16 @@
                 </div>
                 <a href="{{ url_for('main.dashboard') }}" class="w3-bar-item w3-button"
                    style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid fa-table-columns w3-text-green"></i> Panel de Control
+                    <i class="fa-solid fa-table-columns w3-text-green"></i> <span class="i18n" data-es="Panel de Control" data-en="Control Panel">Panel de Control</span>
                 </a>
                 <a href="{{ url_for('main.perfil') }}" class="w3-bar-item w3-button"
                    style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid fa-circle-user w3-text-green"></i> Perfil
+                    <i class="fa-solid fa-circle-user w3-text-green"></i> <span class="i18n" data-es="Perfil" data-en="Profile">Perfil</span>
                 </a>
                 <!-- Modo Nocturno (móvil) -->
                 <div style="padding:14px 20px; display:flex; align-items:center; gap:10px;">
                     <i class="fa-solid fa-moon w3-text-green"></i>
-                    <span class="dd-label" style="font-size:14px; flex:1;">Modo Nocturno</span>
+                    <span class="dd-label i18n" data-es="Modo Nocturno" data-en="Dark Mode" style="font-size:14px; flex:1;">Modo Nocturno</span>
                     <label class="dm-toggle">
                         <input type="checkbox" id="dark-mode-chk-mob" onchange="applyDarkMode(this.checked)">
                         <span class="dm-slider"></span>
@@ -209,7 +209,7 @@
                 <!-- Idioma (móvil) -->
                 <div style="padding:10px 20px 14px; display:flex; align-items:center; gap:10px;">
                     <i class="fa-solid fa-language w3-text-green"></i>
-                    <span class="dd-label" style="font-size:14px; flex:1;">Idioma</span>
+                    <span class="dd-label i18n" data-es="Idioma" data-en="Language" style="font-size:14px; flex:1;">Idioma</span>
                     <div style="display:flex; gap:4px;">
                         <button class="lang-btn" id="mob-lang-es" onclick="setLang('es')">ES</button>
                         <button class="lang-btn" id="mob-lang-en" onclick="setLang('en')">EN</button>
@@ -218,16 +218,16 @@
                 <div style="border-top:1px solid #f0f0f0; margin: 4px 0;"></div>
                 <a href="{{ url_for('main.logout') }}" class="w3-bar-item w3-button"
                    style="padding:14px 20px; font-size:14px; color:#c62828; display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar Sesión
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="i18n" data-es="Cerrar Sesión" data-en="Log Out">Cerrar Sesión</span>
                 </a>
             {% else %}
                 <a href="{{ url_for('main.login') }}" class="w3-bar-item w3-button"
                    style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid fa-right-to-bracket w3-text-green"></i> Iniciar Sesión
+                    <i class="fa-solid fa-right-to-bracket w3-text-green"></i> <span class="i18n" data-es="Iniciar Sesión" data-en="Log In">Iniciar Sesión</span>
                 </a>
                 <a href="{{ url_for('main.registro') }}" class="w3-bar-item w3-button"
                    style="padding:14px 20px; font-size:14px; color:#19521b; font-weight:600; display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid fa-user-plus"></i> Registrate ahora
+                    <i class="fa-solid fa-user-plus"></i> <span class="i18n" data-es="Regístrate ahora" data-en="Sign Up">Regístrate ahora</span>
                 </a>
             {% endif %}
         </div>
@@ -301,6 +301,10 @@
 
           var savedLang = localStorage.getItem('siafpt_lang') || 'es';
           document.documentElement.lang = savedLang === 'en' ? 'en' : 'es';
+          document.querySelectorAll('.i18n').forEach(function(el) {
+              var t = el.getAttribute('data-' + savedLang);
+              if (t) el.textContent = t;
+          });
           ['dd', 'mob'].forEach(function(p) {
               var es = document.getElementById(p + '-lang-es');
               var en = document.getElementById(p + '-lang-en');
@@ -322,6 +326,10 @@
       function setLang(lang) {
           localStorage.setItem('siafpt_lang', lang);
           document.documentElement.lang = lang === 'en' ? 'en' : 'es';
+          document.querySelectorAll('.i18n').forEach(function(el) {
+              var t = el.getAttribute('data-' + lang);
+              if (t) el.textContent = t;
+          });
           ['dd', 'mob'].forEach(function(p) {
               var es = document.getElementById(p + '-lang-es');
               var en = document.getElementById(p + '-lang-en');
