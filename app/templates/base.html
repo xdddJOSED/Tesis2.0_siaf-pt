@@ -29,6 +29,35 @@
             background-attachment: fixed;
             background-color: transparent;
         }
+
+        /* ── Dark Mode ─────────────────────────────────────── */
+        body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
+        body.dark-mode .glass-card { background: #1e1e1e !important; border-color: #2a2a2a !important; box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important; }
+        body.dark-mode .w3-white, body.dark-mode .w3-card { background-color: #1a1a1a !important; }
+        body.dark-mode #user-dropdown, body.dark-mode #mobile-menu { background-color: #1a1a1a !important; border-color: #333 !important; }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4,
+        body.dark-mode p, body.dark-mode label, body.dark-mode span, body.dark-mode .dd-label { color: #e0e0e0 !important; }
+        body.dark-mode .w3-bar a, body.dark-mode #mobile-menu a { color: #e0e0e0 !important; }
+        body.dark-mode input, body.dark-mode textarea, body.dark-mode select { background: #2a2a2a !important; color: #e0e0e0 !important; border-color: #444 !important; }
+        body.dark-mode details > div { background: #252525 !important; }
+        body.dark-mode summary { background: #2a2a2a !important; }
+        body.dark-mode hr { border-color: #333 !important; }
+        body.dark-mode .w3-tag.w3-green { background-color: #1b5e20 !important; }
+
+        /* ── Toggle Switch ─────────────────────────────────── */
+        .dm-toggle { position: relative; display: inline-block; width: 38px; height: 22px; flex-shrink: 0; }
+        .dm-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+        .dm-slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 22px; transition: .3s; }
+        .dm-slider:before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+        .dm-toggle input:checked + .dm-slider { background: #2e7d32; }
+        .dm-toggle input:checked + .dm-slider:before { transform: translateX(16px); }
+
+        /* ── Language Buttons ──────────────────────────────── */
+        .lang-btn { padding: 3px 9px; font-size: 12px; font-weight: 600; border-radius: 6px; border: 1.5px solid #ddd; color: #666; background: none; cursor: pointer; transition: .2s; }
+        .lang-btn:hover { border-color: #2e7d32; color: #2e7d32; }
+        .lang-btn.active { background: #2e7d32 !important; color: white !important; border-color: #2e7d32 !important; }
+        body.dark-mode .lang-btn { border-color: #555; color: #aaa; }
+        body.dark-mode .lang-btn:hover { border-color: #4caf50; color: #4caf50; }
     </style>
     {% block extra_styles %}{% endblock %}
 </head>
@@ -82,13 +111,24 @@
                                onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='none'">
                                 <i class="fa-solid fa-circle-user" style="color:#2e7d32; width:16px;"></i> Perfil
                             </a>
-                            <a href="#"
-                               style="display:flex; align-items:center; gap:10px; padding:12px 16px;
-                                      font-size:14px; color:#1a1a1a; text-decoration:none;
-                                      transition:background 0.15s;"
-                               onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='none'">
-                                <i class="fa-solid fa-language" style="color:#2e7d32; width:16px;"></i> Idioma
-                            </a>
+                            <!-- Modo Nocturno -->
+                            <div style="display:flex; align-items:center; gap:10px; padding:12px 16px;">
+                                <i class="fa-solid fa-moon" style="color:#2e7d32; width:16px;"></i>
+                                <span class="dd-label" style="font-size:14px; flex:1;">Modo Nocturno</span>
+                                <label class="dm-toggle">
+                                    <input type="checkbox" id="dark-mode-chk" onchange="applyDarkMode(this.checked)">
+                                    <span class="dm-slider"></span>
+                                </label>
+                            </div>
+                            <!-- Idioma -->
+                            <div style="display:flex; align-items:center; gap:10px; padding:10px 16px 12px;">
+                                <i class="fa-solid fa-language" style="color:#2e7d32; width:16px;"></i>
+                                <span class="dd-label" style="font-size:14px; flex:1;">Idioma</span>
+                                <div style="display:flex; gap:4px;">
+                                    <button class="lang-btn" id="dd-lang-es" onclick="setLang('es')">ES</button>
+                                    <button class="lang-btn" id="dd-lang-en" onclick="setLang('en')">EN</button>
+                                </div>
+                            </div>
                             <div style="border-top:1px solid #f0f0f0; margin:4px 0;"></div>
                             <a href="{{ url_for('main.logout') }}"
                                style="display:flex; align-items:center; gap:10px; padding:12px 16px;
@@ -157,10 +197,24 @@
                    style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
                     <i class="fa-solid fa-circle-user w3-text-green"></i> Perfil
                 </a>
-                <a href="#" class="w3-bar-item w3-button"
-                   style="padding:14px 20px; font-size:14px; color:#1a1a1a; display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid fa-language w3-text-green"></i> Idioma
-                </a>
+                <!-- Modo Nocturno (móvil) -->
+                <div style="padding:14px 20px; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-moon w3-text-green"></i>
+                    <span class="dd-label" style="font-size:14px; flex:1;">Modo Nocturno</span>
+                    <label class="dm-toggle">
+                        <input type="checkbox" id="dark-mode-chk-mob" onchange="applyDarkMode(this.checked)">
+                        <span class="dm-slider"></span>
+                    </label>
+                </div>
+                <!-- Idioma (móvil) -->
+                <div style="padding:10px 20px 14px; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-language w3-text-green"></i>
+                    <span class="dd-label" style="font-size:14px; flex:1;">Idioma</span>
+                    <div style="display:flex; gap:4px;">
+                        <button class="lang-btn" id="mob-lang-es" onclick="setLang('es')">ES</button>
+                        <button class="lang-btn" id="mob-lang-en" onclick="setLang('en')">EN</button>
+                    </div>
+                </div>
                 <div style="border-top:1px solid #f0f0f0; margin: 4px 0;"></div>
                 <a href="{{ url_for('main.logout') }}" class="w3-bar-item w3-button"
                    style="padding:14px 20px; font-size:14px; color:#c62828; display:flex; align-items:center; gap:10px;">
@@ -234,7 +288,47 @@
           
           // Forzar refresco por si el navegador se queda "dormido"
           window.addEventListener('load', AOS.refresh);
+
+          // ── Aplicar preferencias guardadas ──────────────────
+          var savedDark = localStorage.getItem('siafpt_dark') === '1';
+          if (savedDark) {
+              document.body.classList.add('dark-mode');
+              var chk    = document.getElementById('dark-mode-chk');
+              var chkMob = document.getElementById('dark-mode-chk-mob');
+              if (chk)    chk.checked    = true;
+              if (chkMob) chkMob.checked = true;
+          }
+
+          var savedLang = localStorage.getItem('siafpt_lang') || 'es';
+          document.documentElement.lang = savedLang === 'en' ? 'en' : 'es';
+          ['dd', 'mob'].forEach(function(p) {
+              var es = document.getElementById(p + '-lang-es');
+              var en = document.getElementById(p + '-lang-en');
+              if (es) es.classList.toggle('active', savedLang === 'es');
+              if (en) en.classList.toggle('active', savedLang === 'en');
+          });
       });
+
+      function applyDarkMode(on) {
+          document.body.classList.toggle('dark-mode', on);
+          localStorage.setItem('siafpt_dark', on ? '1' : '0');
+          // Sincronizar ambos checkboxes
+          var chk    = document.getElementById('dark-mode-chk');
+          var chkMob = document.getElementById('dark-mode-chk-mob');
+          if (chk)    chk.checked    = on;
+          if (chkMob) chkMob.checked = on;
+      }
+
+      function setLang(lang) {
+          localStorage.setItem('siafpt_lang', lang);
+          document.documentElement.lang = lang === 'en' ? 'en' : 'es';
+          ['dd', 'mob'].forEach(function(p) {
+              var es = document.getElementById(p + '-lang-es');
+              var en = document.getElementById(p + '-lang-en');
+              if (es) es.classList.toggle('active', lang === 'es');
+              if (en) en.classList.toggle('active', lang === 'en');
+          });
+      }
     </script>
 </body>
 </html>
