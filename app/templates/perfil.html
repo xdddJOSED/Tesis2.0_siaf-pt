@@ -18,9 +18,9 @@
 
 <div style="padding: 40px 0 24px;">
     <h1 style="margin: 0; font-weight: 700; font-size: 26px; color: #1a1a1a;">
-        <i class="fa-solid fa-circle-user" style="color: #2e7d32;"></i> Mi Perfil
+        <i class="fa-solid fa-circle-user" style="color: #2e7d32;"></i> <span class="i18n" data-es="Mi Perfil" data-en="My Profile">Mi Perfil</span>
     </h1>
-    <p style="margin: 6px 0 0; color: #666; font-size: 14px;">Administra tu información personal y foto de perfil.</p>
+    <p style="margin: 6px 0 0; color: #666; font-size: 14px;"><span class="i18n" data-es="Administra tu información personal y foto de perfil." data-en="Manage your personal information and profile picture.">Administra tu información personal y foto de perfil.</span></p>
 </div>
 
 <div class="w3-row-padding" style="margin: 0 -8px 40px;">
@@ -55,7 +55,7 @@
             <p style="margin: 0 0 4px; color: #888; font-size: 13px; word-break: break-all;">{{ usuario.correo }}</p>
             <span style="display: inline-block; padding: 4px 14px; background: #e8f5e9; color: #2e7d32;
                           border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: capitalize;">
-                {{ usuario.rol }}
+                {% if usuario.rol == 'estudiante' %}<span class="i18n" data-es="Estudiante" data-en="Student">Estudiante</span>{% else %}{{ usuario.rol }}{% endif %}
             </span>
 
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
@@ -71,7 +71,7 @@
     <div class="w3-col l8 m12 s12" style="margin-bottom: 24px;">
         <div class="glass-card" style="padding: 36px 32px;">
             <h2 style="margin: 0 0 24px; font-size: 18px; font-weight: 700; color: #1a1a1a;">
-                <i class="fa-solid fa-pen-to-square" style="color: #2e7d32; margin-right: 8px;"></i>Editar información
+                <i class="fa-solid fa-pen-to-square" style="color: #2e7d32; margin-right: 8px;"></i><span class="i18n" data-es="Editar información" data-en="Edit Information">Editar información</span>
             </h2>
 
             <form method="POST" action="{{ url_for('main.perfil') }}" enctype="multipart/form-data" autocomplete="off">
@@ -79,7 +79,7 @@
                 <!-- Nombre completo -->
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                        <i class="fa-solid fa-user" style="color: #2e7d32; margin-right: 4px;"></i> Nombre Completo
+                        <i class="fa-solid fa-user" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Nombre Completo" data-en="Full Name">Nombre Completo</span>
                     </label>
                     <input type="text" name="nombre_completo"
                            value="{{ usuario.nombre_completo }}"
@@ -93,19 +93,19 @@
                 <!-- Correo (solo lectura) -->
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                        <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> Correo Institucional
+                        <i class="fa-solid fa-envelope" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Correo Institucional" data-en="Institutional Email">Correo Institucional</span>
                     </label>
                     <input type="text" value="{{ usuario.correo }}" disabled
                            style="width: 100%; padding: 12px 16px; border: 1.5px solid #eee; border-radius: 8px;
                                   font-size: 15px; font-family: 'Inter', sans-serif; box-sizing: border-box;
                                   background: #f9f9f9; color: #999; cursor: not-allowed;">
-                    <p style="margin: 4px 0 0; font-size: 12px; color: #bbb;">El correo institucional no puede modificarse.</p>
+                    <p style="margin: 4px 0 0; font-size: 12px; color: #bbb;"><span class="i18n" data-es="El correo institucional no puede modificarse." data-en="The institutional email cannot be modified.">El correo institucional no puede modificarse.</span></p>
                 </div>
 
                 <!-- Foto de perfil -->
                 <div style="margin-bottom: 24px;">
                     <label style="display: block; font-weight: 600; font-size: 13px; color: #444; margin-bottom: 6px;">
-                        <i class="fa-solid fa-camera" style="color: #2e7d32; margin-right: 4px;"></i> Foto de Perfil
+                        <i class="fa-solid fa-camera" style="color: #2e7d32; margin-right: 4px;"></i> <span class="i18n" data-es="Foto de Perfil" data-en="Profile Picture">Foto de Perfil</span>
                     </label>
                     <div style="border: 2px dashed #ddd; border-radius: 10px; padding: 20px; text-align: center;
                                 transition: border-color 0.3s; cursor: pointer;"
@@ -115,14 +115,14 @@
                          ondragleave="this.style.borderColor='#ddd';"
                          ondrop="handleDrop(event)">
                         <i class="fa-solid fa-cloud-arrow-up" style="font-size: 28px; color: #ccc; margin-bottom: 8px;"></i>
-                        <p style="margin: 0; font-size: 14px; color: #888;">Haz clic o arrastra una imagen aquí</p>
-                        <p style="margin: 4px 0 0; font-size: 12px; color: #bbb;">JPG, PNG — máximo 2 MB</p>
+                        <p style="margin: 0; font-size: 14px; color: #888;"><span class="i18n" data-es="Haz clic o arrastra una imagen aquí" data-en="Click or drag an image here">Haz clic o arrastra una imagen aquí</span></p>
+                        <p style="margin: 4px 0 0; font-size: 12px; color: #bbb;"><span class="i18n" data-es="JPG, PNG — máximo 2 MB" data-en="JPG, PNG — maximum 2 MB">JPG, PNG — máximo 2 MB</span></p>
                     </div>
                     <input type="file" id="foto-input" name="foto" accept="image/jpeg,image/png"
                            style="display:none;" onchange="previewAvatar(event)">
                     <p style="margin: 8px 0 0; font-size: 12px; color: #aaa; text-align: center;">
                         <i class="fa-solid fa-circle-info" style="margin-right: 4px;"></i>
-                        La subida a la nube se activará en la próxima actualización.
+                        <span class="i18n" data-es="La subida a la nube se activará en la próxima actualización." data-en="Cloud upload will be activated in the next update.">La subida a la nube se activará en la próxima actualización.</span>
                     </p>
                 </div>
 
@@ -131,13 +131,13 @@
                         style="width: 100%; padding: 13px; border: none; border-radius: 8px;
                                font-size: 15px; font-weight: 600; cursor: pointer;
                                font-family: 'Inter', sans-serif; letter-spacing: 0.3px;">
-                    <i class="fa-solid fa-floppy-disk" style="margin-right: 8px;"></i>Guardar Cambios
+                    <i class="fa-solid fa-floppy-disk" style="margin-right: 8px;"></i><span class="i18n" data-es="Guardar Cambios" data-en="Save Changes">Guardar Cambios</span>
                 </button>
 
                 <a href="{{ url_for('main.dashboard') }}"
                    style="display: block; text-align: center; margin-top: 14px; font-size: 13px;
                           color: #888; text-decoration: none;">
-                    <i class="fa-solid fa-arrow-left" style="margin-right: 4px;"></i> Volver al Panel
+                    <i class="fa-solid fa-arrow-left" style="margin-right: 4px;"></i> <span class="i18n" data-es="Volver al Panel" data-en="Back to Panel">Volver al Panel</span>
                 </a>
             </form>
         </div>
