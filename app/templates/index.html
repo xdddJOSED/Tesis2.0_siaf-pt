@@ -32,205 +32,386 @@
 </div>
 
 <style>
-    /* ── Zig-Zag Feature Sections ── */
-    .features-wrapper {
+    /* ── Feature Tabs Section ──────────────────────────────── */
+    .ft-section {
         width: 100vw;
         margin-left: calc(-50vw + 50%);
-    }
-
-    .feature-section {
-        padding: 6rem 2rem;
         background: #f4f6f8;
+        padding: 5rem 2rem 6rem;
     }
 
-    .feature-section--alt {
-        background: #ffffff;
+    .ft-header {
+        text-align: center;
+        max-width: 620px;
+        margin: 0 auto 3.5rem;
     }
 
-    .feature-inner {
+    .ft-header .ft-eyebrow {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #2e7d32;
+        background: #e8f5e9;
+        padding: 5px 14px;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+    }
+
+    .ft-header h2 {
+        font-size: 2.1rem;
+        font-weight: 800;
+        color: #1a1a2e;
+        margin: 0 0 0.75rem;
+        line-height: 1.2;
+    }
+
+    .ft-header p {
+        font-size: 1rem;
+        color: #666;
+        line-height: 1.75;
+        margin: 0;
+    }
+
+    /* ── Layout wrapper ── */
+    .ft-wrapper {
         max-width: 1100px;
         margin: 0 auto;
         display: flex;
+        align-items: flex-start;
+        gap: 2.5rem;
+    }
+
+    /* ── Left nav ── */
+    .ft-nav {
+        width: 290px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ft-btn {
+        display: flex;
         align-items: center;
-        gap: 5rem;
+        gap: 14px;
+        padding: 18px 20px;
+        background: #ffffff;
+        border: 1.5px solid #e4e8e4;
+        border-radius: 14px;
+        cursor: pointer;
+        text-align: left;
+        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        width: 100%;
+        font-family: 'Inter', sans-serif;
     }
 
-    .feature-inner--reversed {
-        flex-direction: row-reverse;
+    .ft-btn:hover {
+        border-color: #4caf50;
+        box-shadow: 0 4px 18px rgba(46, 125, 50, 0.1);
     }
 
-    .feature-text,
-    .feature-visual {
+    .ft-btn.ft-btn--active {
+        background: #e8f5e9;
+        border-color: #2e7d32;
+        box-shadow: 0 4px 18px rgba(46, 125, 50, 0.12);
+    }
+
+    .ft-btn-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: #f1f8e9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: #2e7d32;
+        flex-shrink: 0;
+        transition: background 0.2s;
+    }
+
+    .ft-btn.ft-btn--active .ft-btn-icon {
+        background: #2e7d32;
+        color: #ffffff;
+    }
+
+    .ft-btn-text {
         flex: 1;
         min-width: 0;
     }
 
-    /* Mobile: image always on top */
-    @media (max-width: 768px) {
-        .feature-inner,
-        .feature-inner--reversed {
-            flex-direction: column;
-            gap: 2.5rem;
-        }
-        .feature-visual {
-            order: -1;
-            width: 100%;
-        }
-        .feature-section {
-            padding: 4rem 1.5rem;
-        }
-    }
-
-    .feature-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 60px;
-        height: 60px;
-        background: #e8f5e9;
-        border-radius: 16px;
-        color: #19521b;
-        font-size: 1.4rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .feature-text h2 {
-        font-size: 2rem;
+    .ft-btn-text strong {
+        display: block;
+        font-size: 0.95rem;
         font-weight: 700;
         color: #1a1a2e;
-        margin: 0 0 1rem 0;
-        line-height: 1.25;
+        margin-bottom: 2px;
     }
 
-    .feature-text p {
-        font-size: 1.05rem;
+    .ft-btn-text span {
+        font-size: 0.78rem;
+        color: #888;
+        line-height: 1.4;
+        display: block;
+    }
+
+    .ft-btn-arrow {
+        color: #ccc;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+        transition: color 0.2s, transform 0.2s;
+    }
+
+    .ft-btn.ft-btn--active .ft-btn-arrow {
+        color: #2e7d32;
+        transform: translateX(3px);
+    }
+
+    /* ── Right content ── */
+    .ft-content {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+    }
+
+    .ft-pane {
+        display: none;
+        animation: ftFadeIn 0.3s ease;
+    }
+
+    .ft-pane.ft-pane--active {
+        display: block;
+    }
+
+    @keyframes ftFadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .ft-gif {
+        width: 100%;
+        height: auto;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(25, 82, 27, 0.15);
+        display: block;
+        margin-bottom: 1.75rem;
+    }
+
+    .ft-desc h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 0.6rem;
+    }
+
+    .ft-desc p {
+        font-size: 0.97rem;
         color: #555;
-        line-height: 1.85;
-        margin: 0 0 1.75rem 0;
+        line-height: 1.8;
+        margin: 0 0 1.25rem;
     }
 
-    .feature-list {
+    .ft-list {
         list-style: none;
         padding: 0;
         margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 0.8rem;
+        gap: 0.6rem;
     }
 
-    .feature-list li {
+    .ft-list li {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        font-size: 0.95rem;
+        gap: 0.6rem;
+        font-size: 0.9rem;
         color: #333;
         font-weight: 500;
     }
 
-    .feature-list li i {
-        color: #19521b;
-        font-size: 1rem;
+    .ft-list li i {
+        color: #2e7d32;
+        font-size: 0.85rem;
         flex-shrink: 0;
     }
 
-    .feature-img {
-        width: 100%;
-        height: auto;
-        border-radius: 20px;
-        box-shadow: 0 24px 64px rgba(25, 82, 27, 0.15);
-        transition: box-shadow 0.3s, transform 0.3s;
-        display: block;
-    }
+    /* ── Dark mode ── */
+    body.dark-mode .ft-section { background: #181818; }
+    body.dark-mode .ft-btn { background: #1e1e1e; border-color: #2a2a2a; }
+    body.dark-mode .ft-btn:hover { border-color: #4caf50; }
+    body.dark-mode .ft-btn.ft-btn--active { background: #1b2e1c; border-color: #2e7d32; }
+    body.dark-mode .ft-btn-icon { background: #2a2a2a; }
+    body.dark-mode .ft-btn.ft-btn--active .ft-btn-icon { background: #2e7d32; }
+    body.dark-mode .ft-btn-text strong { color: #e0e0e0; }
+    body.dark-mode .ft-btn-text span { color: #777; }
+    body.dark-mode .ft-header h2 { color: #e0e0e0; }
+    body.dark-mode .ft-header p { color: #aaa; }
+    body.dark-mode .ft-desc h3 { color: #e0e0e0; }
+    body.dark-mode .ft-desc p { color: #aaa; }
+    body.dark-mode .ft-list li { color: #ccc; }
 
-    .feature-img:hover {
-        box-shadow: 0 32px 80px rgba(25, 82, 27, 0.25);
-        transform: translateY(-4px);
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+        .ft-section { padding: 3.5rem 1.25rem 4rem; }
+
+        .ft-wrapper {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .ft-nav {
+            width: 100%;
+            flex-direction: row;
+            overflow-x: auto;
+            gap: 8px;
+            padding-bottom: 6px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .ft-nav::-webkit-scrollbar { display: none; }
+
+        .ft-btn {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-width: 130px;
+            padding: 14px 12px;
+            gap: 8px;
+        }
+
+        .ft-btn-text span,
+        .ft-btn-arrow { display: none; }
+
+        .ft-btn-text strong { font-size: 0.82rem; }
     }
 </style>
 
-<!-- ── Zig-Zag Features ── -->
-<div class="features-wrapper">
+<!-- ── Feature Tabs ── -->
+<section class="ft-section" data-aos="fade-up">
 
-    <!-- Feature 1 — Texto izq · Imagen der -->
-    <section class="feature-section" data-aos="fade-up">
-        <div class="feature-inner">
-            <div class="feature-text">
-                <div class="feature-badge">
-                    <i class="fa-solid fa-brain"></i>
-                </div>
-                <h2>IA Semántica</h2>
-                <p>
-                    Comprensión profunda de las ideas de investigación mediante modelos de lenguaje avanzados.
-                    El motor semántico analiza el contexto y la intención detrás de cada propuesta, 
-                    entregando resultados precisos y con significado real.
-                </p>
-                <ul class="feature-list">
-                    <li><i class="fa-solid fa-circle-check"></i> Análisis contextual del lenguaje natural</li>
-                    <li><i class="fa-solid fa-circle-check"></i> Modelos de lenguaje de última generación</li>
-                    <li><i class="fa-solid fa-circle-check"></i> Resultados semánticos en tiempo real</li>
-                </ul>
-            </div>
-            <div class="feature-visual" data-aos="fade-left" data-aos-delay="150">
+    <div class="ft-header">
+        <span class="ft-eyebrow">Funcionalidades</span>
+        <h2>Todo lo que necesitas en un solo lugar</h2>
+        <p>Explora las capacidades del sistema que transforma una idea en una propuesta de titulación estructurada y validada.</p>
+    </div>
+
+    <div class="ft-wrapper">
+
+        <!-- ── Nav de pestañas ── -->
+        <nav class="ft-nav" role="tablist">
+
+            <button class="ft-btn ft-btn--active"
+                    role="tab" aria-selected="true" aria-controls="ft-tab1" id="ft-btn1"
+                    onclick="ftSwitch('ft-tab1', this)">
+                <span class="ft-btn-icon"><i class="fa-solid fa-brain"></i></span>
+                <span class="ft-btn-text">
+                    <strong>IA Semántica</strong>
+                    <span>Comprensión del lenguaje natural</span>
+                </span>
+                <i class="fa-solid fa-chevron-right ft-btn-arrow"></i>
+            </button>
+
+            <button class="ft-btn"
+                    role="tab" aria-selected="false" aria-controls="ft-tab2" id="ft-btn2"
+                    onclick="ftSwitch('ft-tab2', this)">
+                <span class="ft-btn-icon"><i class="fa-solid fa-database"></i></span>
+                <span class="ft-btn-text">
+                    <strong>Motor Vectorial</strong>
+                    <span>Detección de similitud semántica</span>
+                </span>
+                <i class="fa-solid fa-chevron-right ft-btn-arrow"></i>
+            </button>
+
+            <button class="ft-btn"
+                    role="tab" aria-selected="false" aria-controls="ft-tab3" id="ft-btn3"
+                    onclick="ftSwitch('ft-tab3', this)">
+                <span class="ft-btn-icon"><i class="fa-solid fa-crosshairs"></i></span>
+                <span class="ft-btn-text">
+                    <strong>Alineación Curricular</strong>
+                    <span>Validación normativa UTM</span>
+                </span>
+                <i class="fa-solid fa-chevron-right ft-btn-arrow"></i>
+            </button>
+
+        </nav>
+
+        <!-- ── Paneles de contenido ── -->
+        <div class="ft-content">
+
+            <div class="ft-pane ft-pane--active" id="ft-tab1" role="tabpanel" aria-labelledby="ft-btn1">
                 <img src="{{ url_for('static', filename='img/GIF1_Semanctica.gif') }}"
                      alt="IA Semántica – Demo"
-                     class="feature-img">
-            </div>
-        </div>
-    </section>
-
-    <!-- Feature 2 — Imagen izq · Texto der (invertido) -->
-    <section class="feature-section feature-section--alt" data-aos="fade-up">
-        <div class="feature-inner feature-inner--reversed">
-            <div class="feature-text">
-                <div class="feature-badge">
-                    <i class="fa-solid fa-database"></i>
+                     class="ft-gif">
+                <div class="ft-desc">
+                    <h3>IA Semántica</h3>
+                    <p>Comprensión profunda de las ideas de investigación mediante modelos de lenguaje avanzados.
+                       El motor semántico analiza el contexto y la intención detrás de cada propuesta,
+                       entregando resultados precisos y con significado real.</p>
+                    <ul class="ft-list">
+                        <li><i class="fa-solid fa-circle-check"></i> Análisis contextual del lenguaje natural</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Modelos de lenguaje de última generación</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Resultados semánticos en tiempo real</li>
+                    </ul>
                 </div>
-                <h2>Motor Vectorial</h2>
-                <p>
-                    Búsqueda matemática en el repositorio histórico para garantizar proyectos 100&nbsp;% inéditos.
-                    Utilizamos embeddings vectoriales para calcular similitud semántica entre propuestas 
-                    con una precisión que va más allá de las palabras clave.
-                </p>
-                <ul class="feature-list">
-                    <li><i class="fa-solid fa-circle-check"></i> Comparación por similitud semántica</li>
-                    <li><i class="fa-solid fa-circle-check"></i> Repositorio histórico completo de la UTM</li>
-                    <li><i class="fa-solid fa-circle-check"></i> Detección de duplicados de alta precisión</li>
-                </ul>
             </div>
-            <div class="feature-visual" data-aos="fade-right" data-aos-delay="150">
+
+            <div class="ft-pane" id="ft-tab2" role="tabpanel" aria-labelledby="ft-btn2">
                 <img src="{{ url_for('static', filename='img/GIF2_Motor_Vectorial.gif') }}"
                      alt="Motor Vectorial – Demo"
-                     class="feature-img">
-            </div>
-        </div>
-    </section>
-
-    <!-- Feature 3 — Texto izq · Imagen der -->
-    <section class="feature-section" data-aos="fade-up">
-        <div class="feature-inner">
-            <div class="feature-text">
-                <div class="feature-badge">
-                    <i class="fa-solid fa-crosshairs"></i>
+                     class="ft-gif">
+                <div class="ft-desc">
+                    <h3>Motor Vectorial</h3>
+                    <p>Búsqueda matemática en el repositorio histórico para garantizar proyectos 100&nbsp;% inéditos.
+                       Utilizamos embeddings vectoriales para calcular similitud semántica entre propuestas
+                       con una precisión que va más allá de las palabras clave.</p>
+                    <ul class="ft-list">
+                        <li><i class="fa-solid fa-circle-check"></i> Comparación por similitud semántica</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Repositorio histórico completo de la UTM</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Detección de duplicados de alta precisión</li>
+                    </ul>
                 </div>
-                <h2>Alineación Curricular</h2>
-                <p>
-                    Generación estructurada que respeta los lineamientos oficiales de la 
-                    Universidad Técnica de Manabí. Cada propuesta es validada automáticamente 
-                    contra el currículo vigente de la Carrera de Tecnologías de la Información.
-                </p>
-                <ul class="feature-list">
-                    <li><i class="fa-solid fa-circle-check"></i> Lineamientos oficiales UTM integrados</li>
-                    <li><i class="fa-solid fa-circle-check"></i> Estructura de propuesta normativa válida</li>
-                    <li><i class="fa-solid fa-circle-check"></i> Coherencia con el currículo académico vigente</li>
-                </ul>
             </div>
-            <div class="feature-visual" data-aos="fade-left" data-aos-delay="150">
-                <img src="{{ url_for('static', filename='img/GIF4_alineacioncurricular.gif') }}"
-                     alt="Alineación Curricular"
-                     class="feature-img">
-            </div>
-        </div>
-    </section>
 
-</div>
+            <div class="ft-pane" id="ft-tab3" role="tabpanel" aria-labelledby="ft-btn3">
+                <img src="{{ url_for('static', filename='img/GIF4_alineacioncurricular.gif') }}"
+                     alt="Alineación Curricular – Demo"
+                     class="ft-gif">
+                <div class="ft-desc">
+                    <h3>Alineación Curricular</h3>
+                    <p>Generación estructurada que respeta los lineamientos oficiales de la
+                       Universidad Técnica de Manabí. Cada propuesta es validada automáticamente
+                       contra el currículo vigente de la Carrera de Tecnologías de la Información.</p>
+                    <ul class="ft-list">
+                        <li><i class="fa-solid fa-circle-check"></i> Lineamientos oficiales UTM integrados</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Estructura de propuesta normativa válida</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Coherencia con el currículo académico vigente</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+function ftSwitch(tabId, btn) {
+    // Deactivate all panes and buttons
+    document.querySelectorAll('.ft-pane').forEach(function(p) {
+        p.classList.remove('ft-pane--active');
+    });
+    document.querySelectorAll('.ft-btn').forEach(function(b) {
+        b.classList.remove('ft-btn--active');
+        b.setAttribute('aria-selected', 'false');
+    });
+    // Activate the selected ones
+    document.getElementById(tabId).classList.add('ft-pane--active');
+    btn.classList.add('ft-btn--active');
+    btn.setAttribute('aria-selected', 'true');
+}
+</script>
+
 {% endblock %}
