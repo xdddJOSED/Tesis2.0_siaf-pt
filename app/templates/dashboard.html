@@ -13,6 +13,7 @@ body.dark-mode #modal-pdf-content [style*="background:#f1f8e9"] { background: #1
 body.dark-mode #modal-pdf-content [style*="background:#e3f2fd"] { background: #0d2137 !important; }
 body.dark-mode #modal-pdf-content [style*="background:#ffebee"] { background: #2d1515 !important; }
 body.dark-mode #modal-pdf-content [style*="background:#fff3e0"] { background: #2d2215 !important; }
+body.dark-mode #modal-pdf-content [style*="background:#fff8e1"] { background: #2a2010 !important; }
 body.dark-mode #modal-pdf-content [style*="background:#e8f5e9"] { background: #152d17 !important; }
 body.dark-mode #modal-pdf-content [style*="background:#fafafa"] { background: #252525 !important; }
 body.dark-mode #modal-pdf-content [style*="background:#e8eaf6"] { background: #1a1c2d !important; }
@@ -446,6 +447,20 @@ body.dark-mode #modal-pdf-content [style*="border-top: 1px solid #eee"] { border
                             </div>
                         </details>
 
+                        <!-- Planteamiento del Problema accordion -->
+                        <details id="modal-planteamiento-details" class="pdf-avoid-break" style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #ffcc80; display:none;">
+                            <summary style="list-style:none; padding:16px 20px; background:#fff3e0; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
+                                <span style="width:36px; height:36px; border-radius:8px; background:#e65100; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                    <i class="fa-solid fa-triangle-exclamation" style="color:white; font-size:15px;"></i>
+                                </span>
+                                <span style="font-size:16px; font-weight:700; color:#bf360c; flex:1;">Planteamiento del Problema</span>
+                                <i class="fa-solid fa-chevron-down" style="color:#e65100; font-size:13px;"></i>
+                            </summary>
+                            <div style="padding:20px; background:#fff8e1; border-top:1px solid #ffcc80; border-left:4px solid #e65100;">
+                                <div id="modal-planteamiento"></div>
+                            </div>
+                        </details>
+
                         <!-- Justificación accordion -->
                         <details class="pdf-avoid-break" style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #d7ccc8;">
                             <summary style="list-style:none; padding:16px 20px; background:#efebe9; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
@@ -542,6 +557,18 @@ function verDetalle(id) {
                 document.getElementById('modal-tema-sugerido').textContent = ia.titulo || '';
                 document.getElementById('modal-ia-resumen').textContent = ia.resumen || '';
                 document.getElementById('modal-objetivo-general').textContent = ia.objetivo_general || '';
+
+                const planteamientoDetails = document.getElementById('modal-planteamiento-details');
+                const planteamientoContainer = document.getElementById('modal-planteamiento');
+                planteamientoContainer.innerHTML = '';
+                if (ia.planteamiento_del_problema && ia.planteamiento_del_problema.trim()) {
+                    planteamientoDetails.style.display = '';
+                    ia.planteamiento_del_problema.split(/\n\n+/).filter(Boolean).forEach(function(parrafo) {
+                        planteamientoContainer.innerHTML += '<p style="margin:0 0 14px;font-size:14px;color:#444;line-height:1.8;">' + escHTML(parrafo) + '</p>';
+                    });
+                } else {
+                    planteamientoDetails.style.display = 'none';
+                }
                 const justificacionContainer = document.getElementById('modal-justificacion');
                 justificacionContainer.innerHTML = '';
                 const justificaciones = Array.isArray(ia.justificacion)
