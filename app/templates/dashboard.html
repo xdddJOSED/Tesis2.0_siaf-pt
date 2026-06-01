@@ -15,6 +15,8 @@ body.dark-mode #modal-pdf-content [style*="background:#ffebee"] { background: #2
 body.dark-mode #modal-pdf-content [style*="background:#fff3e0"] { background: #2d2215 !important; }
 body.dark-mode #modal-pdf-content [style*="background:#e8f5e9"] { background: #152d17 !important; }
 body.dark-mode #modal-pdf-content [style*="background:#fafafa"] { background: #252525 !important; }
+body.dark-mode #modal-pdf-content [style*="background:#e8eaf6"] { background: #1a1c2d !important; }
+body.dark-mode #modal-pdf-content [style*="background:#fff8f5"] { background: #2a2218 !important; }
 body.dark-mode #modal-pdf-content hr,
 body.dark-mode #modal-pdf-content [style*="border-bottom: 1px solid #e5e5e5"],
 body.dark-mode #modal-pdf-content [style*="border-top: 1px solid #eee"] { border-color: #333 !important; }
@@ -325,8 +327,8 @@ body.dark-mode #modal-pdf-content [style*="border-top: 1px solid #eee"] { border
                             {{ propuesta.fecha_creacion.strftime('%d/%m/%Y %H:%M') if propuesta.fecha_creacion else '' }}
                         </p>
                         <button onclick="verDetalle({{ propuesta.id }})"
-                            style="margin-top: 4px; padding: 6px 14px; border: 1.5px solid #2e7d32; background: white; color: #2e7d32; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s;"
-                            onmouseover="this.style.background='#2e7d32'; this.style.color='white'" onmouseout="this.style.background='white'; this.style.color='#2e7d32'">
+                            style="margin-top: 4px; padding: 6px 14px; border: 1.5px solid #2e7d32; background: transparent; color: #2e7d32; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s;"
+                            onmouseover="this.style.background='#2e7d32'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#2e7d32'">
                             <i class="fa-solid fa-eye" style="margin-right: 4px;"></i><span class="i18n" data-es="Ver Detalle" data-en="View Details">Ver Detalle</span>
                         </button>
                     </div>
@@ -429,33 +431,53 @@ body.dark-mode #modal-pdf-content [style*="border-top: 1px solid #eee"] { border
                             <p style="margin: 0; font-size: 16px; font-weight: 700; color: #1a1a1a; line-height: 1.4;" id="modal-tema-sugerido"></p>
                         </div>
 
-                        <div class="w3-row-padding" style="margin: 0 -8px 18px;">
-                            <div class="w3-col l6 m12 s12 pdf-avoid-break" style="margin-bottom:12px;">
-                                <div class="w3-panel w3-pale-green w3-round-large pdf-avoid-break" style="margin:0;">
-                                    <p class="w3-small"><strong>Resumen</strong></p>
-                                    <p id="modal-ia-resumen" style="margin: 0; font-size: 13px; color: #444; line-height: 1.6;"></p>
-                                    <div id="modal-palabras-clave" class="pdf-avoid-break" style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;"></div>
-                                </div>
+                        <!-- Resumen accordion -->
+                        <details open class="pdf-avoid-break" style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #a5d6a7;">
+                            <summary style="list-style:none; padding:16px 20px; background:#e8f5e9; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
+                                <span style="width:36px; height:36px; border-radius:8px; background:#2e7d32; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                    <i class="fa-solid fa-align-left" style="color:white; font-size:15px;"></i>
+                                </span>
+                                <span style="font-size:16px; font-weight:700; color:#1b5e20; flex:1;">Resumen</span>
+                                <i class="fa-solid fa-chevron-down" style="color:#2e7d32; font-size:13px;"></i>
+                            </summary>
+                            <div style="padding:20px; background:#f9fdf9; border-top:1px solid #c8e6c9;">
+                                <p id="modal-ia-resumen" style="margin:0 0 12px; font-size:14px; color:#333; line-height:1.7;"></p>
+                                <div id="modal-palabras-clave" class="pdf-avoid-break" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
                             </div>
-                            <div class="w3-col l6 m12 s12 pdf-avoid-break" style="margin-bottom:12px;">
-                                <div class="w3-panel w3-light-grey w3-round-large pdf-avoid-break" style="margin:0;">
-                                    <p class="w3-small"><strong>Objetivo General</strong></p>
-                                    <p id="modal-objetivo-general" style="margin: 0; font-size: 13px; color: #444; line-height: 1.6;"></p>
-                                </div>
-                            </div>
-                        </div>
+                        </details>
 
-                        <div class="w3-card w3-round-large pdf-avoid-break" style="margin-bottom:18px; border:1px solid #eef2ee;">
-                            <div class="w3-container" style="padding: 16px 18px;">
-                                <p class="w3-small"><strong>Objetivos Específicos</strong></p>
-                                <ul class="w3-ul" id="modal-objetivos-especificos"></ul>
+                        <!-- Justificación accordion -->
+                        <details class="pdf-avoid-break" style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #d7ccc8;">
+                            <summary style="list-style:none; padding:16px 20px; background:#efebe9; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
+                                <span style="width:36px; height:36px; border-radius:8px; background:#6d4c41; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                    <i class="fa-solid fa-scale-balanced" style="color:white; font-size:15px;"></i>
+                                </span>
+                                <span style="font-size:16px; font-weight:700; color:#4e342e; flex:1;">Justificación</span>
+                                <i class="fa-solid fa-chevron-down" style="color:#6d4c41; font-size:13px;"></i>
+                            </summary>
+                            <div id="modal-pdf-justificacion" style="padding:20px; background:#faf7f5; border-top:1px solid #d7ccc8;">
+                                <div id="modal-justificacion"></div>
                             </div>
-                        </div>
+                        </details>
 
-                        <div id="modal-pdf-justificacion" style="margin-bottom: 20px;">
-                            <p class="w3-small"><strong>Justificación</strong></p>
-                            <div id="modal-justificacion"></div>
-                        </div>
+                        <!-- Objetivos accordion -->
+                        <details class="pdf-avoid-break" style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #b0bec5;">
+                            <summary style="list-style:none; padding:16px 20px; background:#eceff1; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
+                                <span style="width:36px; height:36px; border-radius:8px; background:#37474f; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                    <i class="fa-solid fa-bullseye" style="color:white; font-size:15px;"></i>
+                                </span>
+                                <span style="font-size:16px; font-weight:700; color:#263238; flex:1;">Objetivos</span>
+                                <i class="fa-solid fa-chevron-down" style="color:#37474f; font-size:13px;"></i>
+                            </summary>
+                            <div style="padding:20px; background:#f5f7f8; border-top:1px solid #b0bec5;">
+                                <div style="padding:14px 16px; background:#e8eaf6; border-radius:8px; border-left:3px solid #3949ab; margin-bottom:14px;">
+                                    <p style="margin:0 0 4px; font-size:12px; font-weight:600; color:#3949ab; text-transform:uppercase; letter-spacing:0.4px;">Objetivo General</p>
+                                    <p id="modal-objetivo-general" style="margin:0; font-size:14px; color:#333; line-height:1.7;"></p>
+                                </div>
+                                <p style="margin:0 0 10px; font-size:12px; font-weight:600; color:#555; text-transform:uppercase; letter-spacing:0.4px;">Objetivos Específicos</p>
+                                <ul style="margin:0; padding:0; list-style:none;" id="modal-objetivos-especificos"></ul>
+                            </div>
+                        </details>
 
                         <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;" id="modal-tags"></div>
 
@@ -529,13 +551,13 @@ function verDetalle(id) {
                         : []);
                 if (justificaciones.length > 0) {
                     justificaciones.forEach(function(parrafo) {
-                        justificacionContainer.innerHTML += '<div class="w3-panel w3-sand w3-round-large w3-margin-bottom pdf-avoid-break" style="margin-top:0;">' +
-                            '<p style="margin:0;font-size:13px;color:#444;line-height:1.6;">' + escHTML(parrafo) + '</p>' +
+                        justificacionContainer.innerHTML += '<div style="padding:14px 16px;background:#fff8f5;border-radius:8px;border-left:3px solid #a1887f;margin-bottom:10px;">' +
+                            '<p style="margin:0;font-size:14px;color:#444;line-height:1.7;">' + escHTML(parrafo) + '</p>' +
                         '</div>';
                     });
                 } else {
-                    justificacionContainer.innerHTML = '<div class="w3-panel w3-sand w3-round-large w3-margin-bottom pdf-avoid-break" style="margin-top:0;">' +
-                        '<p style="margin:0;font-size:13px;color:#444;line-height:1.6;">No disponible.</p>' +
+                    justificacionContainer.innerHTML = '<div style="padding:14px 16px;background:#fff8f5;border-radius:8px;border-left:3px solid #a1887f;margin-bottom:10px;">' +
+                        '<p style="margin:0;font-size:14px;color:#444;line-height:1.7;">No disponible.</p>' +
                     '</div>';
                 }
 
@@ -551,11 +573,12 @@ function verDetalle(id) {
                 objetivosContainer.innerHTML = '';
                 if (ia.objetivos_especificos && ia.objetivos_especificos.length > 0) {
                     ia.objetivos_especificos.forEach(function(objetivo) {
-                        objetivosContainer.innerHTML += '<li style="padding-left:0;border-bottom:1px solid #edf2ed;color:#444;">' +
-                            '<i class="fa-solid fa-circle-check" style="margin-right:8px;color:#2e7d32;"></i>' + escHTML(objetivo) + '</li>';
+                        objetivosContainer.innerHTML += '<li style="padding:10px 12px;border-bottom:1px solid #e0e0e0;color:#444;font-size:14px;line-height:1.6;display:flex;align-items:flex-start;gap:10px;">' +
+                            '<i class="fa-solid fa-circle-check" style="color:#2e7d32;margin-top:3px;flex-shrink:0;"></i>' +
+                            '<span>' + escHTML(objetivo) + '</span></li>';
                     });
                 } else {
-                    objetivosContainer.innerHTML = '<li style="padding-left:0;color:#777;">No disponibles.</li>';
+                    objetivosContainer.innerHTML = '<li style="padding:10px 12px;color:#777;font-size:14px;">No disponibles.</li>';
                 }
 
                 // Tags
