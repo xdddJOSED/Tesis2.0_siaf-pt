@@ -479,109 +479,181 @@ function verDetalle(id) {
             loading.style.display = 'none';
             content.style.display = 'block';
 
-            document.getElementById('modal-titulo').textContent = data.titulo;
-            document.getElementById('modal-resumen').textContent = data.resumen;
+            const tituloIA = data.resultado_ia && data.resultado_ia.titulo ? data.resultado_ia.titulo : data.titulo;
             document.getElementById('modal-fecha').textContent = data.fecha ? ('Generada el ' + data.fecha) : '';
             document.getElementById('modal-header-titulo').textContent = 'Detalle de Propuesta #' + data.id;
-            document.getElementById('modal-pdf-titulo').textContent = data.resultado_ia && data.resultado_ia.titulo ? data.resultado_ia.titulo : data.titulo;
-            document.getElementById('modal-pdf-fecha').textContent = data.fecha ? ('Generada el ' + data.fecha) : 'Fecha no disponible';
-            content.dataset.pdfTitulo = data.resultado_ia && data.resultado_ia.titulo ? data.resultado_ia.titulo : data.titulo;
+            content.dataset.pdfTitulo = tituloIA;
             content.dataset.pdfFecha = data.fecha || '';
 
-            const iaSection = document.getElementById('modal-ia-section');
-            const sinIa = document.getElementById('modal-sin-ia');
+            let html = `
+                <div class="pdf-avoid-break" style="margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid #e5e5e5;">
+                    <p style="margin:0 0 4px; font-size:11px; font-weight:700; color:#2e7d32; text-transform:uppercase; letter-spacing:0.7px;">SIAF-PT · Universidad Técnica de Manabí</p>
+                    <h3 style="margin:0; font-size:20px; font-weight:700; color:#1a1a1a;">${escHTML(tituloIA)}</h3>
+                    <p style="margin:6px 0 0; font-size:12px; color:#666;">${data.fecha ? escHTML('Generada el ' + data.fecha) : 'Fecha no disponible'}</p>
+                </div>
+
+                <div class="pdf-avoid-break" style="margin-bottom:20px; padding:16px; background:#f5f5f5; border-radius:10px;">
+                    <p style="margin:0 0 4px; font-size:11px; font-weight:600; color:#888; text-transform:uppercase; letter-spacing:0.5px;">
+                        <i class="fa-solid fa-pen" style="margin-right:4px;"></i> Idea Original del Estudiante
+                    </p>
+                    <h4 style="margin:0 0 6px; font-size:15px; font-weight:600; color:#1a1a1a;">${escHTML(data.titulo)}</h4>
+                    <p style="margin:0; font-size:13px; color:#555; line-height:1.5;">${escHTML(data.resumen || '')}</p>
+                </div>`;
 
             if (data.resultado_ia) {
                 const ia = data.resultado_ia;
-                iaSection.style.display = 'block';
-                sinIa.style.display = 'none';
 
-                document.getElementById('modal-tema-sugerido').textContent = ia.titulo || '';
-                document.getElementById('modal-ia-resumen').textContent = ia.resumen || '';
-                document.getElementById('modal-objetivo-general').textContent = ia.objetivo_general || '';
-                const justificacionContainer = document.getElementById('modal-justificacion');
-                justificacionContainer.innerHTML = '';
+                // ── Tema sugerido ──
+                html += `
+                <div class="pdf-avoid-break" style="margin-bottom:20px; padding:18px; background:#f1f8e9; border-radius:10px; border-left:4px solid #2e7d32;">
+                    <p style="margin:0 0 6px; font-size:11px; font-weight:600; color:#2e7d32; text-transform:uppercase; letter-spacing:0.5px;">
+                        <i class="fa-solid fa-lightbulb" style="margin-right:4px;"></i> Tema Final Sugerido por IA
+                    </p>
+                    <p style="margin:0; font-size:16px; font-weight:700; color:#1a1a1a; line-height:1.4;">${escHTML(ia.titulo || '')}</p>
+                </div>`;
+
+                // ── 1. Resumen ──
+                const palabrasClaveHtml = ia.palabras_clave && ia.palabras_clave.length
+                    ? `<div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">${ia.palabras_clave.map(p => `<span class="w3-tag w3-round w3-green" style="font-size:11px;padding:4px 10px;">${escHTML(p)}</span>`).join('')}</div>`
+                    : '';
+
+                html += `
+                <details open style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #a5d6a7;">
+                    <summary style="list-style:none; padding:16px 20px; background:#e8f5e9; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
+                        <span style="width:36px; height:36px; border-radius:8px; background:#2e7d32; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fa-solid fa-align-left" style="color:white; font-size:15px;"></i>
+                        </span>
+                        <span style="font-size:16px; font-weight:700; color:#1b5e20; flex:1;">Resumen</span>
+                        <i class="fa-solid fa-chevron-down" style="color:#2e7d32; font-size:13px; transition:transform 0.2s;"></i>
+                    </summary>
+                    <div style="padding:20px; background:#f9fdf9; border-top:1px solid #c8e6c9;">
+                        <p style="margin:0 0 12px; line-height:1.7; color:#333; font-size:14px;">${escHTML(ia.resumen || '')}</p>
+                        ${palabrasClaveHtml}
+                    </div>
+                </details>`;
+
+                // ── 2. Planteamiento del Problema ──
+                if (ia.planteamiento_del_problema) {
+                    const parrafosProblema = ia.planteamiento_del_problema.split('\n\n').filter(Boolean)
+                        .map(p => `<p style="margin:0 0 14px; font-size:14px; color:#444; line-height:1.8;">${escHTML(p)}</p>`).join('');
+                    html += `
+                    <details style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #ffcc80;">
+                        <summary style="list-style:none; padding:16px 20px; background:#fff3e0; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
+                            <span style="width:36px; height:36px; border-radius:8px; background:#e65100; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <i class="fa-solid fa-triangle-exclamation" style="color:white; font-size:15px;"></i>
+                            </span>
+                            <span style="font-size:16px; font-weight:700; color:#bf360c; flex:1;">Planteamiento del Problema</span>
+                            <i class="fa-solid fa-chevron-down" style="color:#e65100; font-size:13px; transition:transform 0.2s;"></i>
+                        </summary>
+                        <div style="padding:20px; background:#fff8e1; border-top:1px solid #ffcc80; border-left:4px solid #e65100;">
+                            ${parrafosProblema}
+                        </div>
+                    </details>`;
+                }
+
+                // ── 3. Justificación ──
                 const justificaciones = Array.isArray(ia.justificacion)
                     ? ia.justificacion
                     : (typeof ia.justificacion === 'string' && ia.justificacion.trim()
                         ? ia.justificacion.split(/\n\n+/).filter(Boolean)
                         : []);
-                if (justificaciones.length > 0) {
-                    justificaciones.forEach(function(parrafo) {
-                        justificacionContainer.innerHTML += '<div class="w3-panel w3-sand w3-round-large w3-margin-bottom pdf-avoid-break" style="margin-top:0;">' +
-                            '<p style="margin:0;font-size:13px;color:#444;line-height:1.6;">' + escHTML(parrafo) + '</p>' +
-                        '</div>';
-                    });
-                } else {
-                    justificacionContainer.innerHTML = '<div class="w3-panel w3-sand w3-round-large w3-margin-bottom pdf-avoid-break" style="margin-top:0;">' +
-                        '<p style="margin:0;font-size:13px;color:#444;line-height:1.6;">No disponible.</p>' +
-                    '</div>';
-                }
+                const justificacionHtml = justificaciones.length
+                    ? justificaciones.map(p => `<div style="padding:14px 16px; background:#fff8f5; border-radius:8px; border-left:3px solid #a1887f; margin-bottom:10px;"><p style="margin:0; font-size:14px; color:#444; line-height:1.7;">${escHTML(p)}</p></div>`).join('')
+                    : '<p style="margin:0; color:#888; font-size:14px;">No disponible.</p>';
 
-                const palabrasClaveContainer = document.getElementById('modal-palabras-clave');
-                palabrasClaveContainer.innerHTML = '';
-                if (ia.palabras_clave && ia.palabras_clave.length > 0) {
-                    ia.palabras_clave.forEach(function(palabra) {
-                        palabrasClaveContainer.innerHTML += '<span class="w3-tag w3-round w3-green" style="font-size:11px;padding:4px 10px;">' + escHTML(palabra) + '</span>';
-                    });
-                }
+                html += `
+                <details style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #d7ccc8;">
+                    <summary style="list-style:none; padding:16px 20px; background:#efebe9; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
+                        <span style="width:36px; height:36px; border-radius:8px; background:#6d4c41; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fa-solid fa-scale-balanced" style="color:white; font-size:15px;"></i>
+                        </span>
+                        <span style="font-size:16px; font-weight:700; color:#4e342e; flex:1;">Justificación</span>
+                        <i class="fa-solid fa-chevron-down" style="color:#6d4c41; font-size:13px; transition:transform 0.2s;"></i>
+                    </summary>
+                    <div style="padding:20px; background:#faf7f5; border-top:1px solid #d7ccc8;">
+                        ${justificacionHtml}
+                    </div>
+                </details>`;
 
-                const objetivosContainer = document.getElementById('modal-objetivos-especificos');
-                objetivosContainer.innerHTML = '';
-                if (ia.objetivos_especificos && ia.objetivos_especificos.length > 0) {
-                    ia.objetivos_especificos.forEach(function(objetivo) {
-                        objetivosContainer.innerHTML += '<li style="padding-left:0;border-bottom:1px solid #edf2ed;color:#444;">' +
-                            '<i class="fa-solid fa-circle-check" style="margin-right:8px;color:#2e7d32;"></i>' + escHTML(objetivo) + '</li>';
-                    });
-                } else {
-                    objetivosContainer.innerHTML = '<li style="padding-left:0;color:#777;">No disponibles.</li>';
-                }
+                // ── 4. Objetivos ──
+                const objetivosEspHtml = ia.objetivos_especificos && ia.objetivos_especificos.length
+                    ? ia.objetivos_especificos.map(o => `<li style="padding:10px 12px; border-bottom:1px solid #e0e0e0; color:#444; font-size:14px; line-height:1.6; display:flex; align-items:flex-start; gap:10px;"><i class="fa-solid fa-circle-check" style="color:#2e7d32; margin-top:3px; flex-shrink:0;"></i><span>${escHTML(o)}</span></li>`).join('')
+                    : '<li style="padding:10px 12px; color:#777; font-size:14px;">No disponibles.</li>';
 
-                // Tags
-                const tagsContainer = document.getElementById('modal-tags');
-                tagsContainer.innerHTML = '';
+                html += `
+                <details style="margin-bottom:8px; border-radius:10px; overflow:hidden; border:1.5px solid #b0bec5;">
+                    <summary style="list-style:none; padding:16px 20px; background:#eceff1; cursor:pointer; display:flex; align-items:center; gap:12px; user-select:none;">
+                        <span style="width:36px; height:36px; border-radius:8px; background:#37474f; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fa-solid fa-bullseye" style="color:white; font-size:15px;"></i>
+                        </span>
+                        <span style="font-size:16px; font-weight:700; color:#263238; flex:1;">Objetivos</span>
+                        <i class="fa-solid fa-chevron-down" style="color:#37474f; font-size:13px; transition:transform 0.2s;"></i>
+                    </summary>
+                    <div style="padding:20px; background:#f5f7f8; border-top:1px solid #b0bec5;">
+                        <div style="padding:14px 16px; background:#e8eaf6; border-radius:8px; border-left:3px solid #3949ab; margin-bottom:14px;">
+                            <p style="margin:0 0 4px; font-size:12px; font-weight:600; color:#3949ab; text-transform:uppercase; letter-spacing:0.4px;">Objetivo General</p>
+                            <p style="margin:0; font-size:14px; color:#333; line-height:1.7;">${escHTML(ia.objetivo_general || '')}</p>
+                        </div>
+                        <p style="margin:0 0 10px; font-size:12px; font-weight:600; color:#555; text-transform:uppercase; letter-spacing:0.4px;">Objetivos Específicos</p>
+                        <ul style="margin:0; padding:0; list-style:none;">${objetivosEspHtml}</ul>
+                    </div>
+                </details>`;
+
+                // ── Similitud tag ──
                 if (data.max_similitud != null) {
                     const pct = (data.max_similitud * 100).toFixed(1);
-                    tagsContainer.innerHTML += '<span style="display:inline-flex;align-items:center;padding:5px 12px;background:#e3f2fd;color:#1565c0;border-radius:20px;font-size:11px;font-weight:600;">' +
-                        '<i class="fa-solid fa-chart-line" style="margin-right:5px;"></i>Similitud máx: ' + pct + '%</span>';
+                    html += `
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+                        <span style="display:inline-flex; align-items:center; padding:5px 12px; background:#e3f2fd; color:#1565c0; border-radius:20px; font-size:11px; font-weight:600;">
+                            <i class="fa-solid fa-chart-line" style="margin-right:5px;"></i>Similitud máx: ${pct}%
+                        </span>
+                    </div>`;
                 }
 
-                // Referencias
-                const refsContainer = document.getElementById('modal-referencias');
-                const refsSection = document.getElementById('modal-referencias-section');
-                refsContainer.innerHTML = '';
+                // ── Tesis similares ──
                 if (ia.referencias && ia.referencias.length > 0) {
-                    refsSection.style.display = 'block';
-                    ia.referencias.forEach(function(ref) {
+                    html += `
+                    <div style="border-top:1px solid #eee; padding-top:16px;">
+                        <p style="margin:0 0 12px; font-size:11px; font-weight:600; color:#555; text-transform:uppercase; letter-spacing:0.5px; word-break:break-word; white-space:normal;">
+                            <i class="fa-solid fa-magnifying-glass-chart" style="margin-right:4px; color:#2e7d32;"></i> Tesis Similares Encontradas
+                        </p>`;
+                    ia.referencias.forEach(function(ref, i) {
                         const bgColor = ref.similitud >= 70 ? '#ffebee' : (ref.similitud >= 40 ? '#fff3e0' : '#e8f5e9');
                         const txtColor = ref.similitud >= 70 ? '#c62828' : (ref.similitud >= 40 ? '#e65100' : '#2e7d32');
-                        const objetivosHtml = Array.isArray(ref.objetivos_especificos) && ref.objetivos_especificos.length > 0
-                            ? ref.objetivos_especificos.map(obj => '<li style="padding-left:0;"><i class="fa-solid fa-angle-right" style="margin-right:8px;color:#2e7d32;"></i>' + escHTML(obj) + '</li>').join('')
-                            : '<li style="padding-left:0;color:#666;">No disponibles.</li>';
-                        refsContainer.innerHTML +=
-                            '<details class="w3-card w3-round-large" style="margin-bottom:8px;border:1px solid #e8ece8;background:#fafafa;">' +
-                                '<summary class="w3-button w3-block" style="text-align:left;padding:14px 16px;white-space:normal;list-style:none;">' +
-                                    '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:6px;">' +
-                                        '<span style="font-size:12px;font-weight:600;color:#333;word-break:break-word;overflow-wrap:break-word;width:100%;box-sizing:border-box;padding-right:12px;"><i class="fa-solid fa-file-lines" style="color:#2e7d32;margin-right:5px;"></i>' + escHTML(ref.titulo) + '</span>' +
-                                        '<span style="display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;background:' + bgColor + ';color:' + txtColor + ';">' + ref.similitud + '% similitud</span>' +
-                                    '</div>' +
-                                '</summary>' +
-                                '<div class="w3-container" style="padding:0 16px 16px;">' +
-                                    '<p style="margin:6px 0;font-size:10px;color:#888;">Sublínea: ' + escHTML(ref.sublinea || 'N/A') + ' · ' + escHTML(ref.modalidad || 'N/A') + '</p>' +
-                                    '<p style="margin:0 0 8px;font-size:12px;color:#444;line-height:1.6;"><strong>Resumen:</strong> ' + escHTML(ref.resumen || 'No disponible.') + '</p>' +
-                                    '<p style="margin:0 0 8px;font-size:12px;color:#444;line-height:1.6;"><strong>Objetivo general:</strong> ' + escHTML(ref.objetivo_general || 'No disponible.') + '</p>' +
-                                    '<p style="margin:0 0 6px;font-size:11px;color:#444;"><strong>Objetivos específicos</strong></p>' +
-                                    '<ul class="w3-ul" style="margin:0;">' + objetivosHtml + '</ul>' +
-                                '</div>' +
-                            '</details>';
+                        const objsHtml = Array.isArray(ref.objetivos_especificos) && ref.objetivos_especificos.length
+                            ? ref.objetivos_especificos.map(o => `<li style="padding-left:0;"><i class="fa-solid fa-angle-right" style="margin-right:8px; color:#2e7d32;"></i>${escHTML(o)}</li>`).join('')
+                            : '<li style="padding-left:0; color:#666;">No disponibles.</li>';
+                        html += `
+                        <details class="w3-card w3-round-large" style="margin-bottom:8px; border:1px solid #e8ece8; background:#fafafa;">
+                            <summary class="w3-button w3-block" style="text-align:left; padding:14px 16px; white-space:normal; list-style:none;">
+                                <div style="display:flex; flex-direction:column; align-items:flex-start; gap:6px;">
+                                    <span style="font-size:12px; font-weight:600; color:#333; word-break:break-word; overflow-wrap:break-word; width:100%; box-sizing:border-box; padding-right:12px;">
+                                        <i class="fa-solid fa-file-lines" style="color:#2e7d32; margin-right:5px;"></i>${escHTML(ref.titulo)}
+                                    </span>
+                                    <span style="display:inline-block; padding:2px 10px; border-radius:20px; font-size:10px; font-weight:700; background:${bgColor}; color:${txtColor};">${ref.similitud}% similitud</span>
+                                </div>
+                            </summary>
+                            <div class="w3-container" style="padding:0 16px 16px;">
+                                <p style="margin:6px 0; font-size:10px; color:#888;">Sublínea: ${escHTML(ref.sublinea || 'N/A')} · ${escHTML(ref.modalidad || 'N/A')}</p>
+                                <p style="margin:0 0 8px; font-size:12px; color:#444; line-height:1.6;"><strong>Resumen:</strong> ${escHTML(ref.resumen || 'No disponible.')}</p>
+                                <p style="margin:0 0 8px; font-size:12px; color:#444; line-height:1.6;"><strong>Objetivo general:</strong> ${escHTML(ref.objetivo_general || 'No disponible.')}</p>
+                                <p style="margin:0 0 6px; font-size:11px; color:#444;"><strong>Objetivos específicos</strong></p>
+                                <ul class="w3-ul" style="margin:0;">${objsHtml}</ul>
+                            </div>
+                        </details>`;
                     });
-                } else {
-                    refsSection.style.display = 'none';
+                    html += `</div>`;
                 }
+
             } else {
-                iaSection.style.display = 'none';
-                sinIa.style.display = 'block';
+                html += `
+                <div style="text-align:center; padding:20px;">
+                    <i class="fa-solid fa-circle-info" style="font-size:28px; color:#ccc; margin-bottom:8px;"></i>
+                    <p style="color:#999; font-size:13px; margin:0;">Esta propuesta no tiene un análisis de IA asociado.</p>
+                </div>`;
             }
+
+            document.getElementById('modal-pdf-content').innerHTML = html;
         })
         .catch(function(err) {
             loading.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="font-size:28px;color:#c62828;"></i>' +
